@@ -27,6 +27,12 @@
                     </span>
                 </a>
                 <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
+                    <li>
+                        <a (click)="collapseNavbar()" class="dropdown-item" routerLink="project" routerLinkActive="active">
+                            <fa-icon [fixedWidth]="true" icon="sticky-note"></fa-icon>
+                            <span jhiTranslate="project.title.list"></span>
+                        </a>
+                    </li>
                     <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
                 </ul>
             </li>

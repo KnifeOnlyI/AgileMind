@@ -23,6 +23,7 @@
     "forceConsistentCasingInFileNames": true
   },
   "angularCompilerOptions": {
+    "experimentalDecorators": true,
     "strictInjectionParameters": true,
     "fullTemplateTypeCheck": true,
     "strictTemplates": true,

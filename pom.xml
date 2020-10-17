@@ -893,7 +893,7 @@
         <profile>
             <id>webpack</id>
             <activation>
-                <activeByDefault>true</activeByDefault>
+                <activeByDefault>false</activeByDefault>
             </activation>
             <dependencies>
             </dependencies>

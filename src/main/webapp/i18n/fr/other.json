@@ -1,0 +1,7 @@
+{
+  "global": {
+    "id": "ID",
+    "name": "Nom",
+    "description": "Description"
+  }
+}

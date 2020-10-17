@@ -1,10 +1,9 @@
 package com.knife.agilemind.security.jwt;
 
-import com.knife.agilemind.security.AuthoritiesConstants;
+import com.knife.agilemind.security.user.AuthoritiesConstants;
 import io.github.jhipster.config.JHipsterProperties;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;

@@ -1,0 +1,15 @@
+<ng-container *ngIf="dangerMessages">
+    <ag-message *ngFor="let message of dangerMessages" [message]="message"></ag-message>
+</ng-container>
+
+<ng-container *ngIf="warnMessages">
+    <ag-message *ngFor="let message of warnMessages" [message]="message"></ag-message>
+</ng-container>
+
+<ng-container *ngIf="infoMessages">
+    <ag-message *ngFor="let message of infoMessages" [message]="message"></ag-message>
+</ng-container>
+
+<ng-container *ngIf="successMessages">
+    <ag-message *ngFor="let message of successMessages" [message]="message"></ag-message>
+</ng-container>

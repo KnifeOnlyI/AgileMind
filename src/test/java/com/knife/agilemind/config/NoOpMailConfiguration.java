@@ -1,6 +1,6 @@
 package com.knife.agilemind.config;
 
-import com.knife.agilemind.service.MailService;
+import com.knife.agilemind.service.mail.MailService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

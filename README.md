@@ -182,6 +182,13 @@ If you need to re-run the Sonar phase, please be sure to specify at least the `i
 
 For more information, refer to the [Code quality page][].
 
+### Elasticsearch
+
+```
+docker-compose -f src/main/docker/elasticsearch.yml up -d
+docker-compose -f src/main/docker/elasticsearch.yml down
+```
+
 ## Using Docker to simplify development (optional)
 
 You can use Docker to improve your JHipster development experience. A number of docker-compose configuration are available in the [src/main/docker](src/main/docker) folder to launch required third party services.

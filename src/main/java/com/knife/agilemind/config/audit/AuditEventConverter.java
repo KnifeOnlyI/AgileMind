@@ -1,12 +1,16 @@
 package com.knife.agilemind.config.audit;
 
-import com.knife.agilemind.domain.PersistentAuditEvent;
-
+import com.knife.agilemind.domain.audit.PersistentAuditEvent;
 import org.springframework.boot.actuate.audit.AuditEvent;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @Component
 public class AuditEventConverter {

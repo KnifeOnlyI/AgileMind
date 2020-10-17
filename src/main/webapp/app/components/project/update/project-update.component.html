@@ -1,0 +1,37 @@
+<ag-message-list></ag-message-list>
+
+<h1 jhiTranslate="project.title.edit"></h1>
+
+<hr>
+
+<form (ngSubmit)="onSubmit()" *ngIf="projectForm" [formGroup]="projectForm.form">
+    <div class="form-group">
+        <label for="projectName"><span jhiTranslate="project.form.field.name"></span></label>
+        <input class="form-control" formControlName="name" id="projectName" type="text">
+    </div>
+
+    <div class="form-group">
+        <label for="projectDescription"><span jhiTranslate="project.form.field.description"></span></label>
+        <textarea class="form-control" formControlName="description" id="projectDescription"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="projectAssignatedUsers"><span jhiTranslate="project.form.field.assignatedUsers"></span></label>
+        <select class="form-control" formControlName="assignatedUsers" id="projectAssignatedUsers" multiple name="projectAssignatedUsers">
+            <option [value]="null">---</option>
+            <option *ngFor="let user of users" [value]="user.id">{{ user.login }}</option>
+        </select>
+    </div>
+
+    <hr>
+
+    <div class="row">
+        <div class="col-1">
+            <ag-button-delete (click)="delete()"></ag-button-delete>
+        </div>
+        <div class="col-11 text-right">
+            <ag-button-cancel [routerLink]="['/project/', projectForm.projectId]"></ag-button-cancel>
+            <ag-button-save [disabled]="!projectForm.isValid"></ag-button-save>
+        </div>
+    </div>
+</form>

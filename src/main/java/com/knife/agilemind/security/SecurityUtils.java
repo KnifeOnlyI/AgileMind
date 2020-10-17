@@ -1,5 +1,6 @@
 package com.knife.agilemind.security;
 
+import com.knife.agilemind.security.user.AuthoritiesConstants;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
@@ -28,17 +29,18 @@ public final class SecurityUtils {
     }
 
     private static String extractPrincipal(Authentication authentication) {
-        if (authentication == null) {
-            return null;
-        } else if (authentication.getPrincipal() instanceof UserDetails) {
-            UserDetails springSecurityUser = (UserDetails) authentication.getPrincipal();
-            return springSecurityUser.getUsername();
-        } else if (authentication.getPrincipal() instanceof String) {
-            return (String) authentication.getPrincipal();
-        }
-        return null;
-    }
+        String results;
 
+        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+            results = ((UserDetails) authentication.getPrincipal()).getUsername();
+        } else if (authentication != null && authentication.getPrincipal() instanceof String) {
+            results = (String) authentication.getPrincipal();
+        } else {
+            results = null;
+        }
+
+        return results;
+    }
 
     /**
      * Get the JWT of the current user.
@@ -69,6 +71,7 @@ public final class SecurityUtils {
      * The name of this method comes from the {@code isUserInRole()} method in the Servlet API.
      *
      * @param authority the authority to check.
+     *
      * @return true if the current user has the authority, false otherwise.
      */
     public static boolean isCurrentUserInRole(String authority) {

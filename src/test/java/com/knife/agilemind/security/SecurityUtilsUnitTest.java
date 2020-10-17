@@ -1,5 +1,6 @@
 package com.knife.agilemind.security;
 
+import com.knife.agilemind.security.user.AuthoritiesConstants;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;

@@ -34,6 +34,9 @@ spring:
     password:
     hikari:
       auto-commit: false
+  h2:
+    console:
+      enabled: true
   jackson:
     serialization:
       write-durations-as-timestamps: false

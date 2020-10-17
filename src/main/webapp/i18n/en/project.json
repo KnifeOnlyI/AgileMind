@@ -1,0 +1,32 @@
+{
+  "project": {
+    "title": {
+      "list": "Projects",
+      "new": "New project",
+      "edit": "Update project"
+    },
+    "list": {
+      "noResults": "No created project"
+    },
+    "form": {
+      "field": {
+        "name": "Name",
+        "description": "Description",
+        "assignatedUsers": "Assignated users"
+      }
+    },
+    "error": {
+      "name": {
+        "empty": "The project name cannot be empty"
+      },
+      "form": {
+        "invalid": "Invalid form"
+      }
+    },
+    "message": {
+      "created": "Created project : {{ projectName }}",
+      "updated": "Updated project : {{ projectName }}",
+      "deleted": "Deleted project : {{ projectName }}"
+    }
+  }
+}

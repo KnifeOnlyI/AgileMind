@@ -50,9 +50,9 @@ spring:
       indent-output: true
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://localhost:5432/AgileMind
-    username: AgileMind
-    password:
+    url: jdbc:postgresql://localhost:5432/agilemind
+    username: agilemind
+    password: agilemind
     hikari:
       poolName: Hikari
       auto-commit: false

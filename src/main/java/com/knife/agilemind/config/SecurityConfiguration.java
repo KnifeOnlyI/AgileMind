@@ -1,8 +1,8 @@
 package com.knife.agilemind.config;
 
-import com.knife.agilemind.security.*;
-import com.knife.agilemind.security.jwt.*;
-
+import com.knife.agilemind.security.jwt.JWTConfigurer;
+import com.knife.agilemind.security.jwt.TokenProvider;
+import com.knife.agilemind.security.user.AuthoritiesConstants;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpMethod;

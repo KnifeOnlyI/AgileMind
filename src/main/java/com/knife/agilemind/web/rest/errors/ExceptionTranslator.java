@@ -1,10 +1,13 @@
 package com.knife.agilemind.web.rest.errors;
 
+import com.knife.agilemind.exception.BusinessException;
+import com.knife.agilemind.exception.TechnicalException;
+import com.knife.agilemind.exception.other.UsernameAlreadyUsedException;
 import io.github.jhipster.config.JHipsterConstants;
 import io.github.jhipster.web.util.HeaderUtil;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.dao.ConcurrencyFailureException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +17,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.NativeWebRequest;
-import org.springframework.core.env.Environment;
 import org.zalando.problem.DefaultProblem;
 import org.zalando.problem.Problem;
 import org.zalando.problem.ProblemBuilder;
@@ -91,7 +93,10 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
     }
 
     @Override
-    public ResponseEntity<Problem> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, @Nonnull NativeWebRequest request) {
+    public ResponseEntity<Problem> handleMethodArgumentNotValid(
+        MethodArgumentNotValidException ex,
+        @Nonnull NativeWebRequest request
+    ) {
         BindingResult result = ex.getBindingResult();
         List<FieldErrorVM> fieldErrors = result.getFieldErrors().stream()
             .map(f -> new FieldErrorVM(f.getObjectName().replaceFirst("DTO$", ""), f.getField(), f.getCode()))
@@ -108,25 +113,39 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
     }
 
     @ExceptionHandler
-    public ResponseEntity<Problem> handleEmailAlreadyUsedException(com.knife.agilemind.service.EmailAlreadyUsedException ex, NativeWebRequest request) {
+    public ResponseEntity<Problem> handleEmailAlreadyUsedException(
+        com.knife.agilemind.exception.other.EmailAlreadyUsedException ex, NativeWebRequest request
+    ) {
         EmailAlreadyUsedException problem = new EmailAlreadyUsedException();
-        return create(problem, request, HeaderUtil.createFailureAlert(applicationName,  true, problem.getEntityName(), problem.getErrorKey(), problem.getMessage()));
+        return create(problem, request, HeaderUtil.createFailureAlert(
+            applicationName, true, problem.getEntityName(), problem.getErrorKey(), problem.getMessage())
+        );
     }
 
     @ExceptionHandler
-    public ResponseEntity<Problem> handleUsernameAlreadyUsedException(com.knife.agilemind.service.UsernameAlreadyUsedException ex, NativeWebRequest request) {
+    public ResponseEntity<Problem> handleUsernameAlreadyUsedException(
+        UsernameAlreadyUsedException ex, NativeWebRequest request
+    ) {
         LoginAlreadyUsedException problem = new LoginAlreadyUsedException();
-        return create(problem, request, HeaderUtil.createFailureAlert(applicationName,  true, problem.getEntityName(), problem.getErrorKey(), problem.getMessage()));
+        return create(problem, request, HeaderUtil.createFailureAlert(
+            applicationName, true, problem.getEntityName(), problem.getErrorKey(), problem.getMessage())
+        );
     }
 
     @ExceptionHandler
-    public ResponseEntity<Problem> handleInvalidPasswordException(com.knife.agilemind.service.InvalidPasswordException ex, NativeWebRequest request) {
+    public ResponseEntity<Problem> handleInvalidPasswordException(
+        com.knife.agilemind.exception.other.InvalidPasswordException ex, NativeWebRequest request
+    ) {
         return create(new InvalidPasswordException(), request);
     }
 
     @ExceptionHandler
-    public ResponseEntity<Problem> handleBadRequestAlertException(BadRequestAlertException ex, NativeWebRequest request) {
-        return create(ex, request, HeaderUtil.createFailureAlert(applicationName, true, ex.getEntityName(), ex.getErrorKey(), ex.getMessage()));
+    public ResponseEntity<Problem> handleBadRequestAlertException(
+        BadRequestAlertException ex, NativeWebRequest request
+    ) {
+        return create(ex, request, HeaderUtil.createFailureAlert(
+            applicationName, true, ex.getEntityName(), ex.getErrorKey(), ex.getMessage())
+        );
     }
 
     @ExceptionHandler
@@ -138,9 +157,43 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
         return create(ex, problem, request);
     }
 
+    /**
+     * Handle the BusinessException
+     *
+     * @param ex      The business exception
+     * @param request The request
+     *
+     * @return The response entity contains the problem
+     */
+    @ExceptionHandler
+    public ResponseEntity<Problem> handleBusinessException(BusinessException ex, NativeWebRequest request) {
+        Problem problem = Problem.builder()
+            .withStatus(ex.getStatus())
+            .withTitle(ex.getTitle())
+            .build();
+        return create(ex, problem, request);
+    }
+
+    /**
+     * Handle the TechnicalException
+     *
+     * @param ex      The technical exception
+     * @param request The request
+     *
+     * @return The response entity contains the problem
+     */
+    @ExceptionHandler
+    public ResponseEntity<Problem> handleTechnicalException(TechnicalException ex, NativeWebRequest request) {
+        Problem problem = Problem.builder()
+            .withStatus(ex.getStatus())
+            .withTitle(ex.getTitle())
+            .build();
+        return create(ex, problem, request);
+    }
+
     @Override
     public ProblemBuilder prepare(final Throwable throwable, final StatusType status, final URI type) {
-        
+
         Collection<String> activeProfiles = Arrays.asList(env.getActiveProfiles());
 
         if (activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_PRODUCTION)) {
@@ -155,7 +208,7 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
                         .map(this::toProblem)
                         .orElse(null));
             }
-    
+
             if (throwable instanceof DataAccessException) {
                 return Problem.builder()
                     .withType(type)
@@ -167,7 +220,7 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
                         .map(this::toProblem)
                         .orElse(null));
             }
-    
+
             if (containsPackageName(throwable.getMessage())) {
                 return Problem.builder()
                     .withType(type)
@@ -195,6 +248,8 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
     private boolean containsPackageName(String message) {
 
         // This list is for sure not complete
-        return StringUtils.containsAny(message, "org.", "java.", "net.", "javax.", "com.", "io.", "de.", "com.knife.agilemind");
+        return StringUtils.containsAny(
+            message, "org.", "java.", "net.", "javax.", "com.", "io.", "de.", "com.knife.agilemind"
+        );
     }
 }

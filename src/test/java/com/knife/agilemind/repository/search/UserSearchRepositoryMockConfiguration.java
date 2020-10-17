@@ -1,5 +1,6 @@
 package com.knife.agilemind.repository.search;
 
+import com.knife.agilemind.repository.search.user.UserSearchRepository;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Configuration;
 

@@ -1,0 +1,22 @@
+<ag-message-list></ag-message-list>
+
+<h1 jhiTranslate="project.title.new"></h1>
+
+<hr>
+
+<form (ngSubmit)="onSubmit()" [formGroup]="projectForm.form">
+    <div class="form-group">
+        <label for="projectName"><span jhiTranslate="project.form.field.name"></span></label>
+        <input class="form-control" formControlName="name" id="projectName" type="text">
+    </div>
+
+    <div class="form-group">
+        <label for="projectDescription"><span jhiTranslate="project.form.field.description"></span></label>
+        <textarea class="form-control" formControlName="description" id="projectDescription"></textarea>
+    </div>
+
+    <div class="text-right">
+        <ag-button-cancel routerLink="/project/"></ag-button-cancel>
+        <ag-button-save [disabled]="!projectForm.isValid"></ag-button-save>
+    </div>
+</form>

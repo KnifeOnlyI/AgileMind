@@ -1,6 +1,7 @@
 package com.knife.agilemind.web.rest.vm;
 
-import com.knife.agilemind.service.dto.UserDTO;
+import com.knife.agilemind.dto.user.UserDTO;
+
 import javax.validation.constraints.Size;
 
 /**

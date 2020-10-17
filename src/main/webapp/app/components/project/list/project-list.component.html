@@ -1,0 +1,44 @@
+<ag-message-list></ag-message-list>
+
+<div class="row">
+    <div class="col-11">
+        <h1 jhiTranslate="project.title.list"></h1>
+    </div>
+    <div *jhiHasAnyAuthority="'ROLE_ADMIN'" class="col-1 text-right">
+        <button class="btn btn-primary"
+                routerLink="/project/new"
+                type="button">
+            <fa-icon icon="plus"></fa-icon>
+        </button>
+    </div>
+</div>
+
+<hr>
+
+<ng-container *ngIf="projects && projects.length > 0; else NoProjects">
+    <table class="table">
+        <caption hidden="hidden">Project list</caption>
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col"></th>
+            <th jhiTranslate="global.name" scope="col"></th>
+            <th jhiTranslate="global.description" scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let project of projects; let i = index">
+            <td>
+                <button [routerLink]="['/project/', project.id]" class="btn btn-primary" type="button">
+                    <fa-icon icon="search"></fa-icon>
+                </button>
+            </td>
+            <td>{{project.name}}</td>
+            <td>{{project.description}}</td>
+        </tr>
+        </tbody>
+    </table>
+</ng-container>
+
+<ng-template #NoProjects>
+    <h1 class="text-center alert alert-secondary" jhiTranslate="project.list.noResults"></h1>
+</ng-template>
