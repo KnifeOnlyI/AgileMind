@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
+
+    <changeSet id="agilemind-0.0.1-story_status" author="Knife">
+        <createSequence sequenceName="story_status_seq" startValue="1" incrementBy="1"/>
+
+        <createTable tableName="story_status">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true" nullable="false" unique="true"/>
+            </column>
+            <column name="key" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+
+        <loadData tableName="story_status"
+                  file="data.csv"
+                  separator=";"
+                  relativeToChangelogFile="true"
+        />
+    </changeSet>
+</databaseChangeLog>

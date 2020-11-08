@@ -5,10 +5,10 @@
 
     <changeSet id="agilemind-0.0.1-project_user" author="Knife">
         <createTable tableName="project_user">
-            <column name="project_id" type="bigint">
+            <column name="project_id" type="BIGINT">
                 <constraints foreignKeyName="fk_project_id_project_id" referencedTableName="project" referencedColumnNames="id" nullable="false"/>
             </column>
-            <column name="user_id" type="bigint">
+            <column name="user_id" type="BIGINT">
                 <constraints foreignKeyName="fk_user_id_jhi_user_id" referencedTableName="jhi_user" referencedColumnNames="id" nullable="false"/>
             </column>
         </createTable>

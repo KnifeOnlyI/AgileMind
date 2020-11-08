@@ -43,8 +43,9 @@ import java.util.stream.Collectors;
 public class DefaultUserService {
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultUserService.class);
+
     @Autowired
-    private UserRepository userRepository;
+    protected UserRepository userRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -284,6 +285,17 @@ public class DefaultUserService {
     @Transactional(readOnly = true)
     public Optional<UserEntity> getUserWithAuthorities() {
         return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneWithAuthoritiesByLogin);
+    }
+
+    /**
+     * Get the user with the specified ID
+     *
+     * @param id The ID
+     *
+     * @return The founded user
+     */
+    public Optional<UserEntity> getOptional(Long id) {
+        return this.userRepository.findById(id);
     }
 
     /**

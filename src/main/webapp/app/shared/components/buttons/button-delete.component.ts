@@ -8,19 +8,19 @@ import {Component, EventEmitter, Output} from '@angular/core';
 @Component({
   selector: 'ag-button-delete',
   template: `
-    <button type="button" class="btn btn-danger" (click)="onClick()">
+    <button type="button" class="btn btn-danger" (click)="emitClick()">
       <fa-icon icon="trash"></fa-icon>
       <span jhiTranslate="entity.action.delete"></span>
     </button>`
 })
 export class ButtonDeleteComponent {
   @Output()
-  public click = new EventEmitter();
+  public onClick = new EventEmitter();
 
   /**
    * Executed on click
    */
-  public onClick(): void {
-    this.click.emit();
+  public emitClick(): void {
+    this.onClick.emit();
   }
 }

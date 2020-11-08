@@ -1,0 +1,37 @@
+{
+  "story": {
+    "title": {
+      "new": "Nouvelle story",
+      "edit": "Mise à jour d'une story"
+    },
+    "list": {
+      "noResults": "Aucune story créée"
+    },
+    "form": {
+      "field": {
+        "points": "Story points",
+        "businessValue": "Valeur business",
+        "status": "Statut",
+        "assignatedUser": "Utilisateur assigné"
+      }
+    },
+    "error": {
+      "name": {
+        "empty": "Le nom de la story ne peux pas être nul"
+      },
+      "status": {
+        "id": {
+          "null": "Le champ 'Statut' est obligatoire"
+        }
+      },
+      "form": {
+        "invalid": "Invalid form"
+      }
+    },
+    "message": {
+      "created": "Story créée : {{ storyName }}",
+      "updated": "Story mise à jour : {{ storyName }}",
+      "deleted": "Story supprimée : {{ storyName }}"
+    }
+  }
+}

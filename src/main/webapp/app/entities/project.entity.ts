@@ -10,13 +10,15 @@ export class Project {
    * @param id The ID
    * @param name The name
    * @param description The description
-   * @param assignatedUsers The assignated users id list
+   * @param assignatedUserIdList The assignated users id list
+   * @param storyIdList The story id list
    */
   public constructor(
     public id?: number,
     public name?: string,
     public description?: string,
-    public assignatedUsers?: Array<number>
+    public assignatedUserIdList?: Array<number>,
+    public storyIdList?: Array<number>,
   ) {
   }
 }

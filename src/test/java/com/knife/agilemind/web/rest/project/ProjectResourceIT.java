@@ -3,16 +3,13 @@ package com.knife.agilemind.web.rest.project;
 import com.knife.agilemind.AgileMindApp;
 import com.knife.agilemind.constant.project.ProjectConstant;
 import com.knife.agilemind.domain.project.ProjectEntity;
-import com.knife.agilemind.domain.user.UserEntity;
 import com.knife.agilemind.dto.project.CreateProjectDTO;
 import com.knife.agilemind.dto.project.ProjectDTO;
 import com.knife.agilemind.repository.project.ProjectRepository;
-import com.knife.agilemind.repository.user.UserRepository;
+import com.knife.agilemind.repository.story.StoryRepository;
 import com.knife.agilemind.util.HttpTestUtil;
 import com.knife.agilemind.util.ListUtil;
-import com.knife.agilemind.web.rest.AbstractResourceIT;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.opentest4j.AssertionFailedError;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +20,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.zalando.problem.Status;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 @SpringBootTest(classes = AgileMindApp.class)
-class ProjectResourceIT extends AbstractResourceIT {
+class ProjectResourceIT {
     @Autowired
     private ProjectResource projectResource;
 
@@ -34,29 +32,13 @@ class ProjectResourceIT extends AbstractResourceIT {
     private ProjectRepository projectRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private StoryRepository storyRepository;
 
     @Autowired
     private HttpTestUtil httpTestUtil;
 
     @Autowired
     private ListUtil listUtil;
-
-    /**
-     * The "admin" user
-     */
-    private UserEntity adminUser;
-
-    /**
-     * The "user" user
-     */
-    private UserEntity user;
-
-    @BeforeEach
-    void setUp() {
-        this.adminUser = this.userRepository.findOneByLogin("admin").orElseThrow(AssertionFailedError::new);
-        this.user = this.userRepository.findOneByLogin("user").orElseThrow(AssertionFailedError::new);
-    }
 
     /**
      * Test on the valid project creation
@@ -71,18 +53,17 @@ class ProjectResourceIT extends AbstractResourceIT {
 
         // Test response
 
-        ProjectDTO response = this.httpTestUtil.getNotNullBody(
-            this.projectResource.create(newProject), HttpStatus.OK
-        );
+        ProjectDTO response = this.httpTestUtil.getNotNullBody(this.projectResource.create(newProject), HttpStatus.OK);
 
         Assertions.assertNotNull(response.getId());
         Assertions.assertEquals(newProject.getName(), response.getName());
         Assertions.assertEquals(newProject.getDescription(), response.getDescription());
-        this.listUtil.assertContains(response.getAssignatedUsers());
+        this.listUtil.assertContainsID(response.getAssignatedUserIdList());
+        this.listUtil.assertContainsID(response.getStoryIdList());
 
         // Test database
 
-        Assertions.assertEquals(1L, this.projectRepository.count(),
+        Assertions.assertEquals(3L, this.projectRepository.count(),
             "Only one project MUST be created in database after CREATION operation"
         );
 
@@ -91,6 +72,7 @@ class ProjectResourceIT extends AbstractResourceIT {
         Assertions.assertEquals(newProject.getName(), projectEntity.getName());
         Assertions.assertEquals(newProject.getDescription(), projectEntity.getDescription());
         Assertions.assertEquals(0, projectEntity.getAssignatedUsers().size());
+        Assertions.assertEquals(0, projectEntity.getStories().size());
     }
 
     /**
@@ -100,37 +82,31 @@ class ProjectResourceIT extends AbstractResourceIT {
     @Transactional
     @WithMockUser(username = "admin")
     void testValidGet() {
-        ProjectEntity savedProject = this.projectRepository.save(
-            new ProjectEntity().setName("Name").setDescription("Description")
-        );
-
-        // Assign "admin" user to project
-        savedProject.getAssignatedUsers().add(this.adminUser);
+        ProjectEntity savedProject = this.projectRepository.getOne(1000L);
 
         // Test response
 
-        ProjectDTO response = this.httpTestUtil.getNotNullBody(
-            this.projectResource.get(savedProject.getId()), HttpStatus.OK
-        );
+        ProjectDTO response = this.httpTestUtil.getNotNullBody(this.projectResource.get(savedProject.getId()), HttpStatus.OK);
 
         Assertions.assertEquals(savedProject.getId(), response.getId());
         Assertions.assertEquals(savedProject.getName(), response.getName());
         Assertions.assertEquals(savedProject.getDescription(), response.getDescription());
-        this.listUtil.assertContains(response.getAssignatedUsers(), this.adminUser.getId());
+        this.listUtil.assertContainsID(response.getAssignatedUserIdList(), 3L);
+        this.listUtil.assertContainsID(response.getStoryIdList(), 1000L, 1001L, 1002L, 1003L, 1004L);
 
         // Test database
 
-        Assertions.assertEquals(1, this.projectRepository.count(),
+        Assertions.assertEquals(2, this.projectRepository.count(),
             "No one project MUST be deleted in database after GET operation"
         );
 
-        ProjectEntity projectEntity = this.projectRepository.findById(savedProject.getId())
-            .orElseThrow(AssertionFailedError::new);
+        ProjectEntity projectEntity = this.projectRepository.getOne(savedProject.getId());
 
         Assertions.assertEquals(savedProject.getId(), projectEntity.getId());
         Assertions.assertEquals(savedProject.getName(), projectEntity.getName());
         Assertions.assertEquals(savedProject.getDescription(), projectEntity.getDescription());
-        this.listUtil.assertContains(savedProject.getAssignatedUsers(), this.adminUser.getLogin());
+        this.listUtil.assertContainsUsers(savedProject.getAssignatedUsers(), "admin");
+        this.listUtil.assertContainsStories(savedProject.getStories(), 1000L, 1001L, 1002L, 1003L, 1004L);
     }
 
     /**
@@ -140,14 +116,10 @@ class ProjectResourceIT extends AbstractResourceIT {
     @Transactional
     @WithMockUser(username = "admin")
     void testValidGetAllWithAdminUser() {
-        ProjectEntity project1 = this.projectRepository.save(new ProjectEntity().setName("#1").setDescription("#1"));
-        ProjectEntity project2 = this.projectRepository.save(new ProjectEntity().setName("#2").setDescription("#2"));
-        ProjectEntity project3 = this.projectRepository.save(new ProjectEntity().setName("#3").setDescription("#3"));
+        ProjectEntity project1 = this.projectRepository.getOne(1000L);
+        ProjectEntity project2 = this.projectRepository.getOne(1001L);
 
-        // Assign "admin" user to first project
-        project1.getAssignatedUsers().add(this.adminUser);
-
-        List<ProjectEntity> list = Arrays.asList(project1, project2, project3);
+        List<ProjectEntity> list = Arrays.asList(project1, project2);
 
         List<ProjectDTO> response = this.httpTestUtil.getNotNullBody(this.projectResource.getAll(), HttpStatus.OK);
 
@@ -155,7 +127,7 @@ class ProjectResourceIT extends AbstractResourceIT {
         list.sort((o1, o2) -> (int) (o1.getId() - o2.getId()));
         response.sort((o1, o2) -> (int) (o1.getId() - o2.getId()));
 
-        Assertions.assertEquals(3, response.size(), "3 projects MUST be founded (all)");
+        Assertions.assertEquals(2, response.size(), "3 projects MUST be founded (all)");
 
         // Compare initial list and response list
         for (int i = 0; i < list.size(); i++) {
@@ -164,7 +136,7 @@ class ProjectResourceIT extends AbstractResourceIT {
             Assertions.assertEquals(list.get(i).getDescription(), response.get(i).getDescription());
 
             if (list.get(i).getId().equals(project1.getId())) {
-                this.listUtil.assertContains(response.get(i).getAssignatedUsers(), this.adminUser.getId());
+                this.listUtil.assertContainsID(response.get(i).getAssignatedUserIdList(), 3L);
             }
         }
     }
@@ -176,27 +148,16 @@ class ProjectResourceIT extends AbstractResourceIT {
     @Transactional
     @WithMockUser(username = "user")
     void testValidGetAllWithNotAdminUser() {
-        ProjectEntity project1 = this.projectRepository.save(new ProjectEntity().setName("#1").setDescription("#1"));
-        ProjectEntity project2 = this.projectRepository.save(new ProjectEntity().setName("#2").setDescription("#2"));
-        ProjectEntity project3 = this.projectRepository.save(new ProjectEntity().setName("#3").setDescription("#3"));
-
-        // Assign "admin" user to first project
-        project1.getAssignatedUsers().add(this.user);
-
-        List<ProjectEntity> list = Arrays.asList(project1, project2, project3);
+        ProjectEntity project = this.projectRepository.getOne(1001L);
 
         List<ProjectDTO> response = this.httpTestUtil.getNotNullBody(this.projectResource.getAll(), HttpStatus.OK);
 
-        // Sort the lists with the same order
-        list.sort((o1, o2) -> (int) (o1.getId() - o2.getId()));
-        response.sort((o1, o2) -> (int) (o1.getId() - o2.getId()));
+        Assertions.assertEquals(1, response.size(), "1 project MUST be founded (all where 'user' is assignated)");
 
-        Assertions.assertEquals(1, response.size(), "1 project MUST be founded (all)");
-
-        Assertions.assertEquals(list.get(0).getId(), response.get(0).getId());
-        Assertions.assertEquals(list.get(0).getName(), response.get(0).getName());
-        Assertions.assertEquals(list.get(0).getName(), response.get(0).getName());
-        this.listUtil.assertContains(response.get(0).getAssignatedUsers(), this.user.getId());
+        Assertions.assertEquals(project.getId(), response.get(0).getId());
+        Assertions.assertEquals(project.getName(), response.get(0).getName());
+        Assertions.assertEquals(project.getName(), response.get(0).getName());
+        this.listUtil.assertContainsID(response.get(0).getAssignatedUserIdList(), 3L, 4L);
     }
 
     /**
@@ -206,6 +167,8 @@ class ProjectResourceIT extends AbstractResourceIT {
     @Transactional
     @WithMockUser(username = "admin")
     void testValidGetAllWithoutProjects() {
+        this.projectRepository.deleteAll();
+
         List<ProjectDTO> response = this.httpTestUtil.getNotNullBody(this.projectResource.getAll(), HttpStatus.OK);
 
         Assertions.assertEquals(0, response.size(), "No one project MUST be founded (all)");
@@ -218,16 +181,15 @@ class ProjectResourceIT extends AbstractResourceIT {
     @Transactional
     @WithMockUser(username = "admin")
     void testValidUpdate() {
-        ProjectEntity savedProject = this.projectRepository.save(
-            new ProjectEntity().setName("Name").setDescription("Description")
-        );
+        ProjectEntity project = this.projectRepository.getOne(1001L);
 
         ProjectDTO updatedProjectDTO = new ProjectDTO()
-            .setId(savedProject.getId())
+            .setId(project.getId())
             .setName("UpdatedName")
             .setDescription("UpdatedDescription");
 
-        updatedProjectDTO.getAssignatedUsers().add(this.adminUser.getId());
+        // Assign "user" to project and remove "admin"
+        updatedProjectDTO.setAssignatedUserIdList(new HashSet<>()).getAssignatedUserIdList().add(4L);
 
         // Test response
 
@@ -238,21 +200,22 @@ class ProjectResourceIT extends AbstractResourceIT {
         Assertions.assertEquals(updatedProjectDTO.getId(), response.getId());
         Assertions.assertEquals(updatedProjectDTO.getName(), response.getName());
         Assertions.assertEquals(updatedProjectDTO.getDescription(), response.getDescription());
-        this.listUtil.assertContains(response.getAssignatedUsers(), this.adminUser.getId());
+        this.listUtil.assertContainsID(response.getAssignatedUserIdList(), 4L);
 
         // Test database
 
-        Assertions.assertEquals(1, this.projectRepository.count(),
+        Assertions.assertEquals(2L, this.projectRepository.count(),
             "No projects MUST be created in database after UPDATE operation"
         );
 
-        ProjectEntity projectEntity = this.projectRepository.findById(savedProject.getId())
+        ProjectEntity projectEntity = this.projectRepository.findById(1001L)
             .orElseThrow(AssertionFailedError::new);
 
-        Assertions.assertEquals(savedProject.getId(), projectEntity.getId());
-        Assertions.assertEquals(savedProject.getName(), projectEntity.getName());
-        Assertions.assertEquals(savedProject.getDescription(), projectEntity.getDescription());
-        this.listUtil.assertContains(projectEntity.getAssignatedUsers(), this.adminUser.getLogin());
+        Assertions.assertEquals(project.getId(), projectEntity.getId());
+        Assertions.assertEquals(project.getName(), projectEntity.getName());
+        Assertions.assertEquals(project.getDescription(), projectEntity.getDescription());
+        this.listUtil.assertContainsUsers(projectEntity.getAssignatedUsers(), "user");
+        this.listUtil.assertContainsStories(projectEntity.getStories(), 1005L, 1006L, 1007L, 1008L, 1009L);
     }
 
     /**
@@ -262,19 +225,19 @@ class ProjectResourceIT extends AbstractResourceIT {
     @Transactional
     @WithMockUser(username = "admin")
     void testValidDelete() {
-        ProjectEntity savedProject = this.projectRepository.save(new ProjectEntity()
-            .setName("Name")
-            .setDescription("Description")
-        );
-
         // Test response
 
-        this.httpTestUtil.assertNullBody(this.projectResource.delete(savedProject.getId()), HttpStatus.OK);
+        this.httpTestUtil.assertNullBody(this.projectResource.delete(1000L), HttpStatus.OK);
+        this.httpTestUtil.assertNullBody(this.projectResource.delete(1001L), HttpStatus.OK);
 
         // Test database
 
         Assertions.assertEquals(0, this.projectRepository.count(),
             "No projects MUST be presents in database after DELETE operation"
+        );
+
+        Assertions.assertEquals(0, this.storyRepository.count(),
+            "No stories MUST be presents in database after DELETE operation"
         );
     }
 
@@ -334,10 +297,7 @@ class ProjectResourceIT extends AbstractResourceIT {
     @Test
     @Transactional
     void testInvalidGetBecauseNotConnected() {
-        this.httpTestUtil.assertBusinessException(() -> this.projectResource.get(1L),
-            null,
-            Status.NOT_FOUND
-        );
+        this.httpTestUtil.assertBusinessException(() -> this.projectResource.get(1L), null, Status.NOT_FOUND);
     }
 
     /**
@@ -347,12 +307,7 @@ class ProjectResourceIT extends AbstractResourceIT {
     @Transactional
     @WithMockUser(username = "user")
     void testInvalidGetBecauseNotAssignated() {
-        ProjectEntity savedProject = this.projectRepository.save(new ProjectEntity()
-            .setName("Name")
-            .setDescription("Description")
-        );
-
-        this.httpTestUtil.assertBusinessException(() -> this.projectResource.get(savedProject.getId()),
+        this.httpTestUtil.assertBusinessException(() -> this.projectResource.get(1L),
             ProjectConstant.Error.NOT_FOUND,
             Status.NOT_FOUND
         );

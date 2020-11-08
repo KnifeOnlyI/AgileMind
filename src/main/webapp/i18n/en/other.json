@@ -1,7 +1,25 @@
 {
   "global": {
-    "id": "ID",
-    "name": "Name",
-    "description": "Description"
+    "form": {
+      "field": {
+        "id": "ID",
+        "name": "Name",
+        "description": "Description",
+        "assignatedUser": "Assignated user",
+        "assignatedUsers": "Assignated users"
+      }
+    },
+    "confirm": {
+      "yesNo": {
+        "title": "Confirm",
+        "yes": "Yes",
+        "no": "No"
+      },
+      "delete": {
+        "title": "Confirm delete",
+        "yes": "Delete",
+        "no": "Cancel"
+      }
+    }
   }
 }

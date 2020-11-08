@@ -67,6 +67,7 @@ spring:
   liquibase:
     # Remove 'faker' if you do not want the sample data to be loaded automatically
     contexts: dev, faker
+    change-log: classpath:config/liquibase/master.xml
   mail:
     host: localhost
     port: 25

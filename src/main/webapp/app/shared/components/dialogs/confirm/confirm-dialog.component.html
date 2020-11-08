@@ -1,0 +1,10 @@
+<div class="modal-header">
+    <h4 [jhiTranslate]="titleLabel" class="modal-title"></h4>
+    <button (click)="noChoice()" aria-label="Close" class="close" type="button">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-footer">
+    <button (click)="no()" [class]="noBtnClass" [jhiTranslate]="noBtnLabel" type="button"></button>
+    <button (click)="yes()" [class]="yesBtnClass" [jhiTranslate]="yesBtnLabel" type="button"></button>
+</div>

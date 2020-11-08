@@ -1,7 +1,7 @@
 package com.knife.agilemind.constant.project;
 
 /**
- * Store all project contants key
+ * Store all project constants key
  *
  * @author Dany Pignoux (dany.pignoux@outlook.fr)
  */
@@ -20,6 +20,8 @@ public final class ProjectConstant {
         public static final String ID_NULL = "project.error.id.null";
         public static final String NAME_NULL = "project.error.name.null";
         public static final String NAME_EMPTY = "project.error.name.empty";
+
+        public static final String USER_NOT_ASSIGNATED = "project.error.user.not_assignated";
 
         private Error() {
         }

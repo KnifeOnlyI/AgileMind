@@ -1,5 +1,6 @@
 package com.knife.agilemind.domain.project;
 
+import com.knife.agilemind.domain.story.StoryEntity;
 import com.knife.agilemind.domain.user.UserEntity;
 
 import javax.persistence.Column;
@@ -10,12 +11,18 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Represent a project entity
+ *
+ * @author Dany Pignoux (dany.pignoux@erudo.fr)
+ */
 @Entity
 @Table(name = "project")
 public class ProjectEntity implements Serializable {
@@ -42,7 +49,7 @@ public class ProjectEntity implements Serializable {
     private String description;
 
     /**
-     * The assignated users list
+     * The assignated users
      */
     @ManyToMany
     @JoinTable(
@@ -51,6 +58,12 @@ public class ProjectEntity implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private Set<UserEntity> assignatedUsers = new HashSet<>();
+
+    /**
+     * The stories
+     */
+    @OneToMany(mappedBy = "project", orphanRemoval = true)
+    private Set<StoryEntity> stories = new HashSet<>();
 
     /**
      * Get the value of : serialVersionUID
@@ -142,6 +155,27 @@ public class ProjectEntity implements Serializable {
      */
     public ProjectEntity setAssignatedUsers(Set<UserEntity> assignatedUsers) {
         this.assignatedUsers = assignatedUsers;
+        return this;
+    }
+
+    /**
+     * Get the value of : stories
+     *
+     * @return stories
+     */
+    public Set<StoryEntity> getStories() {
+        return stories;
+    }
+
+    /**
+     * Set value of : stories
+     *
+     * @param stories The new value
+     *
+     * @return this
+     */
+    public ProjectEntity setStories(Set<StoryEntity> stories) {
+        this.stories = stories;
         return this;
     }
 }

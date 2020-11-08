@@ -1,12 +1,11 @@
-<ag-message-list></ag-message-list>
-
 <ng-container *ngIf="project">
     <div class="row">
         <div class="col-11">
             <h1>{{project.name}}</h1>
         </div>
-        <div *jhiHasAnyAuthority="'ROLE_ADMIN'" class="col-1 text-right">
-            <button [routerLink]="['/project/edit/', project.id]"
+
+        <div class="col-1 text-right">
+            <button *jhiHasAnyAuthority="'ROLE_ADMIN'" [routerLink]="['/project/edit/', project.id]"
                     class="btn btn-secondary" type="button">
                 <fa-icon icon="cog"></fa-icon>
             </button>
@@ -17,5 +16,69 @@
 
     <hr>
 
-    <!-- TODO: Put story list here -->
+    <div class="row">
+        <div class="col-1">
+            <button [routerLink]="['/project', project.id, 'story', 'new']"
+                    class="btn btn-primary" type="button">
+                <fa-icon icon="plus"></fa-icon>
+            </button>
+        </div>
+        <div class="col-11 text-right">
+            <!-- Filter to show TO DO stories -->
+            <button (click)="setCurrentDiplayStatus('todo')"
+                    [class]="currentDisplayStatus === 'todo' ? 'btn btn-dark' : 'btn btn-outline-dark'"
+                    jhiTranslate="storyStatus.key.todo"
+                    type="button">
+            </button>
+
+            <!-- Filter to show IN PROGRESS stories -->
+            <button (click)="setCurrentDiplayStatus('inProgress')"
+                    [class]="currentDisplayStatus === 'inProgress' ? 'btn btn-info' : 'btn btn-outline-info'"
+                    jhiTranslate="storyStatus.key.inProgress"
+                    type="button">
+            </button>
+
+
+            <!-- Filter to show DONE stories -->
+            <button (click)="setCurrentDiplayStatus('done')"
+                    [class]="currentDisplayStatus === 'done' ? 'btn btn-success' : 'btn btn-outline-success'"
+                    jhiTranslate="storyStatus.key.done"
+                    type="button">
+            </button>
+        </div>
+    </div>
+
+    <hr>
+
+    <ng-container *ngIf="totalNbStories > 0; else NoStories">
+        <table class="table table-borderless table-hover">
+            <caption hidden="hidden"></caption>
+            <thead class="thead-dark">
+            <tr class="text-center">
+                <th class="text-left" jhiTranslate="global.form.field.name" scope="col" style="width: 15%"></th>
+                <th jhiTranslate="global.form.field.description" scope="col" style="width: 20%"></th>
+                <th jhiTranslate="story.form.field.points" scope="col" style="width: 20%"></th>
+                <th jhiTranslate="story.form.field.businessValue" scope="col" style="width: 20%"></th>
+                <th jhiTranslate="global.form.field.assignatedUser" scope="col" style="width: 20%"></th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <!-- Display all stories of the current display status selected -->
+            <tr *ngFor="let story of stories[currentDisplayStatus]; let i = index" [routerLink]="['/story/edit', story.id]" class="text-center" style="cursor: pointer;">
+                <td class="text-left">{{story.name}}</td>
+                <td class="text-justify">{{story.description}}</td>
+                <td>{{story.points}}</td>
+                <td>{{story.businessValue }}</td>
+                <td>
+                    <ag-user *ngIf="story.assignatedUserId" [id]="story.assignatedUserId"></ag-user>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </ng-container>
+
+    <ng-template #NoStories>
+        <h1 class="text-center alert alert-secondary" jhiTranslate="story.list.noResults"></h1>
+    </ng-template>
 </ng-container>

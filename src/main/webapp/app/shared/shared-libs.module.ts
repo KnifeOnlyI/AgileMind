@@ -4,9 +4,10 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {NgJhipsterModule} from 'ng-jhipster';
 import {InfiniteScrollModule} from 'ngx-infinite-scroll';
-import {FaIconLibrary, FontAwesomeModule} from '@fortawesome/angular-fontawesome';
+import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {TranslateModule} from '@ngx-translate/core';
-import {ICONS} from 'app/shared/constants/icon.constants';
+import {ToastModule} from 'primeng/toast';
+import {ToastrModule} from 'ngx-toastr';
 
 @NgModule({
   exports: [
@@ -18,10 +19,15 @@ import {ICONS} from 'app/shared/constants/icon.constants';
     FontAwesomeModule,
     ReactiveFormsModule,
     TranslateModule,
+    ToastModule,
   ],
+  imports: [
+    ToastrModule.forRoot({
+      easeTime: 300,
+      progressBar: true,
+      positionClass: 'toast-bottom-left',
+    }),
+  ]
 })
 export class AgileMindSharedLibsModule {
-  constructor(library: FaIconLibrary) {
-    library.addIcons(...ICONS);
-  }
 }

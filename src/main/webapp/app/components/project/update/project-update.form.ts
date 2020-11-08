@@ -1,6 +1,6 @@
 import {Project} from 'app/entities/project.entity';
 import {ProjectCreateForm} from 'app/components/project/create/project-create.form';
-import {FormControl} from '@angular/forms';
+import {FormControl, Validators} from '@angular/forms';
 
 /**
  * Represent the form to create project
@@ -8,11 +8,6 @@ import {FormControl} from '@angular/forms';
  * @author Dany Pignoux (dany.pignoux@erudo.fr)
  */
 export class ProjectUpdateForm extends ProjectCreateForm {
-  /**
-   * The project ID
-   */
-  public projectId!: number;
-
   /**
    * Constructor
    *
@@ -25,25 +20,70 @@ export class ProjectUpdateForm extends ProjectCreateForm {
       throw Error('The project is invalid');
     }
 
-    this.projectId = project.id;
+    this.form.addControl('id', new FormControl(null, Validators.required));
+    this.form.addControl('assignatedUserIdList', new FormControl(null));
 
-    this.form.addControl('assignatedUsers', new FormControl(null));
-
+    this.form.patchValue({id: project.id});
     this.form.patchValue({name: project.name});
     this.form.patchValue({description: project.description});
-    this.form.patchValue({assignatedUsers: project.assignatedUsers});
+    this.form.patchValue({assignatedUserIdList: project.assignatedUserIdList});
   }
+
+  // region Forms control
+
+  /**
+   * Get the id form control
+   *
+   * @return The id form control
+   */
+  public get idFormControl(): FormControl {
+    return this.getFormControl('id');
+  }
+
+  /**
+   * Get the assignated users idf form control
+   *
+   * @return The assignated users idf form control
+   */
+  public get assignatedUserIdListFormControl(): FormControl {
+    return this.getFormControl('assignatedUserIdList');
+  }
+
+  // endregion
+
+  // region Values
+
+  /**
+   * Get the ID
+   *
+   * @return The ID
+   */
+  public get id(): number {
+    return this.idFormControl.value;
+  }
+
+
+  /**
+   * Get the assignatedUserIdList
+   *
+   * @return The assignatedUserIdList
+   */
+  public get assignatedUserIdList(): Array<number> {
+    return this.assignatedUserIdListFormControl.value;
+  }
+
+  // endregion
 
   /**
    * Get a updated project from the form
    *
    * @return The created project. NULL if form is invalid
    */
-  get project(): Project {
+  public get project(): Project {
     const project = super.project;
 
-    project.id = this.projectId;
-    project.assignatedUsers = this.form.get('assignatedUsers')?.value;
+    project.id = this.id;
+    project.assignatedUserIdList = this.assignatedUserIdList;
 
     return project;
   }

@@ -15,24 +15,9 @@ public final class UserConstant {
      * @author Dany Pignoux (dany.pignoux@outlook.fr)
      */
     public static final class Error {
-        public static final String NOT_FOUND = "project.error.not_found";
+        public static final String NOT_FOUND = "user.error.not_found";
 
         private Error() {
-        }
-    }
-
-    /**
-     * Store IDs
-     *
-     * @author Dany Pignoux (dany.pignoux@outlook.fr)
-     */
-    public static final class Id {
-        /**
-         * ID for admin user
-         */
-        public static final long ADMIN = 3L;
-
-        private Id() {
         }
     }
 

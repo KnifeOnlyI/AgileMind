@@ -80,9 +80,6 @@
         }
       }
     },
-    "field": {
-      "id": "ID"
-    },
     "ribbon": {
       "dev": "Développement"
     },

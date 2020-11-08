@@ -1,0 +1,35 @@
+<h1 jhiTranslate="story.title.new"></h1>
+
+<hr>
+
+<form (ngSubmit)="onSubmit()" [formGroup]="form.form">
+    <div class="form-group">
+        <label for="name"><span jhiTranslate="global.form.field.name"></span></label>
+        <input [formControl]="form.nameFormControl" class="form-control" id="name" type="text">
+    </div>
+
+    <div class="form-group">
+        <label for="description"><span jhiTranslate="global.form.field.description"></span></label>
+        <textarea [formControl]="form.descriptionFormControl" class="form-control" id="description"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="points"><span jhiTranslate="story.form.field.points"></span></label>
+        <input [formControl]="form.pointsFormControl" class="form-control" id="points" min="0" step="0.5" type="number"/>
+    </div>
+
+    <div class="form-group">
+        <label for="businessValue"><span jhiTranslate="story.form.field.businessValue"></span></label>
+        <input [formControl]="form.businessValueFormControl" class="form-control" id="businessValue" min="0" type="number"/>
+    </div>
+
+    <ag-story-status-select [control]="form.statusIdFormControl"></ag-story-status-select>
+    <ag-user-select [control]="form.assignatedUserIdFormControl"></ag-user-select>
+
+    <hr>
+
+    <div class="text-right">
+        <ag-button-cancel [routerLink]="['/project/', form.projectId]"></ag-button-cancel>
+        <ag-button-save [disabled]="!form.isValid"></ag-button-save>
+    </div>
+</form>

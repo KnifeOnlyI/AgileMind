@@ -28,9 +28,14 @@ public class ProjectDTO implements Serializable {
     private String description;
 
     /**
-     * The assignated users ID list
+     * The assignated user id list
      */
-    private Set<Long> assignatedUsers = new HashSet<>();
+    private Set<Long> assignatedUserIdList = new HashSet<>();
+
+    /**
+     * The story id list
+     */
+    private Set<Long> storyIdList = new HashSet<>();
 
     /**
      * Get the value of : serialVersionUID
@@ -105,23 +110,44 @@ public class ProjectDTO implements Serializable {
     }
 
     /**
-     * Récupère : assignatedUsers.
+     * Get the value of : assignatedUserIdList
      *
-     * @return assignatedUsers.
+     * @return assignatedUserIdList
      */
-    public Set<Long> getAssignatedUsers() {
-        return assignatedUsers;
+    public Set<Long> getAssignatedUserIdList() {
+        return assignatedUserIdList;
     }
 
     /**
-     * Défini la nouvelle valeur de : assignatedUsers.
+     * Set value of : assignatedUserIdList
      *
-     * @param assignatedUsers La nouvelle valeur.
+     * @param assignatedUserIdList The new value
      *
-     * @return L'instance (Pattern fluent)
+     * @return this
      */
-    public ProjectDTO setAssignatedUsers(Set<Long> assignatedUsers) {
-        this.assignatedUsers = assignatedUsers;
+    public ProjectDTO setAssignatedUserIdList(Set<Long> assignatedUserIdList) {
+        this.assignatedUserIdList = assignatedUserIdList;
+        return this;
+    }
+
+    /**
+     * Get the value of : storyIdList
+     *
+     * @return storyIdList
+     */
+    public Set<Long> getStoryIdList() {
+        return storyIdList;
+    }
+
+    /**
+     * Set value of : storyIdList
+     *
+     * @param storyIdList The new value
+     *
+     * @return this
+     */
+    public ProjectDTO setStoryIdList(Set<Long> storyIdList) {
+        this.storyIdList = storyIdList;
         return this;
     }
 }

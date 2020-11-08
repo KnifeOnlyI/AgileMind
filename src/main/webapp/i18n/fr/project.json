@@ -3,21 +3,18 @@
     "title": {
       "list": "Projets",
       "new": "Création d'un projet",
-      "edit": "Mise à jour d'un projet"
+      "edit": "Mise à jour d'un projet",
+      "view": "Projet"
     },
     "list": {
       "noResults": "Aucun projet créé"
     },
-    "form": {
-      "field": {
-        "name": "Nom",
-        "description": "Description",
-        "assignatedUsers": "Utilisateurs assignés"
-      }
-    },
     "error": {
       "name": {
         "empty": "Le nom du projet ne doit pas être vide"
+      },
+      "user": {
+        "not_assignated": "L'utilisateur ne peut pas être assigné à la story"
       },
       "form": {
         "invalid": "Formulaire invalide"

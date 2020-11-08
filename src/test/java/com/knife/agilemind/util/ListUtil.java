@@ -1,5 +1,6 @@
 package com.knife.agilemind.util;
 
+import com.knife.agilemind.domain.story.StoryEntity;
 import com.knife.agilemind.domain.user.UserEntity;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.stereotype.Service;
@@ -11,29 +12,44 @@ public class ListUtil {
     /**
      * Assert the actual users contains the expected logins
      *
-     * @param actualUsers    The user entity list to test
-     * @param expectedLogins The login list to find
+     * @param actual   The user entity list to test
+     * @param expected The login list to find
      */
-    public void assertContains(Set<UserEntity> actualUsers, String... expectedLogins) {
-        int expectedLoginsSize = 0;
-        int actualUsersSize = 0;
+    public void assertContainsUsers(Set<UserEntity> actual, String... expected) {
+        int expectedSize = expected != null ? expected.length : 0;
+        int actualSize = actual != null ? actual.size() : 0;
 
-        if (expectedLogins != null) {
-            expectedLoginsSize = expectedLogins.length;
+        Assertions.assertEquals(expectedSize, actualSize, "The lists doesn't have same size");
+
+        if (actual != null && expected != null) {
+            for (String expectedLogin : expected) {
+                Assertions.assertTrue(
+                    actual.stream().anyMatch(story -> story.getLogin().equals(expectedLogin)),
+                    String.format("Cannot find '%s' in actual", expectedLogin)
+                );
+            }
         }
+    }
 
-        if (actualUsers != null) {
-            actualUsersSize = actualUsers.size();
-        }
+    /**
+     * Assert the actual stories contains the expected ids
+     *
+     * @param actual   The story entity list to test
+     * @param expected The ID list to find
+     */
+    public void assertContainsStories(Set<StoryEntity> actual, Long... expected) {
+        int expectedSize = expected != null ? expected.length : 0;
+        int actualSize = actual != null ? actual.size() : 0;
 
-        Assertions.assertEquals(expectedLoginsSize, actualUsersSize, "The lists doesn't have same size");
+        Assertions.assertEquals(expectedSize, actualSize, "The lists doesn't have same size");
 
-        if (actualUsers != null && expectedLogins != null) {
-            for (String login : expectedLogins) {
-                Assertions.assertNotNull(login, "The expected login CANNOT be null");
+        if (actual != null && expected != null) {
+            for (Long id : expected) {
+                Assertions.assertNotNull(id, "The expected ID CANNOT be null");
 
-                Assertions.assertNotNull(actualUsers.stream().findFirst().filter(user -> user.getLogin().equals(login)
-                    ).orElse(null), String.format("Cannot find '%s' in actual", login)
+                Assertions.assertTrue(
+                    actual.stream().anyMatch(story -> story.getId().equals(id)),
+                    String.format("Cannot find '%s' in actual", id)
                 );
             }
         }
@@ -45,24 +61,19 @@ public class ListUtil {
      * @param actual   The actual list
      * @param expected The expected list
      */
-    public void assertContains(Set<Long> actual, Long... expected) {
-        int expectedSize = 0;
-        int actualSize = 0;
-
-        if (expected != null) {
-            expectedSize = expected.length;
-        }
-
-        if (actual != null) {
-            actualSize = actual.size();
-        }
+    public void assertContainsID(Set<Long> actual, Long... expected) {
+        int expectedSize = expected != null ? expected.length : 0;
+        int actualSize = actual != null ? actual.size() : 0;
 
         Assertions.assertEquals(expectedSize, actualSize, "The lists doesn't have same size");
 
         if (actual != null && expected != null) {
             for (Long value : expected) {
-                Assertions.assertNotNull(actual.stream().findFirst().filter(userId -> userId.equals(value)
-                    ).orElse(null), String.format("Cannot find '%s' in actual", value)
+                Assertions.assertNotNull(value, "The expected value CANNOT be null");
+
+                Assertions.assertTrue(
+                    actual.stream().anyMatch(actualValue -> actualValue.equals(value)),
+                    String.format("Cannot find '%s' in actual", value)
                 );
             }
         }

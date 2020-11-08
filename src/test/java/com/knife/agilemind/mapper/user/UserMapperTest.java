@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * Unit tests for {@link UserMapper}.
  */
-public class UserMapperTest {
+class UserMapperTest {
 
     private static final String DEFAULT_LOGIN = "johndoe";
     private static final Long DEFAULT_ID = 1L;
@@ -26,7 +26,7 @@ public class UserMapperTest {
     private UserDTO userDto;
 
     @BeforeEach
-    public void init() {
+    void init() {
         userMapper = new UserMapper();
         user = new UserEntity();
         user.setLogin(DEFAULT_LOGIN);
@@ -42,7 +42,7 @@ public class UserMapperTest {
     }
 
     @Test
-    public void testUsersToUserDTOsShouldMapOnlyNonNullUsers() {
+    void testUsersToUserDTOsShouldMapOnlyNonNullUsers() {
         List<UserEntity> users = new ArrayList<>();
         users.add(user);
         users.add(null);
@@ -54,7 +54,7 @@ public class UserMapperTest {
     }
 
     @Test
-    public void testUserDTOsToUsersShouldMapOnlyNonNullUsers() {
+    void testUserDTOsToUsersShouldMapOnlyNonNullUsers() {
         List<UserDTO> usersDto = new ArrayList<>();
         usersDto.add(userDto);
         usersDto.add(null);
@@ -66,7 +66,7 @@ public class UserMapperTest {
     }
 
     @Test
-    public void testUserDTOsToUsersWithAuthoritiesStringShouldMapToUsersWithAuthoritiesDomain() {
+    void testUserDTOsToUsersWithAuthoritiesStringShouldMapToUsersWithAuthoritiesDomain() {
         Set<String> authoritiesAsString = new HashSet<>();
         authoritiesAsString.add("ADMIN");
         userDto.setAuthorities(authoritiesAsString);
@@ -84,7 +84,7 @@ public class UserMapperTest {
     }
 
     @Test
-    public void testUserDTOsToUsersMapWithNullAuthoritiesStringShouldReturnUserWithEmptyAuthorities() {
+    void testUserDTOsToUsersMapWithNullAuthoritiesStringShouldReturnUserWithEmptyAuthorities() {
         userDto.setAuthorities(null);
 
         List<UserDTO> usersDto = new ArrayList<>();
@@ -99,7 +99,7 @@ public class UserMapperTest {
     }
 
     @Test
-    public void testUserDTOToUserMapWithAuthoritiesStringShouldReturnUserWithAuthorities() {
+    void testUserDTOToUserMapWithAuthoritiesStringShouldReturnUserWithAuthorities() {
         Set<String> authoritiesAsString = new HashSet<>();
         authoritiesAsString.add("ADMIN");
         userDto.setAuthorities(authoritiesAsString);
@@ -113,7 +113,7 @@ public class UserMapperTest {
     }
 
     @Test
-    public void testUserDTOToUserMapWithNullAuthoritiesStringShouldReturnUserWithEmptyAuthorities() {
+    void testUserDTOToUserMapWithNullAuthoritiesStringShouldReturnUserWithEmptyAuthorities() {
         userDto.setAuthorities(null);
 
         UserEntity user = userMapper.userDTOToUser(userDto);
@@ -124,13 +124,13 @@ public class UserMapperTest {
     }
 
     @Test
-    public void testUserDTOToUserMapWithNullUserShouldReturnNull() {
+    void testUserDTOToUserMapWithNullUserShouldReturnNull() {
         assertThat(userMapper.userDTOToUser(null)).isNull();
     }
 
     @Test
-    public void testUserFromId() {
-        assertThat(userMapper.userFromId(DEFAULT_ID).getId()).isEqualTo(DEFAULT_ID);
-        assertThat(userMapper.userFromId(null)).isNull();
+    void testUserFromId() {
+        assertThat(userMapper.idToUserEntity(DEFAULT_ID).getId()).isEqualTo(DEFAULT_ID);
+        assertThat(userMapper.idToUserEntity(null)).isNull();
     }
 }

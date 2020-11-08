@@ -1,55 +1,56 @@
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormControl, Validators} from '@angular/forms';
 import {Project} from 'app/entities/project.entity';
+import {BaseForm} from 'app/shared/form/base.form';
 
 /**
  * Represent the form to create project
  *
  * @author Dany Pignoux (dany.pignoux@erudo.fr)
  */
-export class ProjectCreateForm {
+export class ProjectCreateForm extends BaseForm {
   /**
-   * The form group
+   * Constructor
    */
-  private _form = new FormGroup({
-    name: new FormControl('', Validators.required),
-    description: new FormControl(''),
-  });
+  public constructor() {
+    super();
+
+    this.form.addControl('name', new FormControl('', Validators.required));
+    this.form.addControl('description', new FormControl(null));
+  }
+
+  // region Forms control
 
   /**
-   * Get the form
+   * Get the name form control
    *
-   * @return The form group
+   * @return The name form control
    */
-  get form(): FormGroup {
-    return this._form;
+  public get nameFormControl(): FormControl {
+    return this.getFormControl('name');
   }
 
   /**
-   * Check if the form is valid
+   * Get the description form control
    *
-   * @return TRUE if is valid, FALSE otherwise
+   * @return The description form control
    */
-  public get isValid(): boolean {
-    return this._form.valid;
+  public get descriptionFormControl(): FormControl {
+    return this.getFormControl('description');
   }
 
-  /**
-   * Get the name
-   *
-   * @return The name
-   */
-  public get name(): string | undefined {
-    return this._form.get('name')?.value;
+  // endregion
+
+  // region Values
+
+  public get name(): string {
+    return this.nameFormControl.value;
   }
 
-  /**
-   * Get the description
-   *
-   * @return The description
-   */
-  public get description(): string | undefined {
-    return this._form.get('description')?.value;
+  public get description(): string {
+    return this.descriptionFormControl.value;
   }
+
+  // endregion
 
   /**
    * Get a new project from the form

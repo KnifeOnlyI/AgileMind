@@ -31,6 +31,21 @@ public class UserValidator {
     }
 
     /**
+     * Assert the specified user id is valid
+     *
+     * @param userId The user id to check
+     */
+    public void assertExists(Long userId) {
+        if (userId == null) {
+            throw new TechnicalException();
+        }
+
+        if (this.userRepository.findById(userId).orElse(null) == null) {
+            throw new BusinessException(UserConstant.Error.NOT_FOUND, Status.NOT_FOUND);
+        }
+    }
+
+    /**
      * Assert and get a user with the specified ID exists in database
      *
      * @param id The ID of user to check

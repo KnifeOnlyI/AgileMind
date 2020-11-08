@@ -1,37 +1,31 @@
-<ag-message-list></ag-message-list>
-
-<h1 jhiTranslate="project.title.edit"></h1>
+<div class="row">
+    <div class="col-11">
+        <h1 jhiTranslate="project.title.edit"></h1>
+    </div>
+    <div class="col-1 text-right">
+        <ag-button-delete (onClick)="confirmDelete()"></ag-button-delete>
+    </div>
+</div>
 
 <hr>
 
-<form (ngSubmit)="onSubmit()" *ngIf="projectForm" [formGroup]="projectForm.form">
+<form (ngSubmit)="onSubmit()" *ngIf="form" [formGroup]="form.form">
     <div class="form-group">
-        <label for="projectName"><span jhiTranslate="project.form.field.name"></span></label>
-        <input class="form-control" formControlName="name" id="projectName" type="text">
+        <label for="projectName"><span jhiTranslate="global.form.field.name"></span></label>
+        <input [formControl]="form.nameFormControl" class="form-control" id="projectName" type="text">
     </div>
 
     <div class="form-group">
-        <label for="projectDescription"><span jhiTranslate="project.form.field.description"></span></label>
-        <textarea class="form-control" formControlName="description" id="projectDescription"></textarea>
+        <label for="projectDescription"><span jhiTranslate="global.form.field.description"></span></label>
+        <textarea [formControl]="form.descriptionFormControl" class="form-control" id="projectDescription"></textarea>
     </div>
 
-    <div class="form-group">
-        <label for="projectAssignatedUsers"><span jhiTranslate="project.form.field.assignatedUsers"></span></label>
-        <select class="form-control" formControlName="assignatedUsers" id="projectAssignatedUsers" multiple name="projectAssignatedUsers">
-            <option [value]="null">---</option>
-            <option *ngFor="let user of users" [value]="user.id">{{ user.login }}</option>
-        </select>
-    </div>
+    <ag-user-select [control]="form.assignatedUserIdListFormControl" [multiple]="true"></ag-user-select>
 
     <hr>
 
-    <div class="row">
-        <div class="col-1">
-            <ag-button-delete (click)="delete()"></ag-button-delete>
-        </div>
-        <div class="col-11 text-right">
-            <ag-button-cancel [routerLink]="['/project/', projectForm.projectId]"></ag-button-cancel>
-            <ag-button-save [disabled]="!projectForm.isValid"></ag-button-save>
-        </div>
+    <div class="text-right">
+        <ag-button-cancel [routerLink]="['/project/', form.idFormControl.value]"></ag-button-cancel>
+        <ag-button-save [disabled]="!form.isValid"></ag-button-save>
     </div>
 </form>

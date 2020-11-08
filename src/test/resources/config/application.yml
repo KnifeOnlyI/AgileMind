@@ -64,6 +64,7 @@ spring:
           home: target/elasticsearch
   liquibase:
     contexts: test
+    change-log: classpath:config/liquibase/master-test.xml
   mail:
     host: localhost
   main:

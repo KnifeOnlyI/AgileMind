@@ -72,7 +72,7 @@ public class UserMapper {
         }
     }
 
-    public UserEntity userFromId(Long id) {
+    public UserEntity idToUserEntity(Long id) {
         if (id == null) {
             return null;
         }
@@ -81,7 +81,7 @@ public class UserMapper {
         return user;
     }
 
-    public Long toId(UserEntity userEntity) {
+    public Long userEntityToId(UserEntity userEntity) {
         return userEntity != null ? userEntity.getId() : null;
     }
 }

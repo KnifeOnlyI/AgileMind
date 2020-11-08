@@ -1,0 +1,5 @@
+id;key
+
+1;storyStatus.key.todo
+2;storyStatus.key.inProgress
+3;storyStatus.key.done

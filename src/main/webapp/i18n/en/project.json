@@ -3,21 +3,18 @@
     "title": {
       "list": "Projects",
       "new": "New project",
-      "edit": "Update project"
+      "edit": "Update project",
+      "view": "Project"
     },
     "list": {
       "noResults": "No created project"
     },
-    "form": {
-      "field": {
-        "name": "Name",
-        "description": "Description",
-        "assignatedUsers": "Assignated users"
-      }
-    },
     "error": {
       "name": {
         "empty": "The project name cannot be empty"
+      },
+      "user": {
+        "not_assignated": "The user cannot be assigned to this story"
       },
       "form": {
         "invalid": "Invalid form"

@@ -1,12 +1,10 @@
 import {Component} from '@angular/core';
 import {ProjectService} from 'app/service/project.service';
 import {Router} from '@angular/router';
-import {MessageService} from 'app/service/message.service';
-import {TranslateService} from '@ngx-translate/core';
 import {ProjectCreateForm} from 'app/components/project/create/project-create.form';
-import {Message, MessageLevel} from 'app/shared/entity/message.entity';
 import {HttpErrorResponse} from '@angular/common/http';
-import {HTTPError} from 'app/shared/entity/error.entity';
+import {AlertService} from 'app/service/alert.service';
+import {Alert, AlertContent, AlertLevel} from 'app/shared/entity/alert.entity';
 
 /**
  * Component to manage project creation
@@ -17,21 +15,19 @@ import {HTTPError} from 'app/shared/entity/error.entity';
   templateUrl: './project-create.component.html',
 })
 export class ProjectCreateComponent {
-  public projectForm = new ProjectCreateForm();
+  public form = new ProjectCreateForm();
 
   /**
    * Constructor
    *
    * @param projectService The project service
    * @param router The router
-   * @param messageService The message service
-   * @param translateService The translation service
+   * @param alertService The alert service
    */
   public constructor(
     private projectService: ProjectService,
     private router: Router,
-    private messageService: MessageService,
-    private translateService: TranslateService
+    private alertService: AlertService
   ) {
   }
 
@@ -39,41 +35,24 @@ export class ProjectCreateComponent {
    * Submit the project
    */
   public onSubmit(): void {
-    this.projectForm.isValid ? this.onValidSubmit() : this.onInvalidSubmit();
+    this.form.isValid ?
+      this.onValidSubmit() :
+      this.alertService.add(new Alert(AlertLevel.ERROR, new AlertContent('project.error.form.invalid')));
   }
 
   /**
    * Executed on valid submit
    */
   private onValidSubmit(): void {
-    this.projectService.save(this.projectForm.project).subscribe(project => {
-      this.messageService.addMessage(new Message(
-        this.translateService.instant('project.message.created', {projectName: project.name}),
-        MessageLevel.SUCCESS
+    this.projectService.save(this.form.project).subscribe(project => {
+      this.alertService.add(new Alert(
+        AlertLevel.SUCCESS,
+        new AlertContent('project.message.created', {projectName: project.name})
       ));
 
       this.router.navigate(['/project']).then();
     }, (error: HttpErrorResponse) => {
-      this.onInvalidReponse(error.error);
+      this.alertService.add(new Alert(AlertLevel.ERROR, new AlertContent(error.error.title)));
     });
-  }
-
-  /**
-   * Executed on invalid submit
-   */
-  private onInvalidSubmit(): void {
-    this.messageService.addMessage(new Message(
-      this.translateService.instant('project.error.form.invalid'),
-      MessageLevel.DANGER
-    ));
-  }
-
-  /**
-   * Executed on receive invalid HTTP response
-   *
-   * @param error The HTTP error
-   */
-  private onInvalidReponse(error: HTTPError): void {
-    this.messageService.addMessage(new Message(this.translateService.instant(error.title), MessageLevel.DANGER));
   }
 }

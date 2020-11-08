@@ -8,6 +8,7 @@ import com.knife.agilemind.dto.project.ProjectDTO;
 import com.knife.agilemind.exception.BusinessException;
 import com.knife.agilemind.exception.TechnicalException;
 import com.knife.agilemind.repository.project.ProjectRepository;
+import com.knife.agilemind.service.user.UserService;
 import com.knife.agilemind.service.user.UserValidator;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,9 @@ public class ProjectValidator {
 
     @Autowired
     private UserValidator userValidator;
+
+    @Autowired
+    private UserService userService;
 
     /**
      * Assert the specified ID is not null
@@ -77,8 +81,10 @@ public class ProjectValidator {
      * Assert the specified DTO is valid to update a project in database
      *
      * @param projectDTO The project to update
+     *
+     * @return The project entity to update
      */
-    public void assertValid(ProjectDTO projectDTO) {
+    public ProjectEntity assertValid(ProjectDTO projectDTO) {
         if (projectDTO == null) {
             throw new TechnicalException();
         }
@@ -93,28 +99,36 @@ public class ProjectValidator {
             throw new BusinessException(ProjectConstant.Error.NAME_EMPTY, Status.BAD_REQUEST);
         }
 
-        this.assertValidAssignatedUsers(projectDTO.getAssignatedUsers());
+        this.assertValidAssignatedUsers(projectDTO.getAssignatedUserIdList());
+
+        ProjectEntity projectEntity = this.projectRepository.findById(projectDTO.getId()).orElse(null);
+
+        if (projectEntity == null) {
+            throw new BusinessException(ProjectConstant.Error.NOT_FOUND, Status.NOT_FOUND);
+        }
+
+        return projectEntity;
     }
 
     /**
-     * Assert the specified user is assignated to the specified project
+     * Assert the specified user is an admin or is assignated to the specified project
      *
-     * @param user          The user
-     * @param projectEntity The project to check
+     * @param user    The user
+     * @param project The project to check
      */
-    public void assertUserIsAssignated(UserEntity user, ProjectEntity projectEntity) {
+    public boolean userIsNotAssignated(UserEntity user, ProjectEntity project) {
         boolean isAssignated = false;
 
         if (user == null) {
             throw new BusinessException(ProjectConstant.Error.NOT_FOUND, Status.NOT_FOUND);
         }
 
-        if (user.getId() == null || projectEntity == null) {
+        if (user.getId() == null || project == null) {
             throw new TechnicalException();
         }
 
-        if (projectEntity.getAssignatedUsers() != null) {
-            for (UserEntity assignatedUser : projectEntity.getAssignatedUsers()) {
+        if (project.getAssignatedUsers() != null) {
+            for (UserEntity assignatedUser : project.getAssignatedUsers()) {
                 if (assignatedUser.getId().equals(user.getId())) {
                     isAssignated = true;
                     break;
@@ -122,9 +136,7 @@ public class ProjectValidator {
             }
         }
 
-        if (!isAssignated) {
-            throw new BusinessException(ProjectConstant.Error.NOT_FOUND, Status.NOT_FOUND);
-        }
+        return !isAssignated && !this.userService.userIsAdmin(user);
     }
 
     /**
@@ -135,10 +147,7 @@ public class ProjectValidator {
     private void assertValidAssignatedUsers(Set<Long> assignatedUsers) {
         if (assignatedUsers != null) {
             assignatedUsers.removeIf(Objects::isNull);
-
-            for (Long userId : assignatedUsers) {
-                this.userValidator.findById(userId);
-            }
+            assignatedUsers.forEach(userId -> userValidator.assertExists(userId));
         }
     }
 }

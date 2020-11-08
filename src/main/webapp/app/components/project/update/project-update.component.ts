@@ -1,14 +1,17 @@
 import {Component, OnInit} from '@angular/core';
 import {ProjectService} from 'app/service/project.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {MessageService} from 'app/service/message.service';
-import {TranslateService} from '@ngx-translate/core';
-import {Message, MessageLevel} from 'app/shared/entity/message.entity';
 import {ProjectUpdateForm} from 'app/components/project/update/project-update.form';
 import {HttpErrorResponse} from '@angular/common/http';
 import {UserService} from 'app/core/user/user.service';
-import {IUser} from 'app/core/user/user.model';
-import {HTTPError} from 'app/shared/entity/error.entity';
+import {
+  ConfirmDialogComponent,
+  ConfirmDialogType,
+  ExitState
+} from 'app/shared/components/dialogs/confirm/confirm-dialog.component';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {AlertService} from 'app/service/alert.service';
+import {Alert, AlertContent, AlertLevel} from 'app/shared/entity/alert.entity';
 
 /**
  * Component to manage project update
@@ -19,12 +22,7 @@ import {HTTPError} from 'app/shared/entity/error.entity';
   templateUrl: './project-update.component.html',
 })
 export class ProjectUpdateComponent implements OnInit {
-  public projectForm!: ProjectUpdateForm;
-
-  /**
-   * Users list
-   */
-  public users!: Array<IUser>;
+  public form!: ProjectUpdateForm;
 
   /**
    * Constructor
@@ -33,16 +31,16 @@ export class ProjectUpdateComponent implements OnInit {
    * @param router The router
    * @param routerService The router service
    * @param messageService The message service
-   * @param translateService The translation service
    * @param userService The user service
+   * @param modalService The modal service
    */
   public constructor(
     private projectService: ProjectService,
     private router: Router,
     private routerService: ActivatedRoute,
-    private messageService: MessageService,
-    private translateService: TranslateService,
+    private messageService: AlertService,
     private userService: UserService,
+    private modalService: NgbModal,
   ) {
   }
 
@@ -57,29 +55,41 @@ export class ProjectUpdateComponent implements OnInit {
         throw Error('No project ID specified in URL');
       }
     });
-
-    this.userService.query().subscribe((users) => {
-      this.users = users.body ? users.body : new Array<IUser>();
-    });
   }
 
   /**
    * Submit the project
    */
   public onSubmit(): void {
-    this.projectForm.isValid ? this.onValidSubmit() : this.onInvalidSubmit();
+    this.form.isValid ? this.onValidSubmit() : this.onInvalidSubmit();
   }
 
   /**
    * Delete the project
    */
   public delete(): void {
-    this.projectService.delete(this.projectForm.projectId).subscribe(() => {
-      this.messageService.addMessage(new Message(
-        this.translateService.instant('project.message.deleted', {projectName: this.projectForm.name}),
-        MessageLevel.SUCCESS
-      ));
+    this.projectService.delete(this.form.id).subscribe(() => {
+      this.messageService.add(new Alert(
+        AlertLevel.SUCCESS,
+        new AlertContent('project.message.deleted', {projectName: this.form.name}))
+      );
+
       this.router.navigate(['/project']).then();
+    });
+  }
+
+  /**
+   * Manage delete confirmation
+   */
+  public confirmDelete(): void {
+    const modalRef: ConfirmDialogComponent = this.modalService.open(ConfirmDialogComponent).componentInstance;
+
+    modalRef.type = ConfirmDialogType.DELETE;
+
+    modalRef.onClose.subscribe((exitState: ExitState) => {
+      if (exitState === ExitState.YES) {
+        this.delete();
+      }
     });
   }
 
@@ -87,15 +97,15 @@ export class ProjectUpdateComponent implements OnInit {
    * Executed on valid submit
    */
   private onValidSubmit(): void {
-    this.projectService.save(this.projectForm.project).subscribe(project => {
-      this.messageService.addMessage(new Message(
-        this.translateService.instant('project.message.updated', {projectName: project.name}),
-        MessageLevel.SUCCESS
+    this.projectService.save(this.form.project).subscribe(project => {
+      this.messageService.add(new Alert(
+        AlertLevel.SUCCESS,
+        new AlertContent('project.message.updated', {projectName: this.form.name})
       ));
 
       this.router.navigate(['/project/', project.id]).then();
     }, (error: HttpErrorResponse) => {
-      this.onInvalidReponse(error.error);
+      this.messageService.add(new Alert(AlertLevel.ERROR, new AlertContent(error.error.title)));
     });
   }
 
@@ -103,19 +113,7 @@ export class ProjectUpdateComponent implements OnInit {
    * Executed on invalid submit
    */
   private onInvalidSubmit(): void {
-    this.messageService.addMessage(new Message(
-      this.translateService.instant('project.form.field.error.invalid'),
-      MessageLevel.DANGER
-    ));
-  }
-
-  /**
-   * Executed on receive invalid HTTP response
-   *
-   * @param error The HTTP error
-   */
-  private onInvalidReponse(error: HTTPError): void {
-    this.messageService.addMessage(new Message(this.translateService.instant(error.title), MessageLevel.DANGER));
+    this.messageService.add(new Alert(AlertLevel.ERROR, new AlertContent('project.form.field.error.invalid')));
   }
 
   /**
@@ -124,7 +122,7 @@ export class ProjectUpdateComponent implements OnInit {
    * @param id ID of project to initialize
    */
   private getProject(id: number): void {
-    this.projectService.get(id).subscribe(project => (this.projectForm = new ProjectUpdateForm(project)),
+    this.projectService.get(id).subscribe(project => (this.form = new ProjectUpdateForm(project)),
       (error: HttpErrorResponse) => {
         if (error.status === 404) {
           this.router.navigate(['404']).then();

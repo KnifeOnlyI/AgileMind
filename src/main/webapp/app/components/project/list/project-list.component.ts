@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {Project} from 'app/entities/project.entity';
 import {ProjectService} from 'app/service/project.service';
-import {MessageService} from 'app/service/message.service';
 import {TranslateService} from '@ngx-translate/core';
+import {MessageService} from 'primeng/api';
 
 /**
  * Component to manage list displaying
@@ -11,6 +11,7 @@ import {TranslateService} from '@ngx-translate/core';
  */
 @Component({
   templateUrl: './project-list.component.html',
+  providers: [MessageService]
 })
 // @ts-ignore
 export class ProjectListComponent implements OnInit {
@@ -39,7 +40,7 @@ export class ProjectListComponent implements OnInit {
   public ngOnInit(): void {
     // Fetch all projects from back API
     this.projectService.getAll().subscribe(projects => {
-      this.projects = projects;
+      this.projects = projects.sort((a, b) => a.id! - b.id!);
     });
   }
 }

@@ -1,0 +1,37 @@
+{
+  "story": {
+    "title": {
+      "new": "New story",
+      "edit": "Update story"
+    },
+    "list": {
+      "noResults": "No created stories"
+    },
+    "form": {
+      "field": {
+        "points": "Story points",
+        "businessValue": "Business value",
+        "status": "Status",
+        "assignatedUser": "Assignated user"
+      }
+    },
+    "error": {
+      "name": {
+        "empty": "The story name cannot be empty"
+      },
+      "status": {
+        "id": {
+          "null": "The story status cannot be empty"
+        }
+      },
+      "form": {
+        "invalid": "Invalid form"
+      }
+    },
+    "message": {
+      "created": "Created story : {{ storyName }}",
+      "updated": "Updated story : {{ storyName }}",
+      "deleted": "Deleted story : {{ storyName }}"
+    }
+  }
+}

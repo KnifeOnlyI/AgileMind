@@ -1,17 +1,22 @@
 package com.knife.agilemind.service.project;
 
+import com.knife.agilemind.constant.project.ProjectConstant;
 import com.knife.agilemind.domain.project.ProjectEntity;
+import com.knife.agilemind.domain.story.StoryEntity;
+import com.knife.agilemind.domain.user.UserEntity;
 import com.knife.agilemind.dto.project.CreateProjectDTO;
 import com.knife.agilemind.dto.project.ProjectDTO;
 import com.knife.agilemind.exception.BusinessException;
-import com.knife.agilemind.mapper.project.ProjectMapper;
 import com.knife.agilemind.repository.project.ProjectRepository;
+import com.knife.agilemind.service.story.StoryService;
 import com.knife.agilemind.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.zalando.problem.Status;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Service to manage the projects
@@ -24,13 +29,13 @@ public class ProjectService {
     private ProjectRepository projectRepository;
 
     @Autowired
-    private ProjectMapper projectMapper;
-
-    @Autowired
     private ProjectValidator projectValidator;
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private StoryService storyService;
 
     /**
      * Get the project identified by the specified ID
@@ -40,7 +45,7 @@ public class ProjectService {
      * @return The project
      */
     public ProjectDTO get(Long id) {
-        if (!this.userService.userIsLogged()) {
+        if (this.userService.userIsNotLogged()) {
             throw new BusinessException(Status.NOT_FOUND);
         }
 
@@ -48,11 +53,13 @@ public class ProjectService {
 
         ProjectEntity projectEntity = this.projectValidator.findById(id);
 
-        if (!this.userService.currentIsAdmin()) {
-            this.projectValidator.assertUserIsAssignated(this.userService.getLoggedUser(), projectEntity);
+        if (!this.userService.currentIsAdmin() &&
+            this.projectValidator.userIsNotAssignated(this.userService.getLoggedUser(), projectEntity)
+        ) {
+            throw new BusinessException(ProjectConstant.Error.NOT_FOUND, Status.NOT_FOUND);
         }
 
-        return this.projectMapper.toDTO(projectEntity);
+        return this.toDTO(projectEntity);
     }
 
     /**
@@ -69,7 +76,7 @@ public class ProjectService {
             projectList = this.projectRepository.getAllByAssignatedUsersContains(this.userService.getLoggedUser());
         }
 
-        return this.projectMapper.toDTOs(projectList);
+        return this.toDTOs(projectList);
     }
 
     /**
@@ -86,7 +93,11 @@ public class ProjectService {
 
         this.projectValidator.assertValid(createProjectDTO);
 
-        return this.projectMapper.toDTO(this.projectRepository.save(this.projectMapper.toEntity(createProjectDTO)));
+        ProjectEntity projectEntity = this.projectRepository.save(new ProjectEntity()
+            .setName(createProjectDTO.getName())
+            .setDescription(createProjectDTO.getDescription()));
+
+        return this.toDTO(projectEntity);
     }
 
     /**
@@ -101,9 +112,18 @@ public class ProjectService {
             throw new BusinessException(Status.NOT_FOUND);
         }
 
-        this.projectValidator.assertValid(projectDTO);
+        ProjectEntity projectEntity = this.projectValidator.assertValid(projectDTO)
+            .setName(projectDTO.getName())
+            .setDescription(projectDTO.getDescription())
+            .setAssignatedUsers(this.userService.findAllById(projectDTO.getAssignatedUserIdList()));
 
-        return this.projectMapper.toDTO(this.projectRepository.save(this.projectMapper.toEntity(projectDTO)));
+        Set<StoryEntity> stories = this.storyService.findAllById(projectDTO.getStoryIdList());
+
+        for (StoryEntity storyEntity : stories) {
+            projectEntity.getStories().add(storyEntity);
+        }
+
+        return this.toDTO(projectEntity);
     }
 
     /**
@@ -119,5 +139,86 @@ public class ProjectService {
         this.projectValidator.assertNotNullId(id);
 
         this.projectRepository.delete(this.projectValidator.findById(id));
+    }
+
+    /**
+     * Find project in database by the specified ID
+     *
+     * @param id The project id to find
+     */
+    public ProjectEntity findById(Long id) {
+        ProjectEntity results = null;
+
+        if (id != null) {
+            results = this.projectRepository.findById(id).orElse(null);
+        }
+
+
+        return results;
+    }
+
+    /**
+     * Find project in database by the specified ID (throw error if not found)
+     *
+     * @param id The project id to find
+     */
+    public ProjectEntity findExistingById(Long id) {
+        ProjectEntity results = this.findById(id);
+
+        if (results == null) {
+            throw new BusinessException(ProjectConstant.Error.NOT_FOUND, Status.NOT_FOUND);
+        }
+
+        return results;
+    }
+
+    /**
+     * Convert the specified entity to DTO
+     *
+     * @param entity The entity
+     *
+     * @return The DTO
+     */
+    public ProjectDTO toDTO(ProjectEntity entity) {
+        ProjectDTO results = new ProjectDTO();
+
+        if (entity != null) {
+            results.setId(entity.getId());
+            results.setName(entity.getName());
+            results.setDescription(entity.getDescription());
+
+            if (entity.getAssignatedUsers() != null) {
+                for (UserEntity assignatedUser : entity.getAssignatedUsers()) {
+                    results.getAssignatedUserIdList().add(this.userService.toId(assignatedUser));
+                }
+            }
+
+            if (entity.getStories() != null) {
+                for (StoryEntity story : entity.getStories()) {
+                    results.getStoryIdList().add(story.getId());
+                }
+            }
+        }
+
+        return results;
+    }
+
+    /**
+     * Convert the specified entities to DTOs
+     *
+     * @param entities The entities
+     *
+     * @return The DTOs
+     */
+    public List<ProjectDTO> toDTOs(List<ProjectEntity> entities) {
+        List<ProjectDTO> results = new ArrayList<>();
+
+        if (entities != null) {
+            for (ProjectEntity entity : entities) {
+                results.add(this.toDTO(entity));
+            }
+        }
+
+        return results;
     }
 }

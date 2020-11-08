@@ -4,12 +4,22 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Default entity mapper
+ * Entity/DTO/CreateDTO mapper
  *
  * @param <E> Entity type
  * @param <D> DTO type
+ * @param <C> CreateDTO type
  */
-public interface EntityMapper<E, D> {
+public interface EntityMapper<E, D, C> {
+    /**
+     * Convert a CreateDTO to entity
+     *
+     * @param dto The CreateDTO to convert
+     *
+     * @return The entity
+     */
+    E createToEntity(C dto);
+
     /**
      * DTO to entity
      *
@@ -17,7 +27,7 @@ public interface EntityMapper<E, D> {
      *
      * @return The entity
      */
-    E toEntity(D dto);
+    E dtoToEntity(D dto);
 
     /**
      * Entity to DTO
@@ -26,7 +36,7 @@ public interface EntityMapper<E, D> {
      *
      * @return The DTO
      */
-    D toDTO(E entity);
+    D entityToDTO(E entity);
 
     /**
      * DTOs to entities
@@ -35,7 +45,7 @@ public interface EntityMapper<E, D> {
      *
      * @return The entities
      */
-    List<E> toEntities(List<D> dtos);
+    List<E> dtoListToEntityList(List<D> dtos);
 
     /**
      * Entities to DTOs
@@ -44,7 +54,7 @@ public interface EntityMapper<E, D> {
      *
      * @return The DTOs
      */
-    List<D> toDTOs(List<E> entities);
+    List<D> entityListToDTOList(List<E> entities);
 
     /**
      * DTOs to entities
@@ -53,7 +63,7 @@ public interface EntityMapper<E, D> {
      *
      * @return The entities
      */
-    Set<E> toEntities(Set<D> dtos);
+    Set<E> dtoSetToEntitySet(Set<D> dtos);
 
     /**
      * Entities to DTOs
@@ -62,5 +72,5 @@ public interface EntityMapper<E, D> {
      *
      * @return The DTOs
      */
-    Set<D> toDTOs(Set<E> entities);
+    Set<D> entitySetToDTO(Set<E> entities);
 }

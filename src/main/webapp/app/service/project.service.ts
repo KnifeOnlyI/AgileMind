@@ -1,20 +1,21 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { Project } from '../entities/project.entity';
-import { SERVER_API_URL } from '../app.constants';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
+import {Project} from '../entities/project.entity';
+import {SERVER_API_URL} from '../app.constants';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 // @ts-ignore
 export class ProjectService {
-  private static BASE_URL = `${SERVER_API_URL}api/project`;
+  public static BASE_URL = `${SERVER_API_URL}api/project`;
 
   /**
    * Constructeur
    *
    * @param http HTTP service
    */
-  public constructor(private http: HttpClient) {}
+  public constructor(private http: HttpClient) {
+  }
 
   /**
    * Get project with the specified id

@@ -1,0 +1,256 @@
+package com.knife.agilemind.domain.story;
+
+import com.knife.agilemind.domain.project.ProjectEntity;
+import com.knife.agilemind.domain.user.UserEntity;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import java.io.Serializable;
+
+/**
+ * Represent a story entity
+ *
+ * @author Dany Pignoux (dany.pignoux@erudo.fr)
+ */
+@Entity
+@Table(name = "story")
+public class StoryEntity implements Serializable {
+    private static final long serialVersionUID = -6760681991131405269L;
+
+    /**
+     * The ID
+     */
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "story_seq")
+    @SequenceGenerator(name = "story_seq", allocationSize = 1)
+    private Long id;
+
+    /**
+     * The name
+     */
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    /**
+     * The description
+     */
+    @Column(name = "description")
+    private String description;
+
+    /**
+     * The story points
+     */
+    @Column(name = "points")
+    private Long points;
+
+    /**
+     * The business value
+     */
+    @Column(name = "business_value")
+    private Long businessValue;
+
+    /**
+     * The status
+     */
+    @ManyToOne
+    @JoinColumn(name = "status_id")
+    private StoryStatusEntity status;
+
+    /**
+     * The assignated user
+     */
+    @ManyToOne
+    @JoinColumn(name = "assignated_user_id")
+    private UserEntity assignatedUser;
+
+    /**
+     * The project
+     */
+    @ManyToOne
+    @JoinColumn(name = "project_id", nullable = false)
+    private ProjectEntity project;
+
+    /**
+     * Get the value of : serialVersionUID
+     *
+     * @return serialVersionUID
+     */
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    /**
+     * Get the value of : id
+     *
+     * @return id
+     */
+    public Long getId() {
+        return id;
+    }
+
+    /**
+     * Set value of : id
+     *
+     * @param id The new value
+     *
+     * @return this
+     */
+    public StoryEntity setId(Long id) {
+        this.id = id;
+        return this;
+    }
+
+    /**
+     * Get the value of : name
+     *
+     * @return name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Set value of : name
+     *
+     * @param name The new value
+     *
+     * @return this
+     */
+    public StoryEntity setName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    /**
+     * Get the value of : description
+     *
+     * @return description
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * Set value of : description
+     *
+     * @param description The new value
+     *
+     * @return this
+     */
+    public StoryEntity setDescription(String description) {
+        this.description = description;
+        return this;
+    }
+
+    /**
+     * Get the value of : points
+     *
+     * @return points
+     */
+    public Long getPoints() {
+        return points;
+    }
+
+    /**
+     * Set value of : points
+     *
+     * @param points The new value
+     *
+     * @return this
+     */
+    public StoryEntity setPoints(Long points) {
+        this.points = points;
+        return this;
+    }
+
+    /**
+     * Get the value of : businessValue
+     *
+     * @return businessValue
+     */
+    public Long getBusinessValue() {
+        return businessValue;
+    }
+
+    /**
+     * Set value of : businessValue
+     *
+     * @param businessValue The new value
+     *
+     * @return this
+     */
+    public StoryEntity setBusinessValue(Long businessValue) {
+        this.businessValue = businessValue;
+        return this;
+    }
+
+    /**
+     * Get the value of : status
+     *
+     * @return status
+     */
+    public StoryStatusEntity getStatus() {
+        return status;
+    }
+
+    /**
+     * Set value of : status
+     *
+     * @param status The new value
+     *
+     * @return this
+     */
+    public StoryEntity setStatus(StoryStatusEntity status) {
+        this.status = status;
+        return this;
+    }
+
+    /**
+     * Get the value of : assignatedUser
+     *
+     * @return assignatedUser
+     */
+    public UserEntity getAssignatedUser() {
+        return assignatedUser;
+    }
+
+    /**
+     * Set value of : assignatedUser
+     *
+     * @param assignatedUser The new value
+     *
+     * @return this
+     */
+    public StoryEntity setAssignatedUser(UserEntity assignatedUser) {
+        this.assignatedUser = assignatedUser;
+        return this;
+    }
+
+    /**
+     * Get the value of : project
+     *
+     * @return project
+     */
+    public ProjectEntity getProject() {
+        return project;
+    }
+
+    /**
+     * Set value of : project
+     *
+     * @param project The new value
+     *
+     * @return this
+     */
+    public StoryEntity setProject(ProjectEntity project) {
+        this.project = project;
+        return this;
+    }
+}

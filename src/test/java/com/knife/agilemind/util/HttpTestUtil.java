@@ -84,6 +84,29 @@ public class HttpTestUtil {
     }
 
     /**
+     * Assert the specified action throws a business exception with the specified status
+     *
+     * @param testedAction   The action to test
+     * @param expectedStatus The expected status
+     */
+    public void assertBusinessException(TestedAction testedAction, StatusType expectedStatus) {
+        try {
+            testedAction.doAction();
+
+            Assertions.fail(String.format("Expected exception of type '%s', none was thrown",
+                BusinessException.class.getName()
+            ));
+        } catch (BusinessException e) {
+            Assertions.assertEquals(expectedStatus, e.getStatus());
+        } catch (Exception e) {
+            Assertions.fail(String.format("Expected exception of type '%s' , '%s' thrown",
+                BusinessException.class.getName(),
+                e.getClass().getName()
+            ));
+        }
+    }
+
+    /**
      * Assert the specified action throws a technical exception with the specified errorKey and status
      *
      * @param testedAction The action to test
