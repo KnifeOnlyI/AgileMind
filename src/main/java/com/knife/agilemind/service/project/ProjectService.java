@@ -54,7 +54,7 @@ public class ProjectService {
         ProjectEntity projectEntity = this.projectValidator.findById(id);
 
         if (!this.userService.currentIsAdmin() &&
-            this.projectValidator.userIsNotAssignated(this.userService.getLoggedUser(), projectEntity)
+            this.projectValidator.userIsNotAssigned(this.userService.getLoggedUser(), projectEntity)
         ) {
             throw new BusinessException(ProjectConstant.Error.NOT_FOUND, Status.NOT_FOUND);
         }
@@ -73,7 +73,7 @@ public class ProjectService {
         if (this.userService.currentIsAdmin()) {
             projectList = this.projectRepository.findAll();
         } else {
-            projectList = this.projectRepository.getAllByAssignatedUsersContains(this.userService.getLoggedUser());
+            projectList = this.projectRepository.getAllByAssignedUsersContains(this.userService.getLoggedUser());
         }
 
         return this.toDTOs(projectList);
@@ -115,7 +115,7 @@ public class ProjectService {
         ProjectEntity projectEntity = this.projectValidator.assertValid(projectDTO)
             .setName(projectDTO.getName())
             .setDescription(projectDTO.getDescription())
-            .setAssignatedUsers(this.userService.findAllById(projectDTO.getAssignatedUserIdList()));
+            .setAssignedUsers(this.userService.findAllById(projectDTO.getAssignedUserIdList()));
 
         Set<StoryEntity> stories = this.storyService.findAllById(projectDTO.getStoryIdList());
 
@@ -187,9 +187,9 @@ public class ProjectService {
             results.setName(entity.getName());
             results.setDescription(entity.getDescription());
 
-            if (entity.getAssignatedUsers() != null) {
-                for (UserEntity assignatedUser : entity.getAssignatedUsers()) {
-                    results.getAssignatedUserIdList().add(this.userService.toId(assignatedUser));
+            if (entity.getAssignedUsers() != null) {
+                for (UserEntity assignedUser : entity.getAssignedUsers()) {
+                    results.getAssignedUserIdList().add(this.userService.toId(assignedUser));
                 }
             }
 

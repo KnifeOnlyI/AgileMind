@@ -23,7 +23,7 @@ export class StoryUpdateForm extends StoryCreateForm {
     this.form.patchValue({points: story.points});
     this.form.patchValue({businessValue: story.businessValue});
     this.form.patchValue({statusId: story.statusId});
-    this.form.patchValue({assignatedUserId: story.assignatedUserId});
+    this.form.patchValue({assignedUserId: story.assignedUserId});
   }
 
   // region Forms control

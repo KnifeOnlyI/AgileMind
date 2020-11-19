@@ -1,0 +1,35 @@
+{
+  "task": {
+    "title": {
+      "new": "Nouvelle tâche",
+      "edit": "Mise à jour d'une tâche"
+    },
+    "list": {
+      "noResults": "Aucune tâche créée"
+    },
+    "form": {
+      "field": {
+        "estimatedTime": "Temps estimé (minutes)",
+        "loggedTime": "Temps enregistré (minutes)"
+      }
+    },
+    "error": {
+      "name": {
+        "empty": "Le nom de la tâche ne peux pas être nul"
+      },
+      "status": {
+        "id": {
+          "null": "Le statut de la tâche est obligatoire"
+        }
+      },
+      "form": {
+        "invalid": "Formulaire invalide"
+      }
+    },
+    "alert": {
+      "created": "Tâche créée",
+      "updated": "Tâche mise à jour",
+      "deleted": "Tâche supprimée"
+    }
+  }
+}

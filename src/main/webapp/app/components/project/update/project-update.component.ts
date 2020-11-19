@@ -69,10 +69,7 @@ export class ProjectUpdateComponent implements OnInit {
    */
   public delete(): void {
     this.projectService.delete(this.form.id).subscribe(() => {
-      this.messageService.add(new Alert(
-        AlertLevel.SUCCESS,
-        new AlertContent('project.message.deleted', {projectName: this.form.name}))
-      );
+      this.messageService.add(new Alert(AlertLevel.SUCCESS, new AlertContent('project.alert.deleted')));
 
       this.router.navigate(['/project']).then();
     });
@@ -98,12 +95,9 @@ export class ProjectUpdateComponent implements OnInit {
    */
   private onValidSubmit(): void {
     this.projectService.save(this.form.project).subscribe(project => {
-      this.messageService.add(new Alert(
-        AlertLevel.SUCCESS,
-        new AlertContent('project.message.updated', {projectName: this.form.name})
-      ));
+      this.messageService.add(new Alert(AlertLevel.SUCCESS, new AlertContent('project.alert.updated')));
 
-      this.router.navigate(['/project/', project.id]).then();
+      this.router.navigate(['/project', project.id]).then();
     }, (error: HttpErrorResponse) => {
       this.messageService.add(new Alert(AlertLevel.ERROR, new AlertContent(error.error.title)));
     });

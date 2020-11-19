@@ -23,9 +23,8 @@ import {ToastrModule} from 'ngx-toastr';
   ],
   imports: [
     ToastrModule.forRoot({
-      easeTime: 300,
       progressBar: true,
-      positionClass: 'toast-bottom-left',
+      preventDuplicates: false,
     }),
   ]
 })

@@ -15,7 +15,7 @@
 
 <ng-container *ngIf="projects && projects.length > 0; else NoProjects">
     <div class="row">
-        <div *ngFor="let project of projects" class="col-2" style="padding: 25px; cursor: pointer;">
+        <div *ngFor="let project of projects" class="col-3" style="padding: 25px; cursor: pointer;">
             <div [routerLink]="['/project/', project.id]" class="card bg-light mb-3" style="width: 18rem;">
                 <div class="card-body">
                     <h5 class="card-title text-center">{{project.name}}</h5>

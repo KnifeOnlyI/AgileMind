@@ -17,6 +17,9 @@ import {ProjectUpdateComponent} from 'app/components/project/update/project-upda
     ProjectUpdateComponent,
     ProjectViewComponent,
   ],
+  exports: [
+    ProjectListComponent
+  ]
 })
 // @ts-ignore
 export class AgileMindProjectModule {

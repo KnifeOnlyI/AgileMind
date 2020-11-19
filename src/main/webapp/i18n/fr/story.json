@@ -12,7 +12,8 @@
         "points": "Story points",
         "businessValue": "Valeur business",
         "status": "Statut",
-        "assignatedUser": "Utilisateur assigné"
+        "assignedUser": "Utilisateur assigné",
+        "tasks": "Tâches"
       }
     },
     "error": {
@@ -28,10 +29,10 @@
         "invalid": "Invalid form"
       }
     },
-    "message": {
-      "created": "Story créée : {{ storyName }}",
-      "updated": "Story mise à jour : {{ storyName }}",
-      "deleted": "Story supprimée : {{ storyName }}"
+    "alert": {
+      "created": "Story créée",
+      "updated": "Story mise à jour",
+      "deleted": "Story supprimée"
     }
   }
 }

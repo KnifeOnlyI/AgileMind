@@ -1,0 +1,9 @@
+{
+  "taskStatus": {
+    "key": {
+      "todo": "Todo",
+      "inProgress": "In progress",
+      "done": "Done"
+    }
+  }
+}

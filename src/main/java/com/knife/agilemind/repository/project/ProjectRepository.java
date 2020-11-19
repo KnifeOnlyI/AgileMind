@@ -15,11 +15,11 @@ import java.util.List;
 @Repository
 public interface ProjectRepository extends JpaRepository<ProjectEntity, Long> {
     /**
-     * Get all projects assignated to the specified user
+     * Get all projects assigned to the specified user
      *
      * @param userEntity The user
      *
-     * @return The projects assignated to the specified user
+     * @return The projects assigned to the specified user
      */
-    List<ProjectEntity> getAllByAssignatedUsersContains(UserEntity userEntity);
+    List<ProjectEntity> getAllByAssignedUsersContains(UserEntity userEntity);
 }

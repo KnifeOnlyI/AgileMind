@@ -12,19 +12,19 @@ import {UserService} from 'app/core/user/user.service';
   selector: 'ag-user-select',
   template: `
     <div *ngIf="control && users" class="form-group">
-      <label for="assignatedUserId">
-        <span [jhiTranslate]="multiple ? 'global.form.field.assignatedUsers' : 'global.form.field.assignatedUser'">
+      <label for="assignedUserId">
+        <span [jhiTranslate]="multiple ? 'global.form.field.assignedUsers' : 'global.form.field.assignedUser'">
         </span>
       </label>
       <ng-container *ngIf="multiple">
-        <select class="form-control" id="assignatedUserId" name="assignatedUserId" [formControl]="control"
+        <select class="form-control" id="assignedUserId" name="assignedUserId" [formControl]="control"
                 [multiple]="multiple">
           <option [value]="null">---</option>
           <option *ngFor="let user of users" [value]="user.id">{{ user.login }}</option>
         </select>
       </ng-container>
       <ng-container *ngIf="!multiple">
-        <select class="form-control" id="assignatedUserId" name="assignatedUserId" [formControl]="control">
+        <select class="form-control" id="assignedUserId" name="assignedUserId" [formControl]="control">
           <option [value]="null">---</option>
           <option *ngFor="let user of users" [value]="user.id">{{ user.login }}</option>
         </select>

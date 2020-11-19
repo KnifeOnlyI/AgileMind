@@ -62,7 +62,7 @@ public class StoryService {
             .setPoints(createStoryDTO.getPoints())
             .setBusinessValue(createStoryDTO.getBusinessValue())
             .setStatus(this.storyStatusService.findById(createStoryDTO.getStatusId()))
-            .setAssignatedUser(this.userService.findById(createStoryDTO.getAssignatedUserId()))
+            .setAssignedUser(this.userService.findById(createStoryDTO.getAssignedUserId()))
             .setProject(this.projectService.findById(createStoryDTO.getProjectId()))
         ));
     }
@@ -85,9 +85,9 @@ public class StoryService {
 
         StoryEntity storyEntity = this.storyRepository.findById(id).orElse(null);
 
-        // If the story's not exists or user is not assignated, throw "STORY_NOT_FOUND" error
+        // If the story's not exists or user is not assigned, throw "STORY_NOT_FOUND" error
         if (storyEntity == null ||
-            this.projectValidator.userIsNotAssignated(this.userService.getLoggedUser(), storyEntity.getProject())
+            this.projectValidator.userIsNotAssigned(this.userService.getLoggedUser(), storyEntity.getProject())
         ) {
             throw new BusinessException(StoryConstant.Error.NOT_FOUND, Status.NOT_FOUND);
         }
@@ -111,9 +111,9 @@ public class StoryService {
 
         ProjectEntity project = this.projectService.findById(projectId);
 
-        // If the project's not exists or user is not assignated, throw "PROJECT_NOT_FOUND" error
+        // If the project's not exists or user is not assigned, throw "PROJECT_NOT_FOUND" error
         if (project == null ||
-            this.projectValidator.userIsNotAssignated(this.userService.getLoggedUser(), project)
+            this.projectValidator.userIsNotAssigned(this.userService.getLoggedUser(), project)
         ) {
             throw new BusinessException(ProjectConstant.Error.NOT_FOUND, Status.NOT_FOUND);
         }
@@ -139,7 +139,7 @@ public class StoryService {
             .setPoints(storyDTO.getPoints())
             .setBusinessValue(storyDTO.getBusinessValue())
             .setStatus(this.storyStatusService.findById(storyDTO.getStatusId()))
-            .setAssignatedUser(this.userService.findById(storyDTO.getAssignatedUserId()))
+            .setAssignedUser(this.userService.findById(storyDTO.getAssignedUserId()))
             .setProject(this.projectService.findById(storyDTO.getProjectId()))
         );
     }
@@ -161,12 +161,28 @@ public class StoryService {
         StoryEntity storyEntity = this.storyRepository.findById(id).orElse(null);
 
         if (storyEntity == null ||
-            this.projectValidator.userIsNotAssignated(this.userService.getLoggedUser(), storyEntity.getProject())
+            this.projectValidator.userIsNotAssigned(this.userService.getLoggedUser(), storyEntity.getProject())
         ) {
             throw new BusinessException(StoryConstant.Error.NOT_FOUND, Status.NOT_FOUND);
         }
 
         this.storyRepository.delete(storyEntity);
+    }
+
+    /**
+     * Find story in database by the specified ID
+     *
+     * @param id The stiry id to find
+     */
+    public StoryEntity findById(Long id) {
+        StoryEntity results = null;
+
+        if (id != null) {
+            results = this.storyRepository.findById(id).orElse(null);
+        }
+
+
+        return results;
     }
 
     /**
@@ -201,9 +217,9 @@ public class StoryService {
                 results.setStatusId(entity.getStatus().getId());
             }
 
-            if (entity.getAssignatedUser() != null) {
+            if (entity.getAssignedUser() != null) {
 
-                results.setAssignatedUserId(entity.getAssignatedUser().getId());
+                results.setAssignedUserId(entity.getAssignedUser().getId());
             }
 
             if (entity.getProject() != null) {

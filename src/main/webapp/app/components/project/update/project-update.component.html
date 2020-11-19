@@ -10,22 +10,25 @@
 <hr>
 
 <form (ngSubmit)="onSubmit()" *ngIf="form" [formGroup]="form.form">
-    <div class="form-group">
-        <label for="projectName"><span jhiTranslate="global.form.field.name"></span></label>
-        <input [formControl]="form.nameFormControl" class="form-control" id="projectName" type="text">
-    </div>
+    <div class="row">
+        <div class="col-3">
+            <div class="form-group">
+                <label for="projectName"><span jhiTranslate="global.form.field.name"></span></label>
+                <input [formControl]="form.nameFormControl" class="form-control" id="projectName" type="text">
+            </div>
 
-    <div class="form-group">
-        <label for="projectDescription"><span jhiTranslate="global.form.field.description"></span></label>
-        <textarea [formControl]="form.descriptionFormControl" class="form-control" id="projectDescription"></textarea>
+            <ag-user-select [control]="form.assignedUserIdListFormControl" [multiple]="true"></ag-user-select>
+        </div>
+        <div class="col-9 form-group">
+            <label for="description"><span jhiTranslate="global.form.field.description"></span></label>
+            <textarea [formControl]="form.descriptionFormControl" class="form-control" id="description" rows="7"></textarea>
+        </div>
     </div>
-
-    <ag-user-select [control]="form.assignatedUserIdListFormControl" [multiple]="true"></ag-user-select>
 
     <hr>
 
-    <div class="text-right">
-        <ag-button-cancel [routerLink]="['/project/', form.idFormControl.value]"></ag-button-cancel>
+    <div class="text-left">
+        <ag-button-cancel [routerLink]="['/project', form.idFormControl.value]"></ag-button-cancel>
         <ag-button-save [disabled]="!form.isValid"></ag-button-save>
     </div>
 </form>

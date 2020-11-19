@@ -44,13 +44,10 @@ export class ProjectCreateComponent {
    * Executed on valid submit
    */
   private onValidSubmit(): void {
-    this.projectService.save(this.form.project).subscribe(project => {
-      this.alertService.add(new Alert(
-        AlertLevel.SUCCESS,
-        new AlertContent('project.message.created', {projectName: project.name})
-      ));
+    this.projectService.save(this.form.project).subscribe(() => {
+      this.alertService.add(new Alert(AlertLevel.SUCCESS, new AlertContent('project.alert.created')));
 
-      this.router.navigate(['/project']).then();
+      this.router.navigate(['/']).then();
     }, (error: HttpErrorResponse) => {
       this.alertService.add(new Alert(AlertLevel.ERROR, new AlertContent(error.error.title)));
     });

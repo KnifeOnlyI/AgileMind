@@ -28,9 +28,9 @@ public class ProjectDTO implements Serializable {
     private String description;
 
     /**
-     * The assignated user id list
+     * The assigned user id list
      */
-    private Set<Long> assignatedUserIdList = new HashSet<>();
+    private Set<Long> assignedUserIdList = new HashSet<>();
 
     /**
      * The story id list
@@ -110,23 +110,23 @@ public class ProjectDTO implements Serializable {
     }
 
     /**
-     * Get the value of : assignatedUserIdList
+     * Get the value of : assignedUserIdList
      *
-     * @return assignatedUserIdList
+     * @return assignedUserIdList
      */
-    public Set<Long> getAssignatedUserIdList() {
-        return assignatedUserIdList;
+    public Set<Long> getAssignedUserIdList() {
+        return assignedUserIdList;
     }
 
     /**
-     * Set value of : assignatedUserIdList
+     * Set value of : assignedUserIdList
      *
-     * @param assignatedUserIdList The new value
+     * @param assignedUserIdList The new value
      *
      * @return this
      */
-    public ProjectDTO setAssignatedUserIdList(Set<Long> assignatedUserIdList) {
-        this.assignatedUserIdList = assignatedUserIdList;
+    public ProjectDTO setAssignedUserIdList(Set<Long> assignedUserIdList) {
+        this.assignedUserIdList = assignedUserIdList;
         return this;
     }
 

@@ -5,8 +5,9 @@
         "id": "ID",
         "name": "Nom",
         "description": "Description",
-        "assignatedUser": "Utilisateur assigné",
-        "assignatedUsers": "Utilisateurs assignés"
+        "status": "Statut",
+        "assignedUser": "Utilisateur assigné",
+        "assignedUsers": "Utilisateurs assignés"
       }
     },
     "confirm": {

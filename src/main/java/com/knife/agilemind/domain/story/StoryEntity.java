@@ -1,6 +1,7 @@
 package com.knife.agilemind.domain.story;
 
 import com.knife.agilemind.domain.project.ProjectEntity;
+import com.knife.agilemind.domain.task.TaskEntity;
 import com.knife.agilemind.domain.user.UserEntity;
 
 import javax.persistence.Column;
@@ -10,9 +11,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Represent a story entity
@@ -64,11 +68,17 @@ public class StoryEntity implements Serializable {
     private StoryStatusEntity status;
 
     /**
-     * The assignated user
+     * The assigned user
      */
     @ManyToOne
-    @JoinColumn(name = "assignated_user_id")
-    private UserEntity assignatedUser;
+    @JoinColumn(name = "assigned_user_id")
+    private UserEntity assignedUser;
+
+    /**
+     * The tasks
+     */
+    @OneToMany(mappedBy = "story", orphanRemoval = true)
+    private Set<TaskEntity> tasks = new HashSet<>();
 
     /**
      * The project
@@ -213,23 +223,44 @@ public class StoryEntity implements Serializable {
     }
 
     /**
-     * Get the value of : assignatedUser
+     * Get the value of : assignedUser
      *
-     * @return assignatedUser
+     * @return assignedUser
      */
-    public UserEntity getAssignatedUser() {
-        return assignatedUser;
+    public UserEntity getAssignedUser() {
+        return assignedUser;
     }
 
     /**
-     * Set value of : assignatedUser
+     * Set value of : assignedUser
      *
-     * @param assignatedUser The new value
+     * @param assignedUser The new value
      *
      * @return this
      */
-    public StoryEntity setAssignatedUser(UserEntity assignatedUser) {
-        this.assignatedUser = assignatedUser;
+    public StoryEntity setAssignedUser(UserEntity assignedUser) {
+        this.assignedUser = assignedUser;
+        return this;
+    }
+
+    /**
+     * Get the value of : tasks
+     *
+     * @return tasks
+     */
+    public Set<TaskEntity> getTasks() {
+        return tasks;
+    }
+
+    /**
+     * Set value of : tasks
+     *
+     * @param tasks The new value
+     *
+     * @return this
+     */
+    public StoryEntity setTasks(Set<TaskEntity> tasks) {
+        this.tasks = tasks;
         return this;
     }
 

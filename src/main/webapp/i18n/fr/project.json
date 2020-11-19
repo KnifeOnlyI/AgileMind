@@ -14,16 +14,16 @@
         "empty": "Le nom du projet ne doit pas être vide"
       },
       "user": {
-        "not_assignated": "L'utilisateur ne peut pas être assigné à la story"
+        "not_assigned": "L'utilisateur ne peut pas être assigné"
       },
       "form": {
         "invalid": "Formulaire invalide"
       }
     },
-    "message": {
-      "created": "Projet créé : {{ projectName }}",
-      "updated": "Projet mis à jour : {{ projectName }}",
-      "deleted": "Projet supprimé : {{ projectName }}"
+    "alert": {
+      "created": "Projet créé",
+      "updated": "Projet mis à jour",
+      "deleted": "Projet supprimé"
     }
   }
 }

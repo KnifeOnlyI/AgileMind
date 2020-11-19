@@ -1,0 +1,5 @@
+id;key
+
+1;taskStatus.key.todo
+2;taskStatus.key.inProgress
+3;taskStatus.key.done

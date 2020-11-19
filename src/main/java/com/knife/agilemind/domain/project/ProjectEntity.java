@@ -49,7 +49,7 @@ public class ProjectEntity implements Serializable {
     private String description;
 
     /**
-     * The assignated users
+     * The assigned users
      */
     @ManyToMany
     @JoinTable(
@@ -57,7 +57,7 @@ public class ProjectEntity implements Serializable {
         joinColumns = @JoinColumn(name = "project_id"),
         inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    private Set<UserEntity> assignatedUsers = new HashSet<>();
+    private Set<UserEntity> assignedUsers = new HashSet<>();
 
     /**
      * The stories
@@ -138,23 +138,23 @@ public class ProjectEntity implements Serializable {
     }
 
     /**
-     * Récupère : assignatedUsers.
+     * Récupère : assignedUsers.
      *
-     * @return assignatedUsers.
+     * @return assignedUsers.
      */
-    public Set<UserEntity> getAssignatedUsers() {
-        return assignatedUsers;
+    public Set<UserEntity> getAssignedUsers() {
+        return assignedUsers;
     }
 
     /**
-     * Défini la nouvelle valeur de : assignatedUsers.
+     * Défini la nouvelle valeur de : assignedUsers.
      *
-     * @param assignatedUsers La nouvelle valeur.
+     * @param assignedUsers La nouvelle valeur.
      *
      * @return L'instance (Pattern fluent)
      */
-    public ProjectEntity setAssignatedUsers(Set<UserEntity> assignatedUsers) {
-        this.assignatedUsers = assignatedUsers;
+    public ProjectEntity setAssignedUsers(Set<UserEntity> assignedUsers) {
+        this.assignedUsers = assignedUsers;
         return this;
     }
 

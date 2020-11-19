@@ -8,4 +8,6 @@
     <include file="project_user/maj.xml" relativeToChangelogFile="true"/>
     <include file="story_status/maj.xml" relativeToChangelogFile="true"/>
     <include file="story/maj.xml" relativeToChangelogFile="true"/>
+    <include file="task_status/maj.xml" relativeToChangelogFile="true"/>
+    <include file="task/maj.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

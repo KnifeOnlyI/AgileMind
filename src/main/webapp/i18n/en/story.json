@@ -12,7 +12,8 @@
         "points": "Story points",
         "businessValue": "Business value",
         "status": "Status",
-        "assignatedUser": "Assignated user"
+        "assignedUser": "Assigned user",
+        "tasks": "Tasks"
       }
     },
     "error": {
@@ -28,10 +29,10 @@
         "invalid": "Invalid form"
       }
     },
-    "message": {
-      "created": "Created story : {{ storyName }}",
-      "updated": "Updated story : {{ storyName }}",
-      "deleted": "Deleted story : {{ storyName }}"
+    "alert": {
+      "created": "Story created",
+      "updated": "Story updated",
+      "deleted": "Story deleted"
     }
   }
 }

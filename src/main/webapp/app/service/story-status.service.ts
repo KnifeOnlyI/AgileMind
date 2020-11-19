@@ -1,15 +1,12 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable, of} from 'rxjs';
-import {SERVER_API_URL} from '../app.constants';
 import {StoryStatus} from '../entities/story-status.entity';
 import {StoryStatusConstants} from 'app/constants/story-status.constants';
 
 @Injectable({providedIn: 'root'})
 // @ts-ignore
 export class StoryStatusService {
-  public static BASE_URL = `${SERVER_API_URL}api/story-status`;
-
   /**
    * The cache for story status
    */

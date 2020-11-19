@@ -10,9 +10,11 @@ import {ButtonCancelComponent} from 'app/shared/components/buttons/button-cancel
 import {ButtonDeleteComponent} from 'app/shared/components/buttons/button-delete.component';
 import {StoryStatusSelectComponent} from 'app/shared/components/fields/story-status-select/story-status-select.component';
 import {UserSelectComponent} from 'app/shared/components/fields/user-select/user-select.component';
-import {StoryStatusComponent} from 'app/shared/components/fields/story-status/story-status.component';
 import {UserComponent} from 'app/shared/components/fields/user/user.component';
 import {ConfirmDialogComponent} from 'app/shared/components/dialogs/confirm/confirm-dialog.component';
+import {TaskStatusComponent} from 'app/shared/components/fields/task-status/task-status.component';
+import {ButtonBackComponent} from 'app/shared/components/buttons/button-back.component';
+import {TaskStatusSelectComponent} from 'app/shared/components/fields/task-status-select/task-status-select.component';
 
 @NgModule({
   imports: [AgileMindSharedLibsModule],
@@ -24,10 +26,12 @@ import {ConfirmDialogComponent} from 'app/shared/components/dialogs/confirm/conf
     HasAnyAuthorityDirective,
     ButtonSaveComponent,
     ButtonCancelComponent,
+    ButtonBackComponent,
     ButtonDeleteComponent,
     StoryStatusSelectComponent,
+    TaskStatusSelectComponent,
     UserSelectComponent,
-    StoryStatusComponent,
+    TaskStatusComponent,
     UserComponent,
     ConfirmDialogComponent,
   ],
@@ -41,10 +45,12 @@ import {ConfirmDialogComponent} from 'app/shared/components/dialogs/confirm/conf
     HasAnyAuthorityDirective,
     ButtonSaveComponent,
     ButtonCancelComponent,
+    ButtonBackComponent,
     ButtonDeleteComponent,
     StoryStatusSelectComponent,
+    TaskStatusSelectComponent,
     UserSelectComponent,
-    StoryStatusComponent,
+    TaskStatusComponent,
     UserComponent,
     ConfirmDialogComponent,
   ],

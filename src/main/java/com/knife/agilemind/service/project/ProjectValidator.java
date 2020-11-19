@@ -99,7 +99,7 @@ public class ProjectValidator {
             throw new BusinessException(ProjectConstant.Error.NAME_EMPTY, Status.BAD_REQUEST);
         }
 
-        this.assertValidAssignatedUsers(projectDTO.getAssignatedUserIdList());
+        this.assertValidAssignedUsers(projectDTO.getAssignedUserIdList());
 
         ProjectEntity projectEntity = this.projectRepository.findById(projectDTO.getId()).orElse(null);
 
@@ -111,13 +111,13 @@ public class ProjectValidator {
     }
 
     /**
-     * Assert the specified user is an admin or is assignated to the specified project
+     * Assert the specified user is an admin or is assigned to the specified project
      *
      * @param user    The user
      * @param project The project to check
      */
-    public boolean userIsNotAssignated(UserEntity user, ProjectEntity project) {
-        boolean isAssignated = false;
+    public boolean userIsNotAssigned(UserEntity user, ProjectEntity project) {
+        boolean isAssigned = false;
 
         if (user == null) {
             throw new BusinessException(ProjectConstant.Error.NOT_FOUND, Status.NOT_FOUND);
@@ -127,27 +127,27 @@ public class ProjectValidator {
             throw new TechnicalException();
         }
 
-        if (project.getAssignatedUsers() != null) {
-            for (UserEntity assignatedUser : project.getAssignatedUsers()) {
-                if (assignatedUser.getId().equals(user.getId())) {
-                    isAssignated = true;
+        if (project.getAssignedUsers() != null) {
+            for (UserEntity assignedUser : project.getAssignedUsers()) {
+                if (assignedUser.getId().equals(user.getId())) {
+                    isAssigned = true;
                     break;
                 }
             }
         }
 
-        return !isAssignated && !this.userService.userIsAdmin(user);
+        return !isAssigned && !this.userService.userIsAdmin(user);
     }
 
     /**
-     * Assert the specified assignated users is valid
+     * Assert the specified assigned users is valid
      *
-     * @param assignatedUsers The value to check
+     * @param assignedUsers The value to check
      */
-    private void assertValidAssignatedUsers(Set<Long> assignatedUsers) {
-        if (assignatedUsers != null) {
-            assignatedUsers.removeIf(Objects::isNull);
-            assignatedUsers.forEach(userId -> userValidator.assertExists(userId));
+    private void assertValidAssignedUsers(Set<Long> assignedUsers) {
+        if (assignedUsers != null) {
+            assignedUsers.removeIf(Objects::isNull);
+            assignedUsers.forEach(userId -> userValidator.assertExists(userId));
         }
     }
 }

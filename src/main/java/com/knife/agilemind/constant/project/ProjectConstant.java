@@ -21,7 +21,7 @@ public final class ProjectConstant {
         public static final String NAME_NULL = "project.error.name.null";
         public static final String NAME_EMPTY = "project.error.name.empty";
 
-        public static final String USER_NOT_ASSIGNATED = "project.error.user.not_assignated";
+        public static final String USER_NOT_ASSIGNED = "project.error.user.not_assigned";
 
         private Error() {
         }

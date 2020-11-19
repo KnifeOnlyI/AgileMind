@@ -68,11 +68,8 @@ export class StoryCreateComponent implements OnInit {
    * Executed on valid submit
    */
   private onValidSubmit(): void {
-    this.storyService.save(this.form.story).subscribe(story => {
-      this.alertService.add(new Alert(
-        AlertLevel.SUCCESS,
-        new AlertContent('story.message.created', {storyName: story.name})
-      ));
+    this.storyService.save(this.form.story).subscribe(() => {
+      this.alertService.add(new Alert(AlertLevel.SUCCESS, new AlertContent('story.alert.created')));
 
       this.router.navigate(['/project/', this.form.projectId]).then();
     }, (error: HttpErrorResponse) => {

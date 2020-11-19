@@ -46,7 +46,7 @@ class StoryResourceIT {
             .setPoints(1L)
             .setBusinessValue(1L)
             .setStatusId(StoryStatusConstant.DB.TODO_ID)
-            .setAssignatedUserId(3L)
+            .setAssignedUserId(3L)
             .setProjectId(1000L);
 
         // Test response
@@ -58,7 +58,7 @@ class StoryResourceIT {
         Assertions.assertEquals(newStory.getDescription(), response.getDescription());
         Assertions.assertEquals(newStory.getPoints(), response.getPoints());
         Assertions.assertEquals(newStory.getStatusId(), response.getStatusId());
-        Assertions.assertEquals(newStory.getAssignatedUserId(), response.getAssignatedUserId());
+        Assertions.assertEquals(newStory.getAssignedUserId(), response.getAssignedUserId());
 
         // Test database
 
@@ -66,16 +66,16 @@ class StoryResourceIT {
             "Only one story MUST be created in database after CREATION operation"
         );
 
-        StoryEntity projectEntity = this.storyRepository.findById(response.getId()).orElseThrow(AssertionFailedError::new);
+        StoryEntity storyEntity = this.storyRepository.findById(response.getId()).orElseThrow(AssertionFailedError::new);
 
-        Assertions.assertEquals(newStory.getName(), projectEntity.getName());
-        Assertions.assertEquals(newStory.getDescription(), projectEntity.getDescription());
-        Assertions.assertEquals(newStory.getPoints(), projectEntity.getPoints());
-        Assertions.assertEquals(newStory.getBusinessValue(), projectEntity.getBusinessValue());
-        Assertions.assertNotNull(projectEntity.getStatus());
-        Assertions.assertEquals(newStory.getStatusId(), projectEntity.getStatus().getId());
-        Assertions.assertNotNull(projectEntity.getAssignatedUser());
-        Assertions.assertEquals(newStory.getAssignatedUserId(), projectEntity.getAssignatedUser().getId());
+        Assertions.assertEquals(newStory.getName(), storyEntity.getName());
+        Assertions.assertEquals(newStory.getDescription(), storyEntity.getDescription());
+        Assertions.assertEquals(newStory.getPoints(), storyEntity.getPoints());
+        Assertions.assertEquals(newStory.getBusinessValue(), storyEntity.getBusinessValue());
+        Assertions.assertNotNull(storyEntity.getStatus());
+        Assertions.assertEquals(newStory.getStatusId(), storyEntity.getStatus().getId());
+        Assertions.assertNotNull(storyEntity.getAssignedUser());
+        Assertions.assertEquals(newStory.getAssignedUserId(), storyEntity.getAssignedUser().getId());
     }
 
     /**
@@ -93,7 +93,7 @@ class StoryResourceIT {
         Assertions.assertEquals(1, response.getPoints());
         Assertions.assertEquals(1, response.getBusinessValue());
         Assertions.assertEquals(1, response.getStatusId());
-        Assertions.assertEquals(3, response.getAssignatedUserId());
+        Assertions.assertEquals(3, response.getAssignedUserId());
         Assertions.assertEquals(1000L, response.getProjectId());
 
         StoryEntity storyEntity = this.storyRepository.getOne(1000L);
@@ -105,8 +105,8 @@ class StoryResourceIT {
         Assertions.assertEquals(1, storyEntity.getBusinessValue());
         Assertions.assertNotNull(storyEntity.getStatus());
         Assertions.assertEquals(1, storyEntity.getStatus().getId());
-        Assertions.assertNotNull(storyEntity.getAssignatedUser());
-        Assertions.assertEquals(3, storyEntity.getAssignatedUser().getId());
+        Assertions.assertNotNull(storyEntity.getAssignedUser());
+        Assertions.assertEquals(3, storyEntity.getAssignedUser().getId());
         Assertions.assertNotNull(storyEntity.getProject());
         Assertions.assertEquals(1000L, storyEntity.getProject().getId());
     }
@@ -145,12 +145,12 @@ class StoryResourceIT {
     }
 
     /**
-     * Test invalid get all stories from project because logged user is not assignated to story
+     * Test invalid get all stories from project because logged user is not assigned to story
      */
     @Test
     @Transactional
     @WithMockUser(username = "user")
-    void testInvalidGetAllFromProjectBecauseNotAssignated() {
+    void testInvalidGetAllFromProjectBecauseNotAssigned() {
         this.httpTestUtil.assertBusinessException(
             () -> this.storyResource.getAllFromProject(1000L),
             ProjectConstant.Error.NOT_FOUND,
@@ -187,7 +187,7 @@ class StoryResourceIT {
         Assertions.assertEquals(storyDTO.getPoints(), response.getPoints());
         Assertions.assertEquals(storyDTO.getBusinessValue(), response.getBusinessValue());
         Assertions.assertEquals(storyDTO.getStatusId(), response.getStatusId());
-        Assertions.assertEquals(storyDTO.getAssignatedUserId(), response.getAssignatedUserId());
+        Assertions.assertEquals(storyDTO.getAssignedUserId(), response.getAssignedUserId());
         Assertions.assertEquals(storyDTO.getProjectId(), response.getProjectId());
 
         // Test database
@@ -201,7 +201,7 @@ class StoryResourceIT {
         Assertions.assertEquals(storyDTO.getBusinessValue(), storyEntity.getBusinessValue());
         Assertions.assertNotNull(storyEntity.getStatus());
         Assertions.assertEquals(storyDTO.getStatusId(), storyEntity.getStatus().getId());
-        Assertions.assertNull(storyEntity.getAssignatedUser());
+        Assertions.assertNull(storyEntity.getAssignedUser());
         Assertions.assertNotNull(storyEntity.getProject());
         Assertions.assertEquals(storyDTO.getProjectId(), storyEntity.getProject().getId());
     }
@@ -300,22 +300,22 @@ class StoryResourceIT {
             Status.NOT_FOUND
         );
 
-        // Error when trying to assign to story a user not assignated to project
+        // Error when trying to assign to story a user not assigned to project
         this.httpTestUtil.assertBusinessException(() -> this.storyResource.create(new CreateStoryDTO()
             .setName("Name")
             .setStatusId(1L)
             .setProjectId(1000L)
-            .setAssignatedUserId(4L)
-        ), ProjectConstant.Error.USER_NOT_ASSIGNATED, Status.BAD_REQUEST);
+            .setAssignedUserId(4L)
+        ), ProjectConstant.Error.USER_NOT_ASSIGNED, Status.BAD_REQUEST);
     }
 
     /**
-     * Test on invalid create because not assignated to project
+     * Test on invalid create because not assigned to project
      */
     @Test
     @Transactional
     @WithMockUser(username = "user")
-    void testInvalidCreateBecauseNotAssignated() {
+    void testInvalidCreateBecauseNotAssigned() {
         this.httpTestUtil.assertBusinessException(() -> this.storyResource.create(new CreateStoryDTO()
                 .setName("Name")
                 .setStatusId(1L)
@@ -339,12 +339,12 @@ class StoryResourceIT {
     }
 
     /**
-     * Test on the invalid story get because user is not assignated
+     * Test on the invalid story get because user is not assigned
      */
     @Test
     @Transactional
     @WithMockUser(username = "user")
-    void testInvalidGetBecauseNotAssignated() {
+    void testInvalidGetBecauseNotAssigned() {
         this.httpTestUtil.assertBusinessException(
             () -> this.storyResource.get(1001L),
             StoryConstant.Error.NOT_FOUND,
@@ -353,7 +353,7 @@ class StoryResourceIT {
     }
 
     /**
-     * Test on the invalid story get because user is not assignated
+     * Test on the invalid story get because user is not assigned
      */
     @Test
     @Transactional
@@ -403,18 +403,18 @@ class StoryResourceIT {
                 .setName("UpdatedName")
                 .setStatusId(3L)
                 .setProjectId(1000L)
-                .setAssignatedUserId(Long.MAX_VALUE)
+                .setAssignedUserId(Long.MAX_VALUE)
         ), UserConstant.Error.NOT_FOUND, Status.BAD_REQUEST);
 
-        // Error when trying to assign to story a user not assignated to project
+        // Error when trying to assign to story a user not assigned to project
         this.httpTestUtil.assertBusinessException(() -> this.storyResource.update(
             new StoryDTO()
                 .setId(1000L)
                 .setName("UpdatedName")
                 .setStatusId(3L)
-                .setAssignatedUserId(4L)
+                .setAssignedUserId(4L)
                 .setProjectId(1000L)
-        ), ProjectConstant.Error.USER_NOT_ASSIGNATED, Status.BAD_REQUEST);
+        ), ProjectConstant.Error.USER_NOT_ASSIGNED, Status.BAD_REQUEST);
     }
 
     /**
@@ -438,12 +438,12 @@ class StoryResourceIT {
     }
 
     /**
-     * Test on the invalid story delete because not assignated to project
+     * Test on the invalid story delete because not assigned to project
      */
     @Test
     @Transactional
     @WithMockUser(username = "user")
-    void testInvalidDeleteBecauseNotAssignated() {
+    void testInvalidDeleteBecauseNotAssigned() {
         this.httpTestUtil.assertBusinessException(
             () -> this.storyResource.delete(1000L),
             StoryConstant.Error.NOT_FOUND,

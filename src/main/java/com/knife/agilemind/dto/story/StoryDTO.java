@@ -1,6 +1,8 @@
 package com.knife.agilemind.dto.story;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * DTO for view and edit story
@@ -41,14 +43,19 @@ public class StoryDTO implements Serializable {
     private Long statusId;
 
     /**
-     * The assignated user id
+     * The assigned user id
      */
-    private Long assignatedUserId;
+    private Long assignedUserId;
 
     /**
      * The associated project id
      */
     private Long projectId;
+
+    /**
+     * The task id list
+     */
+    private Set<Long> taskIdList = new HashSet<>();
 
     /**
      * Get the value of : serialVersionUID
@@ -186,23 +193,23 @@ public class StoryDTO implements Serializable {
     }
 
     /**
-     * Get the value of : assignatedUserId
+     * Get the value of : assignedUserId
      *
-     * @return assignatedUserId
+     * @return assignedUserId
      */
-    public Long getAssignatedUserId() {
-        return assignatedUserId;
+    public Long getAssignedUserId() {
+        return assignedUserId;
     }
 
     /**
-     * Set value of : assignatedUserId
+     * Set value of : assignedUserId
      *
-     * @param assignatedUserId The new value
+     * @param assignedUserId The new value
      *
      * @return this
      */
-    public StoryDTO setAssignatedUserId(Long assignatedUserId) {
-        this.assignatedUserId = assignatedUserId;
+    public StoryDTO setAssignedUserId(Long assignedUserId) {
+        this.assignedUserId = assignedUserId;
         return this;
     }
 
@@ -224,6 +231,27 @@ public class StoryDTO implements Serializable {
      */
     public StoryDTO setProjectId(Long projectId) {
         this.projectId = projectId;
+        return this;
+    }
+
+    /**
+     * Get the value of : taskIdList
+     *
+     * @return taskIdList
+     */
+    public Set<Long> getTaskIdList() {
+        return taskIdList;
+    }
+
+    /**
+     * Set value of : taskIdList
+     *
+     * @param taskIdList The new value
+     *
+     * @return this
+     */
+    public StoryDTO setTaskIdList(Set<Long> taskIdList) {
+        this.taskIdList = taskIdList;
         return this;
     }
 }

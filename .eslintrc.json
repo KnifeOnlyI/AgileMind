@@ -1,9 +1,6 @@
 {
   "plugins": ["@typescript-eslint/tslint"],
   "extends": ["jhipster"],
-  "parserOptions": {
-    "project": "./tsconfig.base.json"
-  },
   "rules": {
     "@typescript-eslint/tslint/config": [
       "error",

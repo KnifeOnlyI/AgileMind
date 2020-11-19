@@ -3,7 +3,7 @@
                    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
 
-    <changeSet id="agilemind-0.0.1-story_status" author="Knife">
+    <changeSet id="agilemind-1.0.0-story_status" author="Knife">
         <createSequence sequenceName="story_status_seq" startValue="1" incrementBy="1"/>
 
         <createTable tableName="story_status">

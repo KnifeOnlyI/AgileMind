@@ -1,4 +1,4 @@
-id;name;description;points;priority;status_id;assignated_user_id;project_id
+id;name;description;points;business_value;status_id;assigned_user_id;project_id
 
 1000;AgileMind - Story #1;AgileMind - Story description #1;1;1;1;3;1000
 1001;AgileMind - Story #2;AgileMind - Story description #2;2;2;1;3;1000

@@ -1,0 +1,13 @@
+id;name;description;estimated_time;logged_time;status_id;assigned_user_id;story_id
+
+1000;AgileMind - Story #1 - Task #1;AgileMind - Task description #1;60;0;1;3;1000
+1001;AgileMind - Story #1 - Task #2;AgileMind - Task description #2;60;0;2;3;1000
+1002;AgileMind - Story #1 - Task #3;AgileMind - Task description #3;60;0;3;3;1000
+
+1003;AgileMind - Story #2 - Task #1;AgileMind - Task description #1;0;60;1;4;1001
+1004;AgileMind - Story #2 - Task #2;AgileMind - Task description #2;0;60;2;4;1001
+1005;AgileMind - Story #2 - Task #3;AgileMind - Task description #3;0;60;3;4;1001
+
+1006;AgileMind - Story #3 - Task #1;AgileMind - Task description #4;60;0;1;3;1002
+1007;AgileMind - Story #3 - Task #2;AgileMind - Task description #5;60;0;2;3;1002
+1008;AgileMind - Story #3 - Task #3;AgileMind - Task description #6;60;0;3;3;1002

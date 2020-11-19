@@ -1,38 +1,39 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {StoryStatus} from 'app/entities/story-status.entity';
-import {StoryStatusService} from 'app/service/story-status.service';
+import {TaskStatus} from 'app/entities/task-status.entity';
+import {TaskStatusService} from 'app/service/task-status.service';
 
 /**
- * Component to manage story status displaying
+ * Component to manage task status displaying
  *
  * @author Dany Pignoux (dany.pignoux@erudo.fr)
  */
 @Component({
-  selector: 'ag-story-status',
+  selector: 'ag-task-status',
   template: `
     <span *ngIf="status" [ngStyle]="{'color': color}" jhiTranslate="{{status.key}}"></span>`
 })
 // @ts-ignore
-export class StoryStatusComponent implements OnInit {
+export class TaskStatusComponent implements OnInit {
   @Input()
   public id!: number;
 
   /**
-   * The story status
+   * The task status
    */
-  public status?: StoryStatus;
+  public status?: TaskStatus;
 
   /**
    * The class
    */
-  public color = 'gray';
+  public color = 'red';
 
   /**
    * Constructor
    *
-   * @param storyStatusService The story status service
+   * @param taskStatusService The task status service
    */
-  public constructor(private storyStatusService: StoryStatusService) {
+  public constructor(private taskStatusService: TaskStatusService) {
+
   }
 
   /**
@@ -43,10 +44,8 @@ export class StoryStatusComponent implements OnInit {
       throw new Error('@Input() id CANNOT be undefined');
     }
 
-    this.storyStatusService.get(this.id).subscribe((storyStatus) => {
-      this.status = storyStatus;
-
-      console.log('StoryStatus', this.id);
+    this.taskStatusService.get(this.id).subscribe((taskStatus) => {
+      this.status = taskStatus;
 
       if (this.status.id === 2) {
         this.color = 'blue';

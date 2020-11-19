@@ -58,7 +58,7 @@ class ProjectResourceIT {
         Assertions.assertNotNull(response.getId());
         Assertions.assertEquals(newProject.getName(), response.getName());
         Assertions.assertEquals(newProject.getDescription(), response.getDescription());
-        this.listUtil.assertContainsID(response.getAssignatedUserIdList());
+        this.listUtil.assertContainsID(response.getAssignedUserIdList());
         this.listUtil.assertContainsID(response.getStoryIdList());
 
         // Test database
@@ -71,7 +71,7 @@ class ProjectResourceIT {
 
         Assertions.assertEquals(newProject.getName(), projectEntity.getName());
         Assertions.assertEquals(newProject.getDescription(), projectEntity.getDescription());
-        Assertions.assertEquals(0, projectEntity.getAssignatedUsers().size());
+        Assertions.assertEquals(0, projectEntity.getAssignedUsers().size());
         Assertions.assertEquals(0, projectEntity.getStories().size());
     }
 
@@ -91,7 +91,7 @@ class ProjectResourceIT {
         Assertions.assertEquals(savedProject.getId(), response.getId());
         Assertions.assertEquals(savedProject.getName(), response.getName());
         Assertions.assertEquals(savedProject.getDescription(), response.getDescription());
-        this.listUtil.assertContainsID(response.getAssignatedUserIdList(), 3L);
+        this.listUtil.assertContainsID(response.getAssignedUserIdList(), 3L);
         this.listUtil.assertContainsID(response.getStoryIdList(), 1000L, 1001L, 1002L, 1003L, 1004L);
 
         // Test database
@@ -105,7 +105,7 @@ class ProjectResourceIT {
         Assertions.assertEquals(savedProject.getId(), projectEntity.getId());
         Assertions.assertEquals(savedProject.getName(), projectEntity.getName());
         Assertions.assertEquals(savedProject.getDescription(), projectEntity.getDescription());
-        this.listUtil.assertContainsUsers(savedProject.getAssignatedUsers(), "admin");
+        this.listUtil.assertContainsUsers(savedProject.getAssignedUsers(), "admin");
         this.listUtil.assertContainsStories(savedProject.getStories(), 1000L, 1001L, 1002L, 1003L, 1004L);
     }
 
@@ -136,7 +136,7 @@ class ProjectResourceIT {
             Assertions.assertEquals(list.get(i).getDescription(), response.get(i).getDescription());
 
             if (list.get(i).getId().equals(project1.getId())) {
-                this.listUtil.assertContainsID(response.get(i).getAssignatedUserIdList(), 3L);
+                this.listUtil.assertContainsID(response.get(i).getAssignedUserIdList(), 3L);
             }
         }
     }
@@ -152,12 +152,12 @@ class ProjectResourceIT {
 
         List<ProjectDTO> response = this.httpTestUtil.getNotNullBody(this.projectResource.getAll(), HttpStatus.OK);
 
-        Assertions.assertEquals(1, response.size(), "1 project MUST be founded (all where 'user' is assignated)");
+        Assertions.assertEquals(1, response.size(), "1 project MUST be founded (all where 'user' is assigned)");
 
         Assertions.assertEquals(project.getId(), response.get(0).getId());
         Assertions.assertEquals(project.getName(), response.get(0).getName());
         Assertions.assertEquals(project.getName(), response.get(0).getName());
-        this.listUtil.assertContainsID(response.get(0).getAssignatedUserIdList(), 3L, 4L);
+        this.listUtil.assertContainsID(response.get(0).getAssignedUserIdList(), 3L, 4L);
     }
 
     /**
@@ -189,7 +189,7 @@ class ProjectResourceIT {
             .setDescription("UpdatedDescription");
 
         // Assign "user" to project and remove "admin"
-        updatedProjectDTO.setAssignatedUserIdList(new HashSet<>()).getAssignatedUserIdList().add(4L);
+        updatedProjectDTO.setAssignedUserIdList(new HashSet<>()).getAssignedUserIdList().add(4L);
 
         // Test response
 
@@ -200,7 +200,7 @@ class ProjectResourceIT {
         Assertions.assertEquals(updatedProjectDTO.getId(), response.getId());
         Assertions.assertEquals(updatedProjectDTO.getName(), response.getName());
         Assertions.assertEquals(updatedProjectDTO.getDescription(), response.getDescription());
-        this.listUtil.assertContainsID(response.getAssignatedUserIdList(), 4L);
+        this.listUtil.assertContainsID(response.getAssignedUserIdList(), 4L);
 
         // Test database
 
@@ -214,7 +214,7 @@ class ProjectResourceIT {
         Assertions.assertEquals(project.getId(), projectEntity.getId());
         Assertions.assertEquals(project.getName(), projectEntity.getName());
         Assertions.assertEquals(project.getDescription(), projectEntity.getDescription());
-        this.listUtil.assertContainsUsers(projectEntity.getAssignatedUsers(), "user");
+        this.listUtil.assertContainsUsers(projectEntity.getAssignedUsers(), "user");
         this.listUtil.assertContainsStories(projectEntity.getStories(), 1005L, 1006L, 1007L, 1008L, 1009L);
     }
 
@@ -301,12 +301,12 @@ class ProjectResourceIT {
     }
 
     /**
-     * Test on invalid get because connected user is not assignated on the
+     * Test on invalid get because connected user is not assigned on the
      */
     @Test
     @Transactional
     @WithMockUser(username = "user")
-    void testInvalidGetBecauseNotAssignated() {
+    void testInvalidGetBecauseNotAssigned() {
         this.httpTestUtil.assertBusinessException(() -> this.projectResource.get(1L),
             ProjectConstant.Error.NOT_FOUND,
             Status.NOT_FOUND

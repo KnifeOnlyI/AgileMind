@@ -1,0 +1,35 @@
+{
+  "task": {
+    "title": {
+      "new": "New task",
+      "edit": "Update task"
+    },
+    "list": {
+      "noResults": "No created tasks"
+    },
+    "form": {
+      "field": {
+        "estimatedTime": "Estimated time (minutes)",
+        "loggedTime": "Logged time (minutes)"
+      }
+    },
+    "error": {
+      "name": {
+        "empty": "The task name cannot be empty"
+      },
+      "status": {
+        "id": {
+          "null": "The task status cannot be empty"
+        }
+      },
+      "form": {
+        "invalid": "Invalid form"
+      }
+    },
+    "alert": {
+      "created": "Task created",
+      "updated": "Task updated",
+      "deleted": "Task deleted"
+    }
+  }
+}

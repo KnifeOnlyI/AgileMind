@@ -14,16 +14,16 @@
         "empty": "The project name cannot be empty"
       },
       "user": {
-        "not_assignated": "The user cannot be assigned to this story"
+        "not_assigned": "The user cannot be assigned"
       },
       "form": {
         "invalid": "Invalid form"
       }
     },
-    "message": {
-      "created": "Created project : {{ projectName }}",
-      "updated": "Updated project : {{ projectName }}",
-      "deleted": "Deleted project : {{ projectName }}"
+    "alert": {
+      "created": "Project created",
+      "updated": "Project updated",
+      "deleted": "Project deleted"
     }
   }
 }

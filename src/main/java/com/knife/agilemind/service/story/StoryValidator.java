@@ -48,12 +48,12 @@ public class StoryValidator {
     /**
      * Asserts all commons data
      *
-     * @param name           The name
-     * @param points         The points
-     * @param businessValue  The business value
-     * @param status         The status
-     * @param project        The project id
-     * @param assignatedUser The assignated user id
+     * @param name          The name
+     * @param points        The points
+     * @param businessValue The business value
+     * @param status        The status
+     * @param project       The project id
+     * @param assignedUser  The assigned user id
      */
     private void assertValidCommon(
         String name,
@@ -61,14 +61,14 @@ public class StoryValidator {
         Long businessValue,
         Long status,
         Long project,
-        Long assignatedUser
+        Long assignedUser
     ) {
         this.assertValidName(name);
         this.assertValidPoints(points);
         this.assertValidBusinessValue(businessValue);
         this.assertValidStatus(status);
         this.assertValidProject(project);
-        this.assertValidUser(project, assignatedUser);
+        this.assertValidUser(project, assignedUser);
         this.assertLoggedUserCanCreateOrUpdate(project);
     }
 
@@ -86,7 +86,7 @@ public class StoryValidator {
             dto.getBusinessValue(),
             dto.getStatusId(),
             dto.getProjectId(),
-            dto.getAssignatedUserId()
+            dto.getAssignedUserId()
         );
     }
 
@@ -98,7 +98,7 @@ public class StoryValidator {
     public StoryEntity assertValid(StoryDTO dto) {
         this.assertNotNull(dto);
         this.assertValidID(dto.getId());
-        assertValidCommon(dto.getName(), dto.getPoints(), dto.getBusinessValue(), dto.getStatusId(), dto.getProjectId(), dto.getAssignatedUserId());
+        assertValidCommon(dto.getName(), dto.getPoints(), dto.getBusinessValue(), dto.getStatusId(), dto.getProjectId(), dto.getAssignedUserId());
 
         return this.storyRepository.findById(dto.getId()).orElseThrow(TechnicalException::new);
     }
@@ -216,14 +216,14 @@ public class StoryValidator {
     public void assertValidUser(Long projectId, Long userId) {
         if (userId != null) {
             ProjectEntity project = this.projectRepository.findById(projectId).orElseThrow(TechnicalException::new);
-            UserEntity assignatedUser = this.userRepository.findById(userId).orElse(null);
+            UserEntity assignedUser = this.userRepository.findById(userId).orElse(null);
 
-            if (assignatedUser == null) {
+            if (assignedUser == null) {
                 throw new BusinessException(UserConstant.Error.NOT_FOUND, Status.BAD_REQUEST);
             }
 
-            if (this.projectValidator.userIsNotAssignated(assignatedUser, project)) {
-                throw new BusinessException(ProjectConstant.Error.USER_NOT_ASSIGNATED, Status.BAD_REQUEST);
+            if (this.projectValidator.userIsNotAssigned(assignedUser, project)) {
+                throw new BusinessException(ProjectConstant.Error.USER_NOT_ASSIGNED, Status.BAD_REQUEST);
             }
         }
     }
@@ -242,7 +242,7 @@ public class StoryValidator {
 
         ProjectEntity project = this.projectRepository.findById(projectId).orElseThrow(TechnicalException::new);
 
-        if (this.projectValidator.userIsNotAssignated(loggedUser, project)) {
+        if (this.projectValidator.userIsNotAssigned(loggedUser, project)) {
             throw new BusinessException(StoryConstant.Error.NOT_FOUND, Status.NOT_FOUND);
         }
     }

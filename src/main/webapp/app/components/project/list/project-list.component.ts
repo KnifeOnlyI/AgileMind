@@ -10,6 +10,7 @@ import {MessageService} from 'primeng/api';
  * @author Dany Pignoux (dany.pignoux@erudo.fr)
  */
 @Component({
+  selector: 'ag-project-list',
   templateUrl: './project-list.component.html',
   providers: [MessageService]
 })

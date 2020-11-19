@@ -36,9 +36,9 @@ public class CreateStoryDTO implements Serializable {
     private Long statusId;
 
     /**
-     * The assignated user id
+     * The assigned user id
      */
-    private Long assignatedUserId;
+    private Long assignedUserId;
 
     /**
      * The associated project id
@@ -160,23 +160,23 @@ public class CreateStoryDTO implements Serializable {
     }
 
     /**
-     * Get the value of : assignatedUserId
+     * Get the value of : assignedUserId
      *
-     * @return assignatedUserId
+     * @return assignedUserId
      */
-    public Long getAssignatedUserId() {
-        return assignatedUserId;
+    public Long getAssignedUserId() {
+        return assignedUserId;
     }
 
     /**
-     * Set value of : assignatedUserId
+     * Set value of : assignedUserId
      *
-     * @param assignatedUserId The new value
+     * @param assignedUserId The new value
      *
      * @return this
      */
-    public CreateStoryDTO setAssignatedUserId(Long assignatedUserId) {
-        this.assignatedUserId = assignatedUserId;
+    public CreateStoryDTO setAssignedUserId(Long assignedUserId) {
+        this.assignedUserId = assignedUserId;
         return this;
     }
 

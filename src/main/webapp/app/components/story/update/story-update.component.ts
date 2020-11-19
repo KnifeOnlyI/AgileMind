@@ -11,6 +11,8 @@ import {
   ConfirmDialogType,
   ExitState
 } from 'app/shared/components/dialogs/confirm/confirm-dialog.component';
+import {Task} from 'app/entities/task.entity';
+import {TaskService} from 'app/service/task.service';
 
 /**
  * Component to manage story update
@@ -27,9 +29,15 @@ export class StoryUpdateComponent implements OnInit {
   public form!: StoryUpdateForm;
 
   /**
+   * The story's task
+   */
+  public tasks = new Array<Task>();
+
+  /**
    * Constructor
    *
    * @param storyService The story service
+   * @param taskService The task service
    * @param router The router service
    * @param routerService The router service
    * @param alertService The alert service
@@ -37,6 +45,7 @@ export class StoryUpdateComponent implements OnInit {
    */
   public constructor(
     private storyService: StoryService,
+    private taskService: TaskService,
     private router: Router,
     private routerService: ActivatedRoute,
     private alertService: AlertService,
@@ -71,10 +80,7 @@ export class StoryUpdateComponent implements OnInit {
    */
   public delete(): void {
     this.storyService.delete(this.form.id).subscribe(() => {
-      this.alertService.add(new Alert(
-        AlertLevel.SUCCESS,
-        new AlertContent('story.message.deleted', {storyName: this.form.name})
-      ));
+      this.alertService.add(new Alert(AlertLevel.SUCCESS, new AlertContent('story.alert.deleted')));
 
       this.router.navigate(['/project/', this.form.projectId]).then();
     });
@@ -84,13 +90,8 @@ export class StoryUpdateComponent implements OnInit {
    * Executed on valid submit
    */
   private onValidSubmit(): void {
-    this.storyService.save(this.form.story).subscribe(story => {
-      this.alertService.add(new Alert(
-        AlertLevel.SUCCESS,
-        new AlertContent('story.message.updated', {storyName: story.name})
-      ));
-
-      this.router.navigate(['/project/', this.form.projectId]).then();
+    this.storyService.save(this.form.story).subscribe(() => {
+      this.alertService.add(new Alert(AlertLevel.SUCCESS, new AlertContent('story.alert.updated')));
     }, (error: HttpErrorResponse) => {
       this.alertService.add(new Alert(AlertLevel.ERROR, new AlertContent(error.error.title)));
     });
@@ -102,7 +103,15 @@ export class StoryUpdateComponent implements OnInit {
    * @param id The story id
    */
   private getStory(id: number): void {
-    this.storyService.get(id).subscribe(project => (this.form = new StoryUpdateForm(project)),
+    this.storyService.get(id).subscribe(story => {
+        this.form = new StoryUpdateForm(story);
+
+        this.taskService.getAllFromStory(id).subscribe((tasks) => {
+          tasks.sort((a, b) => a.id! - b.id!);
+
+          tasks.forEach(task => this.tasks.push(task));
+        });
+      },
       (error: HttpErrorResponse) => {
         if (error.status === 404) {
           this.router.navigate(['404']).then();

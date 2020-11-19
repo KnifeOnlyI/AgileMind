@@ -2,10 +2,10 @@ version: '2'
 services:
   agilemind-postgresql:
     image: postgres:12.3
-    # volumes:
-    #     - ~/volumes/jhipster/AgileMind/postgresql/:/var/lib/postgresql/data/
+    volumes:
+      - ~/volumes/jhipster/AgileMind/postgresql/:/var/lib/postgresql/data/
     environment:
-      - POSTGRES_USER=AgileMind
+      - POSTGRES_USER=agilemind
       - POSTGRES_PASSWORD=
       - POSTGRES_HOST_AUTH_METHOD=trust
     ports:

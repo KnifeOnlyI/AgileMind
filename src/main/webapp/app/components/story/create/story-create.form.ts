@@ -21,7 +21,7 @@ export class StoryCreateForm extends BaseForm {
     this.form.addControl('points', new FormControl(0, [Validators.min(0)]));
     this.form.addControl('businessValue', new FormControl(0, [Validators.min(0)]));
     this.form.addControl('statusId', new FormControl(1, Validators.required));
-    this.form.addControl('assignatedUserId', new FormControl(null));
+    this.form.addControl('assignedUserId', new FormControl(null));
     this.form.addControl('projectId', new FormControl(projectId, Validators.required));
   }
 
@@ -73,12 +73,12 @@ export class StoryCreateForm extends BaseForm {
   }
 
   /**
-   * Get the assignated user form control
+   * Get the assigned user form control
    *
-   * @return The assignated user form control
+   * @return The assigned user form control
    */
-  public get assignatedUserIdFormControl(): FormControl {
-    return this.getFormControl('assignatedUserId');
+  public get assignedUserIdFormControl(): FormControl {
+    return this.getFormControl('assignedUserId');
   }
 
   /**
@@ -140,12 +140,12 @@ export class StoryCreateForm extends BaseForm {
   }
 
   /**
-   * Get the assignated user id
+   * Get the assigned user id
    *
-   * @return The assignated user id
+   * @return The assigned user id
    */
-  public get assignatedUserId(): number {
-    let value = this.assignatedUserIdFormControl.value;
+  public get assignedUserId(): number {
+    let value = this.assignedUserIdFormControl.value;
 
     if (value instanceof Array && value.length > 0) {
       value = value[0] as number;
@@ -182,7 +182,7 @@ export class StoryCreateForm extends BaseForm {
       this.points,
       this.businessValue,
       this.statusId,
-      this.assignatedUserId,
+      this.assignedUserId,
       this.projectId
     );
   }

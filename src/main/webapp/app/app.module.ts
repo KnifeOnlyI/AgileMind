@@ -16,6 +16,7 @@ import {ErrorComponent} from './layouts/error/error.component';
 import {AgileMindProjectModule} from './components/project/agile-mind-project.module';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AgileMindStoryModule} from 'app/components/story/agile-mind-story.module';
+import {AgileMindTaskModule} from 'app/components/task/agile-mind-task.module';
 
 @NgModule({
   imports: [
@@ -26,6 +27,7 @@ import {AgileMindStoryModule} from 'app/components/story/agile-mind-story.module
     AgileMindHomeModule,
     AgileMindProjectModule,
     AgileMindStoryModule,
+    AgileMindTaskModule,
     // jhipster-needle-angular-add-module JHipster will add new module here
     AgileMindAppRoutingModule,
   ],
