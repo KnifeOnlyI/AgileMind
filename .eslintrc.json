@@ -1,6 +1,14 @@
 {
-  "plugins": ["@typescript-eslint/tslint"],
-  "extends": ["jhipster"],
+  "plugins": [
+    "@typescript-eslint/tslint"
+  ],
+  "extends": [
+    "jhipster"
+  ],
+  // TODO: Remove this before create prod
+  "parserOptions": {
+    "project": "./tsconfig.base.json"
+  },
   "rules": {
     "@typescript-eslint/tslint/config": [
       "error",

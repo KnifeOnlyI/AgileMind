@@ -52,7 +52,7 @@ public class StoryEntity implements Serializable {
      * The story points
      */
     @Column(name = "points")
-    private Long points;
+    private Double points;
 
     /**
      * The business value
@@ -164,7 +164,7 @@ public class StoryEntity implements Serializable {
      *
      * @return points
      */
-    public Long getPoints() {
+    public Double getPoints() {
         return points;
     }
 
@@ -175,7 +175,7 @@ public class StoryEntity implements Serializable {
      *
      * @return this
      */
-    public StoryEntity setPoints(Long points) {
+    public StoryEntity setPoints(Double points) {
         this.points = points;
         return this;
     }

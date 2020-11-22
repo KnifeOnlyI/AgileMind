@@ -30,7 +30,7 @@ public class StoryDTO implements Serializable {
     /**
      * The story points
      */
-    private Long points;
+    private Double points;
 
     /**
      * The business value
@@ -134,7 +134,7 @@ public class StoryDTO implements Serializable {
      *
      * @return points
      */
-    public Long getPoints() {
+    public Double getPoints() {
         return points;
     }
 
@@ -145,7 +145,7 @@ public class StoryDTO implements Serializable {
      *
      * @return this
      */
-    public StoryDTO setPoints(Long points) {
+    public StoryDTO setPoints(Double points) {
         this.points = points;
         return this;
     }

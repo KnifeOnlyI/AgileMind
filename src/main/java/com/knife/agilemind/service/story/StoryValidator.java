@@ -57,7 +57,7 @@ public class StoryValidator {
      */
     private void assertValidCommon(
         String name,
-        Long points,
+        Double points,
         Long businessValue,
         Long status,
         Long project,
@@ -160,7 +160,7 @@ public class StoryValidator {
      *
      * @param points The points to check
      */
-    public void assertValidPoints(Long points) {
+    public void assertValidPoints(Double points) {
         if (points != null && points < 0) {
             throw new BusinessException(StoryConstant.Error.POINTS_LESS_0, Status.BAD_REQUEST);
         }

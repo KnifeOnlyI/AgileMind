@@ -43,7 +43,7 @@ class StoryResourceIT {
         CreateStoryDTO newStory = new CreateStoryDTO()
             .setName("Name")
             .setDescription("Description")
-            .setPoints(1L)
+            .setPoints(1.5)
             .setBusinessValue(1L)
             .setStatusId(StoryStatusConstant.DB.TODO_ID)
             .setAssignedUserId(3L)
@@ -249,7 +249,7 @@ class StoryResourceIT {
         // With negative story points, a POINTS_LESS_0 must be returned
         this.httpTestUtil.assertBusinessException(() -> this.storyResource.create(new CreateStoryDTO()
                 .setName("Name")
-                .setPoints(-1L)
+                .setPoints(-1.5)
             ),
             StoryConstant.Error.POINTS_LESS_0,
             Status.BAD_REQUEST
@@ -394,7 +394,7 @@ class StoryResourceIT {
                 .setId(1000L)
                 .setName("UpdatedName")
                 .setStatusId(3L)
-                .setPoints(-1L)
+                .setPoints(-1.5)
         ), StoryConstant.Error.POINTS_LESS_0, Status.BAD_REQUEST);
 
         this.httpTestUtil.assertBusinessException(() -> this.storyResource.update(
