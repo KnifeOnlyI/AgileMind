@@ -61,10 +61,18 @@ spring:
     contexts: prod
     change-log: classpath:config/liquibase/master.xml
   mail:
-    host: localhost
-    port: 25
-    username:
-    password:
+    host: smtp.gmail.com
+    port: 587
+    username: ${GOOGLE_EMAIL}
+    password: ${GOOGLE_PASSWORD}
+    protocol: smtp
+    tls: true
+    auth: true
+    from: ${GOOGLE_EMAIL}
+    properties.mail.smtp:
+      auth: true
+      starttls.enable: true
+      ssl.trust: smtp.gmail.com
   thymeleaf:
     cache: true
   sleuth:
@@ -129,12 +137,12 @@ jhipster:
         # - In the JHipster Registry (which includes a Spring Cloud Config server)
         # - In a separate `application-prod.yml` file, in the same folder as your executable JAR file
         # - In the `JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET` environment variable
-        base64-secret: NTBhOWVkMDQwY2M3YWE4MjI4NDc3NDhiN2Y1MDgzZDE4YTJiODZkZmMyZWFjYzkzN2RjNjEyOWExOWNhMDcyMGI3NmZkOTczZTllNWU5MDI2ODZjMGIyYzZhNWRmODFiN2FiOWE4ZjUwZDIzYjJiNzk1MGRjMDkyZDc1NDI3Y2U=
+        base64-secret: ${JWT_SECRET_BASE_64}
         # Token is valid 24 hours
         token-validity-in-seconds: 86400
         token-validity-in-seconds-for-remember-me: 2592000
   mail: # specific JHipster mail property, for standard properties see MailProperties
-    base-url: http://my-server-url-to-change # Modify according to your server's URL
+    base-url: http://${SERVER_URL} # Modify according to your server's URL
   metrics:
     logs: # Reports metrics in the logs
       enabled: false

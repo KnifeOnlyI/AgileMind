@@ -12,6 +12,10 @@ services:
       - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
       - SPRING_DATA_JEST_URI=http://agilemind-elasticsearch:9200
       - SPRING_ELASTICSEARCH_REST_URIS=http://agilemind-elasticsearch:9200
+      - GOOGLE_EMAIL=${AGILEMIND_GOOGLE_EMAIL}
+      - GOOGLE_PASSWORD=${AGILEMIND_GOOGLE_PASSWORD}
+      - SERVER_URL=${AGILEMIND_SERVER_URL}
+      - JWT_SECRET_BASE_64=${AGILEMIND_JWT_SECRET_BASE_64}
     ports:
       - 80:8080
   agilemind-postgresql:

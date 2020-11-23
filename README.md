@@ -2,12 +2,24 @@
 
 An agile management software
 
-## Deployment commands
+## Development commands
 
-Set environment variables (first deployment) :
+Start maildev server (local mail server)
 
 ```bash
-echo "export REGISTRY_PASSWORD=<PASSWORD>" >> ~/.bashrc
+docker-compose -f src/main/docker/maildev.yml up -d
+```
+
+## Deployment commands
+
+Needed environment variables :
+
+```bash
+echo "export AGILEMIND_SERVER_URL=<SERVER_URL>" >> ~/.bashrc
+echo "export AGILEMIND_GOOGLE_EMAIL=<EMAIL>" >> ~/.bashrc
+echo "export AGILEMIND_GOOGLE_PASSWORD=<PASSWORD>" >> ~/.bashrc
+echo "export AGILEMIND_REGISTRY_PASSWORD=<PASSWORD>" >> ~/.bashrc
+echo "export AGILEMIND_JWT_SECRET_BASE_64=<PASSWORD>" >> ~/.bashrc
 
 source ~/.bashrc
 ```
@@ -18,16 +30,16 @@ Build application
 mvn package -Pprod -DskipTests verify jib:dockerBuild
 ```
 
-Stop application
-
-```bash
-docker-compose -f src/main/docker/app.yml stop
-```
-
 Start application in background
 
 ```bash
 docker-compose -f src/main/docker/app.yml up -d
+```
+
+Stop application
+
+```bash
+docker-compose -f src/main/docker/app.yml stop
 ```
 
 ## Docker config
@@ -35,3 +47,4 @@ docker-compose -f src/main/docker/app.yml up -d
 Mounted volumes :
 
 - ~/volumes/jhipster/AgileMind/postgresql/:/var/lib/postgresql/data/
+- ~/volumes/jhipster/AgileMind/backups/:/opt/

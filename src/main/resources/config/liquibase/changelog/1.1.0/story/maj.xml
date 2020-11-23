@@ -4,10 +4,10 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
 
     <changeSet id="agilemind-1.1.0-story" author="Knife">
-        <!-- Change type from BIGINT to DECIMAL  -->
+        <!-- Change type from BIGINT to FLOAT  -->
         <sql>
             ALTER TABLE story
-            ALTER COLUMN points TYPE DOUBLE;
+            ALTER COLUMN points TYPE FLOAT;
         </sql>
     </changeSet>
 </databaseChangeLog>
