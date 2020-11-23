@@ -71,7 +71,7 @@ export class ProjectUpdateComponent implements OnInit {
     this.projectService.delete(this.form.id).subscribe(() => {
       this.messageService.add(new Alert(AlertLevel.SUCCESS, new AlertContent('project.alert.deleted')));
 
-      this.router.navigate(['/project']).then();
+      this.router.navigate(['/']).then();
     });
   }
 
