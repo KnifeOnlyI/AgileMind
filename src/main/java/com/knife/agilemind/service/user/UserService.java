@@ -43,7 +43,9 @@ public class UserService extends DefaultUserService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserEntity authenticatedUser = null;
 
-        if (authentication != null) {
+        if (authentication != null &&
+            (authentication.getPrincipal() != null && !authentication.getPrincipal().equals("anonymousUser"))
+        ) {
             authenticatedUser = this.userRepository.findOneByLogin(authentication.getName())
                 .orElseThrow(TechnicalException::new);
         }

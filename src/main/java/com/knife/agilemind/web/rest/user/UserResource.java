@@ -160,6 +160,7 @@ public class UserResource {
         if (existingUser.isPresent() && (!existingUser.get().getId().equals(userDTO.getId()))) {
             throw new LoginAlreadyUsedException();
         }
+
         Optional<UserDTO> updatedUser = userService.updateUser(userDTO);
 
         return ResponseUtil.wrapOrNotFound(updatedUser,

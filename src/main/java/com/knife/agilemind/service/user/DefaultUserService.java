@@ -148,6 +148,12 @@ public class DefaultUserService {
     }
 
     public UserEntity createUser(UserDTO userDTO) {
+        // If the user doesn't have any roles, assign "ROLE_USER" by default
+        if (userDTO.getAuthorities() == null || userDTO.getAuthorities().isEmpty()) {
+            userDTO.setAuthorities(new HashSet<>());
+            userDTO.getAuthorities().add("ROLE_USER");
+        }
+
         UserEntity user = new UserEntity();
         user.setLogin(userDTO.getLogin().toLowerCase(Locale.ENGLISH));
         user.setFirstName(userDTO.getFirstName());
@@ -190,6 +196,12 @@ public class DefaultUserService {
      * @return updated user.
      */
     public Optional<UserDTO> updateUser(UserDTO userDTO) {
+        // If the user doesn't have any roles, assign "ROLE_USER" by default
+        if (userDTO.getAuthorities() == null || userDTO.getAuthorities().isEmpty()) {
+            userDTO.setAuthorities(new HashSet<>());
+            userDTO.getAuthorities().add("ROLE_USER");
+        }
+
         return Optional.of(userRepository
             .findById(userDTO.getId()))
             .filter(Optional::isPresent)
