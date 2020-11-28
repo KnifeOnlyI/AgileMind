@@ -18,6 +18,7 @@
                 <input [formControl]="form.businessValueFormControl" class="form-control" id="businessValue" min="0" type="number"/>
             </div>
 
+            <ag-story-type-select [control]="form.typeIdFormControl"></ag-story-type-select>
             <ag-story-status-select [control]="form.statusIdFormControl"></ag-story-status-select>
             <ag-user-select [control]="form.assignedUserIdFormControl"></ag-user-select>
         </div>

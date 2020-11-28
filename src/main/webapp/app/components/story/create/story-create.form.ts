@@ -21,6 +21,7 @@ export class StoryCreateForm extends BaseForm {
     this.form.addControl('points', new FormControl(0, [Validators.min(0)]));
     this.form.addControl('businessValue', new FormControl(0, [Validators.min(0)]));
     this.form.addControl('statusId', new FormControl(1, Validators.required));
+    this.form.addControl('typeId', new FormControl(1, Validators.required));
     this.form.addControl('assignedUserId', new FormControl(null));
     this.form.addControl('projectId', new FormControl(projectId, Validators.required));
   }
@@ -70,6 +71,15 @@ export class StoryCreateForm extends BaseForm {
    */
   public get statusIdFormControl(): FormControl {
     return this.getFormControl('statusId');
+  }
+
+  /**
+   * Get the type form control
+   *
+   * @return The status form control
+   */
+  public get typeIdFormControl(): FormControl {
+    return this.getFormControl('typeId');
   }
 
   /**
@@ -140,6 +150,15 @@ export class StoryCreateForm extends BaseForm {
   }
 
   /**
+   * Get the typeId
+   *
+   * @return The typeId
+   */
+  public get typeId(): number {
+    return this.typeIdFormControl.value;
+  }
+
+  /**
    * Get the assigned user id
    *
    * @return The assigned user id
@@ -182,6 +201,7 @@ export class StoryCreateForm extends BaseForm {
       this.points,
       this.businessValue,
       this.statusId,
+      this.typeId,
       this.assignedUserId,
       this.projectId
     );

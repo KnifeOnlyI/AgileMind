@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
+
+    <changeSet id="agilemind-1.2.0-story" author="Knife">
+        <addColumn tableName="story">
+            <column name="type_id" type="BIGINT" defaultValue="1">
+                <constraints foreignKeyName="fk_type_id_story_type_id" referencedTableName="story_type" referencedColumnNames="id" nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>

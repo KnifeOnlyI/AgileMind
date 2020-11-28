@@ -13,6 +13,7 @@ export class Story {
    * @param points The story points
    * @param businessValue The business value
    * @param statusId The status id
+   * @param typeId The status id
    * @param assignedUserId The assigned user id
    * @param projectId The project id
    * @param taskIdList The task id list
@@ -24,6 +25,7 @@ export class Story {
     public points?: number,
     public businessValue?: number,
     public statusId?: number,
+    public typeId?: number,
     public assignedUserId?: number,
     public projectId?: number,
     public taskIdList?: Array<number>,

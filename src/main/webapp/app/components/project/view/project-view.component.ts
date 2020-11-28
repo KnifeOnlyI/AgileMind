@@ -101,6 +101,36 @@ export class ProjectViewComponent implements OnInit {
   }
 
   /**
+   * Récupère les styles à appliquer sur la ligne affichant la story spécifiée
+   *
+   * @param story La story à afficher
+   *
+   * @return Les styles à appliquer sur la ligne affichant la story spécifiée
+   */
+  public getStyles(story: Story): { [klass: string]: any; } {
+    const style = {
+      'cursor': 'pointer',
+      'border-bottom': '1px solid',
+    };
+
+    switch (story.typeId) {
+      case 1:
+        style['border-bottom'] += '#28a745';
+        break;
+      case 2:
+        style['border-bottom'] += '#dc3545';
+        break;
+      case 3:
+        style['border-bottom'] += '#a6a6a6';
+        break;
+      default:
+        throw Error(`Not managed story type : ${story.typeId}`);
+    }
+
+    return style;
+  }
+
+  /**
    * Initialize the project
    *
    * @param id ID of project to initialize

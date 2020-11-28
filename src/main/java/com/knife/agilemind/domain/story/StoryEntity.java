@@ -68,6 +68,13 @@ public class StoryEntity implements Serializable {
     private StoryStatusEntity status;
 
     /**
+     * The type
+     */
+    @ManyToOne
+    @JoinColumn(name = "type_id")
+    private StoryTypeEntity type;
+
+    /**
      * The assigned user
      */
     @ManyToOne
@@ -219,6 +226,27 @@ public class StoryEntity implements Serializable {
      */
     public StoryEntity setStatus(StoryStatusEntity status) {
         this.status = status;
+        return this;
+    }
+
+    /**
+     * Get the value of : type
+     *
+     * @return type
+     */
+    public StoryTypeEntity getType() {
+        return type;
+    }
+
+    /**
+     * Set value of : type
+     *
+     * @param type The new value
+     *
+     * @return this
+     */
+    public StoryEntity setType(StoryTypeEntity type) {
+        this.type = type;
         return this;
     }
 

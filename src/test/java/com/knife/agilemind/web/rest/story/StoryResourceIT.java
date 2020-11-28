@@ -4,6 +4,7 @@ import com.knife.agilemind.AgileMindApp;
 import com.knife.agilemind.constant.project.ProjectConstant;
 import com.knife.agilemind.constant.story.StoryConstant;
 import com.knife.agilemind.constant.story.StoryStatusConstant;
+import com.knife.agilemind.constant.story.StoryTypeConstant;
 import com.knife.agilemind.constant.user.UserConstant;
 import com.knife.agilemind.domain.story.StoryEntity;
 import com.knife.agilemind.dto.story.CreateStoryDTO;
@@ -46,6 +47,7 @@ class StoryResourceIT {
             .setPoints(1.5)
             .setBusinessValue(1L)
             .setStatusId(StoryStatusConstant.DB.TODO_ID)
+            .setTypeId(StoryTypeConstant.DB.TODO_ID)
             .setAssignedUserId(3L)
             .setProjectId(1000L);
 
@@ -58,6 +60,7 @@ class StoryResourceIT {
         Assertions.assertEquals(newStory.getDescription(), response.getDescription());
         Assertions.assertEquals(newStory.getPoints(), response.getPoints());
         Assertions.assertEquals(newStory.getStatusId(), response.getStatusId());
+        Assertions.assertEquals(newStory.getTypeId(), response.getTypeId());
         Assertions.assertEquals(newStory.getAssignedUserId(), response.getAssignedUserId());
 
         // Test database
@@ -74,6 +77,8 @@ class StoryResourceIT {
         Assertions.assertEquals(newStory.getBusinessValue(), storyEntity.getBusinessValue());
         Assertions.assertNotNull(storyEntity.getStatus());
         Assertions.assertEquals(newStory.getStatusId(), storyEntity.getStatus().getId());
+        Assertions.assertNotNull(storyEntity.getType());
+        Assertions.assertEquals(newStory.getTypeId(), storyEntity.getType().getId());
         Assertions.assertNotNull(storyEntity.getAssignedUser());
         Assertions.assertEquals(newStory.getAssignedUserId(), storyEntity.getAssignedUser().getId());
     }
@@ -93,6 +98,7 @@ class StoryResourceIT {
         Assertions.assertEquals(1, response.getPoints());
         Assertions.assertEquals(1, response.getBusinessValue());
         Assertions.assertEquals(1, response.getStatusId());
+        Assertions.assertEquals(1, response.getTypeId());
         Assertions.assertEquals(3, response.getAssignedUserId());
         Assertions.assertEquals(1000L, response.getProjectId());
 
@@ -105,6 +111,8 @@ class StoryResourceIT {
         Assertions.assertEquals(1, storyEntity.getBusinessValue());
         Assertions.assertNotNull(storyEntity.getStatus());
         Assertions.assertEquals(1, storyEntity.getStatus().getId());
+        Assertions.assertNotNull(storyEntity.getType());
+        Assertions.assertEquals(1, storyEntity.getType().getId());
         Assertions.assertNotNull(storyEntity.getAssignedUser());
         Assertions.assertEquals(3, storyEntity.getAssignedUser().getId());
         Assertions.assertNotNull(storyEntity.getProject());
@@ -175,6 +183,7 @@ class StoryResourceIT {
             .setId(1000L)
             .setName("Updated name")
             .setStatusId(3L)
+            .setTypeId(3L)
             .setProjectId(1001L);
 
         // Test response
@@ -187,6 +196,7 @@ class StoryResourceIT {
         Assertions.assertEquals(storyDTO.getPoints(), response.getPoints());
         Assertions.assertEquals(storyDTO.getBusinessValue(), response.getBusinessValue());
         Assertions.assertEquals(storyDTO.getStatusId(), response.getStatusId());
+        Assertions.assertEquals(storyDTO.getTypeId(), response.getTypeId());
         Assertions.assertEquals(storyDTO.getAssignedUserId(), response.getAssignedUserId());
         Assertions.assertEquals(storyDTO.getProjectId(), response.getProjectId());
 
@@ -201,6 +211,8 @@ class StoryResourceIT {
         Assertions.assertEquals(storyDTO.getBusinessValue(), storyEntity.getBusinessValue());
         Assertions.assertNotNull(storyEntity.getStatus());
         Assertions.assertEquals(storyDTO.getStatusId(), storyEntity.getStatus().getId());
+        Assertions.assertNotNull(storyEntity.getType());
+        Assertions.assertEquals(storyDTO.getTypeId(), storyEntity.getType().getId());
         Assertions.assertNull(storyEntity.getAssignedUser());
         Assertions.assertNotNull(storyEntity.getProject());
         Assertions.assertEquals(storyDTO.getProjectId(), storyEntity.getProject().getId());
@@ -281,10 +293,30 @@ class StoryResourceIT {
             Status.NOT_FOUND
         );
 
+        // Without type, a STORY_TYPE_ID_NULL must be returned
+        this.httpTestUtil.assertBusinessException(() -> this.storyResource.create(new CreateStoryDTO()
+                .setName("Name")
+                .setStatusId(3L)
+            ),
+            StoryConstant.Error.TYPE_ID_NULL,
+            Status.BAD_REQUEST
+        );
+
+        // With invalid type, a STORY_TYPE_NOT_FOUND must be returned
+        this.httpTestUtil.assertBusinessException(() -> this.storyResource.create(new CreateStoryDTO()
+                .setName("Name")
+                .setStatusId(3L)
+                .setTypeId(Long.MAX_VALUE)
+            ),
+            StoryTypeConstant.Error.NOT_FOUND,
+            Status.NOT_FOUND
+        );
+
         // Without project, a PROJECT_ID_NULL must be returned
         this.httpTestUtil.assertBusinessException(() -> this.storyResource.create(new CreateStoryDTO()
                 .setName("Name")
                 .setStatusId(1L)
+                .setTypeId(1L)
             ),
             StoryConstant.Error.PROJECT_ID_NULL,
             Status.BAD_REQUEST
@@ -294,6 +326,7 @@ class StoryResourceIT {
         this.httpTestUtil.assertBusinessException(() -> this.storyResource.create(new CreateStoryDTO()
                 .setName("Name")
                 .setStatusId(1L)
+                .setTypeId(1L)
                 .setProjectId(Long.MAX_VALUE)
             ),
             ProjectConstant.Error.NOT_FOUND,
@@ -304,6 +337,7 @@ class StoryResourceIT {
         this.httpTestUtil.assertBusinessException(() -> this.storyResource.create(new CreateStoryDTO()
             .setName("Name")
             .setStatusId(1L)
+            .setTypeId(1L)
             .setProjectId(1000L)
             .setAssignedUserId(4L)
         ), ProjectConstant.Error.USER_NOT_ASSIGNED, Status.BAD_REQUEST);
@@ -319,6 +353,7 @@ class StoryResourceIT {
         this.httpTestUtil.assertBusinessException(() -> this.storyResource.create(new CreateStoryDTO()
                 .setName("Name")
                 .setStatusId(1L)
+                .setTypeId(1L)
                 .setProjectId(1000L)
             ), StoryConstant.Error.NOT_FOUND, Status.NOT_FOUND
         );
@@ -394,6 +429,22 @@ class StoryResourceIT {
                 .setId(1000L)
                 .setName("UpdatedName")
                 .setStatusId(3L)
+        ), StoryConstant.Error.TYPE_ID_NULL, Status.BAD_REQUEST);
+
+        this.httpTestUtil.assertBusinessException(() -> this.storyResource.update(
+            new StoryDTO()
+                .setId(1000L)
+                .setName("UpdatedName")
+                .setStatusId(3L)
+                .setTypeId(Long.MAX_VALUE)
+        ), StoryTypeConstant.Error.NOT_FOUND, Status.NOT_FOUND);
+
+        this.httpTestUtil.assertBusinessException(() -> this.storyResource.update(
+            new StoryDTO()
+                .setId(1000L)
+                .setName("UpdatedName")
+                .setStatusId(3L)
+                .setTypeId(3L)
                 .setPoints(-1.5)
         ), StoryConstant.Error.POINTS_LESS_0, Status.BAD_REQUEST);
 
@@ -402,6 +453,7 @@ class StoryResourceIT {
                 .setId(1000L)
                 .setName("UpdatedName")
                 .setStatusId(3L)
+                .setTypeId(3L)
                 .setProjectId(1000L)
                 .setAssignedUserId(Long.MAX_VALUE)
         ), UserConstant.Error.NOT_FOUND, Status.BAD_REQUEST);
@@ -412,6 +464,7 @@ class StoryResourceIT {
                 .setId(1000L)
                 .setName("UpdatedName")
                 .setStatusId(3L)
+                .setTypeId(3L)
                 .setAssignedUserId(4L)
                 .setProjectId(1000L)
         ), ProjectConstant.Error.USER_NOT_ASSIGNED, Status.BAD_REQUEST);

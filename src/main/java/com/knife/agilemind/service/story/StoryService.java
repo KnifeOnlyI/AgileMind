@@ -41,6 +41,9 @@ public class StoryService {
     private StoryStatusService storyStatusService;
 
     @Autowired
+    private StoryTypeService storyTypeService;
+
+    @Autowired
     private ProjectService projectService;
 
     @Autowired
@@ -62,6 +65,7 @@ public class StoryService {
             .setPoints(createStoryDTO.getPoints())
             .setBusinessValue(createStoryDTO.getBusinessValue())
             .setStatus(this.storyStatusService.findById(createStoryDTO.getStatusId()))
+            .setType(this.storyTypeService.findById(createStoryDTO.getTypeId()))
             .setAssignedUser(this.userService.findById(createStoryDTO.getAssignedUserId()))
             .setProject(this.projectService.findById(createStoryDTO.getProjectId()))
         ));
@@ -139,6 +143,7 @@ public class StoryService {
             .setPoints(storyDTO.getPoints())
             .setBusinessValue(storyDTO.getBusinessValue())
             .setStatus(this.storyStatusService.findById(storyDTO.getStatusId()))
+            .setType(this.storyTypeService.findById(storyDTO.getTypeId()))
             .setAssignedUser(this.userService.findById(storyDTO.getAssignedUserId()))
             .setProject(this.projectService.findById(storyDTO.getProjectId()))
         );
@@ -215,6 +220,10 @@ public class StoryService {
 
             if (entity.getStatus() != null) {
                 results.setStatusId(entity.getStatus().getId());
+            }
+
+            if (entity.getType() != null) {
+                results.setTypeId(entity.getType().getId());
             }
 
             if (entity.getAssignedUser() != null) {

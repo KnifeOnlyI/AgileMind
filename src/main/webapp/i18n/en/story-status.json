@@ -4,6 +4,9 @@
       "todo": "Todo",
       "inProgress": "In progress",
       "done": "Done"
+    },
+    "error": {
+      "notFound": "Not existing story status"
     }
   }
 }

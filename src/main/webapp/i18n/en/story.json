@@ -12,6 +12,7 @@
         "points": "Story points",
         "businessValue": "Business value",
         "status": "Status",
+        "type": "Type",
         "assignedUser": "Assigned user",
         "tasks": "Tasks"
       }
@@ -23,6 +24,11 @@
       "status": {
         "id": {
           "null": "The story status cannot be empty"
+        }
+      },
+      "type": {
+        "id": {
+          "null": "The story type cannot be empty"
         }
       },
       "form": {

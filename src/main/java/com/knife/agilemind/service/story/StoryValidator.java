@@ -37,6 +37,9 @@ public class StoryValidator {
     private StoryStatusService storyStatusService;
 
     @Autowired
+    private StoryTypeService storyTypeService;
+
+    @Autowired
     private ProjectRepository projectRepository;
 
     @Autowired
@@ -52,6 +55,7 @@ public class StoryValidator {
      * @param points        The points
      * @param businessValue The business value
      * @param status        The status
+     * @param type          The type
      * @param project       The project id
      * @param assignedUser  The assigned user id
      */
@@ -60,6 +64,7 @@ public class StoryValidator {
         Double points,
         Long businessValue,
         Long status,
+        Long type,
         Long project,
         Long assignedUser
     ) {
@@ -67,6 +72,7 @@ public class StoryValidator {
         this.assertValidPoints(points);
         this.assertValidBusinessValue(businessValue);
         this.assertValidStatus(status);
+        this.assertValidType(type);
         this.assertValidProject(project);
         this.assertValidUser(project, assignedUser);
         this.assertLoggedUserCanCreateOrUpdate(project);
@@ -85,6 +91,7 @@ public class StoryValidator {
             dto.getPoints(),
             dto.getBusinessValue(),
             dto.getStatusId(),
+            dto.getTypeId(),
             dto.getProjectId(),
             dto.getAssignedUserId()
         );
@@ -98,7 +105,7 @@ public class StoryValidator {
     public StoryEntity assertValid(StoryDTO dto) {
         this.assertNotNull(dto);
         this.assertValidID(dto.getId());
-        assertValidCommon(dto.getName(), dto.getPoints(), dto.getBusinessValue(), dto.getStatusId(), dto.getProjectId(), dto.getAssignedUserId());
+        assertValidCommon(dto.getName(), dto.getPoints(), dto.getBusinessValue(), dto.getStatusId(), dto.getTypeId(), dto.getProjectId(), dto.getAssignedUserId());
 
         return this.storyRepository.findById(dto.getId()).orElseThrow(TechnicalException::new);
     }
@@ -143,7 +150,7 @@ public class StoryValidator {
     }
 
     /**
-     * Assert the specicied name is valid
+     * Assert the specified name is valid
      *
      * @param name The name to check
      */
@@ -156,7 +163,7 @@ public class StoryValidator {
     }
 
     /**
-     * Assert the specicied points is valid
+     * Assert the specified points is valid
      *
      * @param points The points to check
      */
@@ -167,7 +174,7 @@ public class StoryValidator {
     }
 
     /**
-     * Assert the specicied business value is valid
+     * Assert the specified business value is valid
      *
      * @param businessValue The business value to check
      */
@@ -178,7 +185,7 @@ public class StoryValidator {
     }
 
     /**
-     * Assert the specicied statusId is valid
+     * Assert the specified statusId is valid
      *
      * @param statusId The statusId to check
      */
@@ -191,7 +198,20 @@ public class StoryValidator {
     }
 
     /**
-     * Assert the specicied projectId is valid
+     * Assert the specified statusId is valid
+     *
+     * @param typeId The typeId to check
+     */
+    public void assertValidType(Long typeId) {
+        if (typeId == null) {
+            throw new BusinessException(StoryConstant.Error.TYPE_ID_NULL, Status.BAD_REQUEST);
+        }
+
+        this.storyTypeService.assertExists(typeId);
+    }
+
+    /**
+     * Assert the specified projectId is valid
      *
      * @param projectId The projectId to check
      */
@@ -208,7 +228,7 @@ public class StoryValidator {
     }
 
     /**
-     * Assert the specicied userId is valid
+     * Assert the specified userId is valid
      *
      * @param projectId The project contains the story
      * @param userId    The userId to check

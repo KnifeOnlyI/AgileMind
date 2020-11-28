@@ -1,13 +1,13 @@
-id;name;description;points;business_value;status_id;assigned_user_id;project_id
+id;name;description;points;business_value;status_id;type_id;assigned_user_id;project_id
 
-1000;AgileMind - Story #1;AgileMind - Story description #1;1;1;1;3;1000
-1001;AgileMind - Story #2;AgileMind - Story description #2;2;2;1;3;1000
-1002;AgileMind - Story #3;AgileMind - Story description #3;3;3;1;3;1000
-1003;AgileMind - Story #4;AgileMind - Story description #4;4;4;1;3;1000
-1004;AgileMind - Story #5;AgileMind - Story description #5;5;5;1;3;1000
+1000;AgileMind - Story #1;AgileMind - Story description #1;1;1;1;1;3;1000
+1001;AgileMind - Story #2;AgileMind - Story description #2;2;2;1;1;3;1000
+1002;AgileMind - Story #3;AgileMind - Story description #3;3;3;1;1;3;1000
+1003;AgileMind - Story #4;AgileMind - Story description #4;4;4;1;1;3;1000
+1004;AgileMind - Story #5;AgileMind - Story description #5;5;5;1;1;3;1000
 
-1005;PXEngine - Story #1;PXEngine - Story description #1;1;1;1;3;1001
-1006;PXEngine - Story #2;PXEngine - Story description #2;2;2;1;3;1001
-1007;PXEngine - Story #3;PXEngine - Story description #3;3;3;1;3;1001
-1008;PXEngine - Story #4;PXEngine - Story description #4;4;4;1;3;1001
-1009;PXEngine - Story #5;PXEngine - Story description #5;5;5;1;3;1001
+1005;PXEngine - Story #1;PXEngine - Story description #1;1;1;1;2;3;1001
+1006;PXEngine - Story #2;PXEngine - Story description #2;2;2;1;2;3;1001
+1007;PXEngine - Story #3;PXEngine - Story description #3;3;3;1;2;3;1001
+1008;PXEngine - Story #4;PXEngine - Story description #4;4;4;1;2;3;1001
+1009;PXEngine - Story #5;PXEngine - Story description #5;5;5;1;2;3;1001

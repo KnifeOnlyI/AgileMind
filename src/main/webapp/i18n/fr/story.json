@@ -12,6 +12,7 @@
         "points": "Story points",
         "businessValue": "Valeur business",
         "status": "Statut",
+        "type": "Type",
         "assignedUser": "Utilisateur assigné",
         "tasks": "Tâches"
       }
@@ -23,6 +24,11 @@
       "status": {
         "id": {
           "null": "Le champ 'Statut' est obligatoire"
+        }
+      },
+      "type": {
+        "id": {
+          "null": "Le champ 'Type' est obligatoire"
         }
       },
       "form": {

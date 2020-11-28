@@ -1,0 +1,12 @@
+{
+  "storyType": {
+    "key": {
+      "functionality": "Functionality",
+      "bug": "Bug",
+      "technical": "Technical"
+    },
+    "error": {
+      "notFound": "Not existing story type"
+    }
+  }
+}

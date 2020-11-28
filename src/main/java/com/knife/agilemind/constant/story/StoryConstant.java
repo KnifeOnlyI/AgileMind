@@ -26,6 +26,7 @@ public final class StoryConstant {
 
         public static final String PROJECT_ID_NULL = "story.error.project.id.null";
         public static final String STATUS_ID_NULL = "story.error.status.id.null";
+        public static final String TYPE_ID_NULL = "story.error.type.id.null";
 
         private Error() {
         }

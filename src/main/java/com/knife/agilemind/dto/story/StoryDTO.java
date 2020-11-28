@@ -43,6 +43,11 @@ public class StoryDTO implements Serializable {
     private Long statusId;
 
     /**
+     * The type id
+     */
+    private Long typeId;
+
+    /**
      * The assigned user id
      */
     private Long assignedUserId;
@@ -189,6 +194,27 @@ public class StoryDTO implements Serializable {
      */
     public StoryDTO setStatusId(Long statusId) {
         this.statusId = statusId;
+        return this;
+    }
+
+    /**
+     * Get the value of : typeId
+     *
+     * @return typeId
+     */
+    public Long getTypeId() {
+        return typeId;
+    }
+
+    /**
+     * Set value of : typeId
+     *
+     * @param typeId The new value
+     *
+     * @return this
+     */
+    public StoryDTO setTypeId(Long typeId) {
+        this.typeId = typeId;
         return this;
     }
 
