@@ -12,6 +12,7 @@ import {
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {AlertService} from 'app/service/alert.service';
 import {Alert, AlertContent, AlertLevel} from 'app/shared/entity/alert.entity';
+import {Project} from 'app/entities/project.entity';
 
 /**
  * Component to manage project update
@@ -116,11 +117,33 @@ export class ProjectUpdateComponent implements OnInit {
    * @param id ID of project to initialize
    */
   private getProject(id: number): void {
-    this.projectService.get(id).subscribe(project => (this.form = new ProjectUpdateForm(project)),
-      (error: HttpErrorResponse) => {
-        if (error.status === 404) {
-          this.router.navigate(['404']).then();
-        }
-      });
+    this.projectService.get(id).subscribe(project => this.onSuccess(project), error => this.onError(error));
+  }
+
+  /**
+   * Executed on http success
+   *
+   * @param body The body
+   */
+  private onSuccess(body: Project): void {
+    this.form = new ProjectUpdateForm(body);
+  }
+
+  /**
+   * Executed on http error
+   *
+   * @param error The error
+   */
+  private onError(error: HttpErrorResponse): void {
+    switch (error.status) {
+      case 404:
+        this.messageService.add(new Alert(
+          AlertLevel.ERROR,
+          new AlertContent(error.error.title ? error.error.title : error.error.message))
+        );
+        break;
+    }
+
+    this.router.navigate(['/']).then();
   }
 }

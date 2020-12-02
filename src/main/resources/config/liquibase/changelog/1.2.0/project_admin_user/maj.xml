@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
+
+    <changeSet id="agilemind-1.2.0-project_admin_user" author="Knife">
+        <createTable tableName="project_admin_user">
+            <column name="project_id" type="BIGINT">
+                <constraints foreignKeyName="fk_project_admin_user_project_id_project_id" referencedTableName="project" referencedColumnNames="id" nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints foreignKeyName="fk_project_admin_user_user_id_jhi_user_id" referencedTableName="jhi_user" referencedColumnNames="id" nullable="false"/>
+            </column>
+        </createTable>
+
+        <!-- Composite primary key -->
+        <addPrimaryKey tableName="project_admin_user" columnNames="project_id, user_id"/>
+    </changeSet>
+</databaseChangeLog>

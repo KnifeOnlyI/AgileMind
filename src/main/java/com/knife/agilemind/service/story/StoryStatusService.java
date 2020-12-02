@@ -3,7 +3,9 @@ package com.knife.agilemind.service.story;
 import com.knife.agilemind.constant.story.StoryStatusConstant;
 import com.knife.agilemind.domain.story.StoryStatusEntity;
 import com.knife.agilemind.dto.story.StoryStatusDTO;
+import com.knife.agilemind.exception.BusinessAssert;
 import com.knife.agilemind.exception.BusinessException;
+import com.knife.agilemind.exception.TechnicalAssert;
 import com.knife.agilemind.repository.story.StoryStatusRepository;
 import com.knife.agilemind.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,12 +54,11 @@ public class StoryStatusService {
      * @param id The status id to find
      */
     public StoryStatusEntity findById(Long id) {
-        StoryStatusEntity results = null;
+        TechnicalAssert.notNull(id);
 
-        if (id != null) {
-            results = this.storyStatusRepository.findById(id).orElse(null);
-        }
+        StoryStatusEntity results = this.storyStatusRepository.findById(id).orElse(null);
 
+        BusinessAssert.notNull(results, StoryStatusConstant.Error.NOT_FOUND, Status.NOT_FOUND);
 
         return results;
     }
@@ -68,10 +69,10 @@ public class StoryStatusService {
      * @param id The story status id to check
      */
     public void assertExists(Long id) {
-        StoryStatusEntity results = this.findById(id);
+        this.userService.assertLogged();
 
-        if (results == null) {
-            throw new BusinessException(StoryStatusConstant.Error.NOT_FOUND, Status.NOT_FOUND);
-        }
+        TechnicalAssert.notNull(id);
+
+        BusinessAssert.notNull(this.findById(id), StoryStatusConstant.Error.NOT_FOUND, Status.NOT_FOUND);
     }
 }

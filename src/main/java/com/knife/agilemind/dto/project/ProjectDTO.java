@@ -33,6 +33,11 @@ public class ProjectDTO implements Serializable {
     private Set<Long> assignedUserIdList = new HashSet<>();
 
     /**
+     * The project administrator user id list
+     */
+    private Set<Long> adminUserIdList = new HashSet<>();
+
+    /**
      * The story id list
      */
     private Set<Long> storyIdList = new HashSet<>();
@@ -127,6 +132,27 @@ public class ProjectDTO implements Serializable {
      */
     public ProjectDTO setAssignedUserIdList(Set<Long> assignedUserIdList) {
         this.assignedUserIdList = assignedUserIdList;
+        return this;
+    }
+
+    /**
+     * Get the value of : adminUserIdList
+     *
+     * @return adminUserIdList
+     */
+    public Set<Long> getAdminUserIdList() {
+        return adminUserIdList;
+    }
+
+    /**
+     * Set value of : adminUserIdList
+     *
+     * @param adminUserIdList The new value
+     *
+     * @return this
+     */
+    public ProjectDTO setAdminUserIdList(Set<Long> adminUserIdList) {
+        this.adminUserIdList = adminUserIdList;
         return this;
     }
 

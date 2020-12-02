@@ -1,39 +1,40 @@
-import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { JhiLanguageService } from 'ng-jhipster';
-import { SessionStorageService } from 'ngx-webstorage';
-import { Observable, ReplaySubject, of } from 'rxjs';
-import { shareReplay, tap, catchError } from 'rxjs/operators';
-import { StateStorageService } from 'app/core/auth/state-storage.service';
+import {Injectable} from '@angular/core';
+import {Router} from '@angular/router';
+import {HttpClient} from '@angular/common/http';
+import {JhiLanguageService} from 'ng-jhipster';
+import {SessionStorageService} from 'ngx-webstorage';
+import {Observable, of, ReplaySubject} from 'rxjs';
+import {catchError, shareReplay, tap} from 'rxjs/operators';
+import {StateStorageService} from 'app/core/auth/state-storage.service';
 
-import { SERVER_API_URL } from 'app/app.constants';
-import { Account } from 'app/core/user/account.model';
+import {SERVER_API_URL} from 'app/app.constants';
+import {Account} from 'app/core/user/account.model';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class AccountService {
   private userIdentity: Account | null = null;
   private authenticationState = new ReplaySubject<Account | null>(1);
   private accountCache$?: Observable<Account | null>;
 
-  constructor(
+  public constructor(
     private languageService: JhiLanguageService,
     private sessionStorage: SessionStorageService,
     private http: HttpClient,
     private stateStorageService: StateStorageService,
     private router: Router
-  ) {}
+  ) {
+  }
 
-  save(account: Account): Observable<{}> {
+  public save(account: Account): Observable<{}> {
     return this.http.post(SERVER_API_URL + 'api/account', account);
   }
 
-  authenticate(identity: Account | null): void {
+  public authenticate(identity: Account | null): void {
     this.userIdentity = identity;
     this.authenticationState.next(this.userIdentity);
   }
 
-  hasAnyAuthority(authorities: string[] | string): boolean {
+  public hasAnyAuthority(authorities: string[] | string): boolean {
     if (!this.userIdentity || !this.userIdentity.authorities) {
       return false;
     }
@@ -43,7 +44,16 @@ export class AccountService {
     return this.userIdentity.authorities.some((authority: string) => authorities.includes(authority));
   }
 
-  identity(force?: boolean): Observable<Account | null> {
+  /**
+   * Check if the logged user is admin
+   *
+   * @return TRUE if the logged user is admin, FALSE if user is not logged or not admin
+   */
+  public isAdmin(): boolean {
+    return this.hasAnyAuthority('ROLE_ADMIN');
+  }
+
+  public identity(force?: boolean): Observable<Account | null> {
     if (!this.accountCache$ || force || !this.isAuthenticated()) {
       this.accountCache$ = this.fetch().pipe(
         catchError(() => {
@@ -69,16 +79,25 @@ export class AccountService {
     return this.accountCache$;
   }
 
-  isAuthenticated(): boolean {
+  public isAuthenticated(): boolean {
     return this.userIdentity !== null;
   }
 
-  getAuthenticationState(): Observable<Account | null> {
+  public getAuthenticationState(): Observable<Account | null> {
     return this.authenticationState.asObservable();
   }
 
-  getImageUrl(): string {
+  public getImageUrl(): string {
     return this.userIdentity ? this.userIdentity.imageUrl : '';
+  }
+
+  /**
+   * Get the login of the logged user
+   *
+   * @return The login of the logged user or empty string if no user's logged
+   */
+  public getLogin(): string {
+    return this.userIdentity ? this.userIdentity.login : '';
   }
 
   private fetch(): Observable<Account> {

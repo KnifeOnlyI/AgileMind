@@ -60,6 +60,17 @@ public class ProjectEntity implements Serializable {
     private Set<UserEntity> assignedUsers = new HashSet<>();
 
     /**
+     * The project administrator users
+     */
+    @ManyToMany
+    @JoinTable(
+        name = "project_admin_user",
+        joinColumns = @JoinColumn(name = "project_id"),
+        inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private Set<UserEntity> adminUsers = new HashSet<>();
+
+    /**
      * The stories
      */
     @OneToMany(mappedBy = "project", orphanRemoval = true)
@@ -134,6 +145,27 @@ public class ProjectEntity implements Serializable {
      */
     public ProjectEntity setDescription(String description) {
         this.description = description;
+        return this;
+    }
+
+    /**
+     * Get the value of : adminUsers
+     *
+     * @return adminUsers
+     */
+    public Set<UserEntity> getAdminUsers() {
+        return adminUsers;
+    }
+
+    /**
+     * Set value of : adminUsers
+     *
+     * @param adminUsers The new value
+     *
+     * @return this
+     */
+    public ProjectEntity setAdminUsers(Set<UserEntity> adminUsers) {
+        this.adminUsers = adminUsers;
         return this;
     }
 

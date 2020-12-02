@@ -36,6 +36,6 @@ export const PROJECT_ROUTE: Route[] = [
     data: {
       pageTitle: 'project.title.edit',
     },
-    canActivate: [AdminRouteAccessService]
+    canActivate: [ConnectedRouteAccessService]
   },
 ];

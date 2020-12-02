@@ -18,8 +18,8 @@ services:
       - JWT_SECRET_BASE_64=${AGILEMIND_JWT_SECRET_BASE_64}
       - KEYSTORE_PASSWORD=${AGILEMIND_KEYSTORE_PASSWORD}
     ports:
-      - 80:8080
-      - 443:443
+      - 8080:8080
+      - 8443:443
   agilemind-postgresql:
     extends:
       file: postgresql.yml

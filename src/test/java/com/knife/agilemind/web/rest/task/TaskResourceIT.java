@@ -52,7 +52,7 @@ class TaskResourceIT {
 
         // Test response
 
-        TaskDTO response = this.httpTestUtil.getNotNullBody(this.taskResource.create(newTask), HttpStatus.OK);
+        TaskDTO response = this.httpTestUtil.assertNotNullBody(this.taskResource.create(newTask), HttpStatus.OK);
 
         Assertions.assertNotNull(response.getId());
         Assertions.assertEquals(newTask.getName(), response.getName());
@@ -90,7 +90,7 @@ class TaskResourceIT {
     @Transactional
     @WithMockUser(username = "admin")
     void testValidGet() {
-        TaskDTO response = this.httpTestUtil.getNotNullBody(this.taskResource.get(1000L), HttpStatus.OK);
+        TaskDTO response = this.httpTestUtil.assertNotNullBody(this.taskResource.get(1000L), HttpStatus.OK);
 
         Assertions.assertEquals(1000L, response.getId());
         Assertions.assertEquals("AgileMind - Story #1 - Task #1", response.getName());
@@ -123,7 +123,7 @@ class TaskResourceIT {
     @Transactional
     @WithMockUser(username = "admin")
     void testValidGetAllFromStory() {
-        List<TaskDTO> response = this.httpTestUtil.getNotNullBody(this.taskResource.getAllFromStory(1000L), HttpStatus.OK);
+        List<TaskDTO> response = this.httpTestUtil.assertNotNullBody(this.taskResource.getAllFromStory(1000L), HttpStatus.OK);
 
         response.sort((a, b) -> (int) (a.getId() - b.getId()));
 
@@ -182,7 +182,7 @@ class TaskResourceIT {
 
         // Test response
 
-        TaskDTO response = this.httpTestUtil.getNotNullBody(this.taskResource.update(taskDTO), HttpStatus.OK);
+        TaskDTO response = this.httpTestUtil.assertNotNullBody(this.taskResource.update(taskDTO), HttpStatus.OK);
 
         Assertions.assertEquals(1000L, taskDTO.getId());
         Assertions.assertEquals(taskDTO.getName(), response.getName());
@@ -323,7 +323,7 @@ class TaskResourceIT {
                 .setName("Name")
                 .setStatusId(1L)
                 .setStoryId(1000L)
-            ), TaskConstant.Error.NOT_FOUND, Status.NOT_FOUND
+            ), StoryConstant.Error.NOT_FOUND, Status.NOT_FOUND
         );
     }
 
@@ -407,7 +407,7 @@ class TaskResourceIT {
                 .setStatusId(3L)
                 .setStoryId(1000L)
                 .setAssignedUserId(Long.MAX_VALUE)
-        ), UserConstant.Error.NOT_FOUND, Status.BAD_REQUEST);
+        ), UserConstant.Error.NOT_FOUND, Status.NOT_FOUND);
 
         // Error when trying to assign to task a user not assigned to story
         this.httpTestUtil.assertBusinessException(() -> this.taskResource.update(

@@ -53,7 +53,7 @@ class StoryResourceIT {
 
         // Test response
 
-        StoryDTO response = this.httpTestUtil.getNotNullBody(this.storyResource.create(newStory), HttpStatus.OK);
+        StoryDTO response = this.httpTestUtil.assertNotNullBody(this.storyResource.create(newStory), HttpStatus.OK);
 
         Assertions.assertNotNull(response.getId());
         Assertions.assertEquals(newStory.getName(), response.getName());
@@ -90,7 +90,7 @@ class StoryResourceIT {
     @Transactional
     @WithMockUser(username = "admin")
     void testValidGet() {
-        StoryDTO response = this.httpTestUtil.getNotNullBody(this.storyResource.get(1000L), HttpStatus.OK);
+        StoryDTO response = this.httpTestUtil.assertNotNullBody(this.storyResource.get(1000L), HttpStatus.OK);
 
         Assertions.assertEquals(1000L, response.getId());
         Assertions.assertEquals("AgileMind - Story #1", response.getName());
@@ -126,7 +126,7 @@ class StoryResourceIT {
     @Transactional
     @WithMockUser(username = "admin")
     void testValidGetAllFromProject() {
-        List<StoryDTO> response = this.httpTestUtil.getNotNullBody(this.storyResource.getAllFromProject(1000L), HttpStatus.OK);
+        List<StoryDTO> response = this.httpTestUtil.assertNotNullBody(this.storyResource.getAllFromProject(1000L), HttpStatus.OK);
 
         response.sort((a, b) -> (int) (a.getId() - b.getId()));
 
@@ -182,13 +182,13 @@ class StoryResourceIT {
         StoryDTO storyDTO = new StoryDTO()
             .setId(1000L)
             .setName("Updated name")
-            .setStatusId(3L)
             .setTypeId(3L)
+            .setStatusId(3L)
             .setProjectId(1001L);
 
         // Test response
 
-        StoryDTO response = this.httpTestUtil.getNotNullBody(this.storyResource.update(storyDTO), HttpStatus.OK);
+        StoryDTO response = this.httpTestUtil.assertNotNullBody(this.storyResource.update(storyDTO), HttpStatus.OK);
 
         Assertions.assertEquals(1000L, storyDTO.getId());
         Assertions.assertEquals(storyDTO.getName(), response.getName());
@@ -355,7 +355,7 @@ class StoryResourceIT {
                 .setStatusId(1L)
                 .setTypeId(1L)
                 .setProjectId(1000L)
-            ), StoryConstant.Error.NOT_FOUND, Status.NOT_FOUND
+            ), ProjectConstant.Error.NOT_FOUND, Status.NOT_FOUND
         );
     }
 
@@ -456,7 +456,7 @@ class StoryResourceIT {
                 .setTypeId(3L)
                 .setProjectId(1000L)
                 .setAssignedUserId(Long.MAX_VALUE)
-        ), UserConstant.Error.NOT_FOUND, Status.BAD_REQUEST);
+        ), UserConstant.Error.NOT_FOUND, Status.NOT_FOUND);
 
         // Error when trying to assign to story a user not assigned to project
         this.httpTestUtil.assertBusinessException(() -> this.storyResource.update(

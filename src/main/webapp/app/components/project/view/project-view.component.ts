@@ -7,6 +7,8 @@ import {Story} from 'app/entities/story.entity';
 import {StoryService} from 'app/service/story.service';
 import {AlertService} from 'app/service/alert.service';
 import {StoryStatusConstants} from 'app/constants/story-status.constants';
+import {AccountService} from 'app/core/auth/account.service';
+import {UserService} from 'app/core/user/user.service';
 
 /**
  * Component to manage project view
@@ -40,6 +42,11 @@ export class ProjectViewComponent implements OnInit {
   public currentDisplayStatus: 'todo' | 'inProgress' | 'done' = 'todo';
 
   /**
+   * Determine if the logged user can view project settings button
+   */
+  public showProjectSettingsBtn = false;
+
+  /**
    * Constructor
    *
    * @param projectService The project service
@@ -47,6 +54,8 @@ export class ProjectViewComponent implements OnInit {
    * @param routerService The router service
    * @param router The router
    * @param alertService The alert service
+   * @param accountService The account service
+   * @param userService The user service
    */
   public constructor(
     private projectService: ProjectService,
@@ -54,6 +63,8 @@ export class ProjectViewComponent implements OnInit {
     private routerService: ActivatedRoute,
     private router: Router,
     private alertService: AlertService,
+    private accountService: AccountService,
+    private userService: UserService,
   ) {
   }
 
@@ -158,6 +169,14 @@ export class ProjectViewComponent implements OnInit {
 
         // Calculate the total number of stories in the project
         this.totalNbStories = this.stories.todo.length + this.stories.inProgress.length + this.stories.done.length;
+      });
+
+      // Determine if the user is admin or is project administrator
+      this.userService.find(this.accountService.getLogin()).subscribe((user) => {
+        const isAdmin = this.accountService.isAdmin();
+        const isProjectAdmin = this.project.adminUserIdList?.findIndex(userId => userId === user.id) !== -1;
+
+        this.showProjectSettingsBtn = isAdmin || isProjectAdmin;
       });
     }, (error: HttpErrorResponse) => {
       if (error.status === 404) {

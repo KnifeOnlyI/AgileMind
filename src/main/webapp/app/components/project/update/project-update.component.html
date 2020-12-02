@@ -17,7 +17,8 @@
                 <input [formControl]="form.nameFormControl" class="form-control" id="projectName" type="text">
             </div>
 
-            <ag-user-select [control]="form.assignedUserIdListFormControl" [multiple]="true"></ag-user-select>
+            <ag-user-select [control]="form.adminUserIdListFormControl" [multiple]="true" label="global.form.field.adminUsers"></ag-user-select>
+            <ag-user-select [control]="form.assignedUserIdListFormControl" [multiple]="true" label="global.form.field.assignedUsers"></ag-user-select>
         </div>
         <div class="col-9 form-group">
             <label for="description"><span jhiTranslate="global.form.field.description"></span></label>

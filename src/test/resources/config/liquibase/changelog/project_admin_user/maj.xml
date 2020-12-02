@@ -3,7 +3,11 @@
                    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
 
-    <include file="story_type/maj.xml" relativeToChangelogFile="true"/>
-    <include file="story/maj.xml" relativeToChangelogFile="true"/>
-    <include file="project_admin_user/maj.xml" relativeToChangelogFile="true"/>
+    <changeSet id="test-project_admin_user" author="Knife">
+        <loadData tableName="project_admin_user"
+                  file="data.csv"
+                  separator=";"
+                  relativeToChangelogFile="true"
+        />
+    </changeSet>
 </databaseChangeLog>

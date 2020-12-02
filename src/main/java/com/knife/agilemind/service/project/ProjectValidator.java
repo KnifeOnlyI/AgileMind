@@ -5,12 +5,11 @@ import com.knife.agilemind.domain.project.ProjectEntity;
 import com.knife.agilemind.domain.user.UserEntity;
 import com.knife.agilemind.dto.project.CreateProjectDTO;
 import com.knife.agilemind.dto.project.ProjectDTO;
-import com.knife.agilemind.exception.BusinessException;
-import com.knife.agilemind.exception.TechnicalException;
+import com.knife.agilemind.exception.BusinessAssert;
+import com.knife.agilemind.exception.TechnicalAssert;
 import com.knife.agilemind.repository.project.ProjectRepository;
 import com.knife.agilemind.service.user.UserService;
 import com.knife.agilemind.service.user.UserValidator;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.zalando.problem.Status;
@@ -35,119 +34,219 @@ public class ProjectValidator {
     private UserService userService;
 
     /**
-     * Assert the specified ID is not null
-     *
-     * @param projectId The project ID to check
-     */
-    public void assertNotNullId(Long projectId) {
-        if (projectId == null) {
-            throw new TechnicalException();
-        }
-    }
-
-    /**
      * Assert and get a project with the specified ID exists in database
      *
      * @param projectId The ID of project to check
      */
     public ProjectEntity findById(Long projectId) {
-        ProjectEntity projectEntity = this.projectRepository.findById(projectId).orElse(null);
+        ProjectEntity project = this.projectRepository.findById(projectId).orElse(null);
 
-        if (projectEntity == null) {
-            throw new BusinessException(ProjectConstant.Error.NOT_FOUND, Status.NOT_FOUND);
-        }
+        BusinessAssert.notNull(project, ProjectConstant.Error.NOT_FOUND, Status.NOT_FOUND);
 
-        return projectEntity;
+        return project;
     }
 
     /**
      * Assert the specified DTO is valid to create a project in database
      *
-     * @param createProjectDTO The project to create
+     * @param dto The project to create
      */
-    public void assertValid(CreateProjectDTO createProjectDTO) {
-        if (createProjectDTO == null) {
-            throw new TechnicalException();
-        }
+    public void assertValid(CreateProjectDTO dto) {
+        TechnicalAssert.notNull(dto);
 
-        if (createProjectDTO.getName() == null) {
-            throw new BusinessException(ProjectConstant.Error.NAME_NULL, Status.BAD_REQUEST);
-        } else if (StringUtils.isBlank(createProjectDTO.getName())) {
-            throw new BusinessException(ProjectConstant.Error.NAME_EMPTY, Status.BAD_REQUEST);
-        }
+        BusinessAssert.notNull(dto.getName(), ProjectConstant.Error.NAME_NULL, Status.BAD_REQUEST);
+        BusinessAssert.notEmpty(dto.getName(), ProjectConstant.Error.NAME_EMPTY, Status.BAD_REQUEST);
     }
 
     /**
      * Assert the specified DTO is valid to update a project in database
      *
-     * @param projectDTO The project to update
-     *
-     * @return The project entity to update
+     * @param dto The project to update
      */
-    public ProjectEntity assertValid(ProjectDTO projectDTO) {
-        if (projectDTO == null) {
-            throw new TechnicalException();
-        }
+    public void assertValid(ProjectDTO dto) {
+        TechnicalAssert.notNull(dto);
 
-        if (projectDTO.getId() == null) {
-            throw new BusinessException(ProjectConstant.Error.ID_NULL, Status.BAD_REQUEST);
-        }
+        BusinessAssert.notNull(dto.getId(), ProjectConstant.Error.ID_NULL, Status.BAD_REQUEST);
+        BusinessAssert.notNull(dto.getName(), ProjectConstant.Error.NAME_NULL, Status.BAD_REQUEST);
+        BusinessAssert.notEmpty(dto.getName(), ProjectConstant.Error.NAME_EMPTY, Status.BAD_REQUEST);
 
-        if (projectDTO.getName() == null) {
-            throw new BusinessException(ProjectConstant.Error.NAME_NULL, Status.BAD_REQUEST);
-        } else if (StringUtils.isBlank(projectDTO.getName())) {
-            throw new BusinessException(ProjectConstant.Error.NAME_EMPTY, Status.BAD_REQUEST);
-        }
-
-        this.assertValidAssignedUsers(projectDTO.getAssignedUserIdList());
-
-        ProjectEntity projectEntity = this.projectRepository.findById(projectDTO.getId()).orElse(null);
-
-        if (projectEntity == null) {
-            throw new BusinessException(ProjectConstant.Error.NOT_FOUND, Status.NOT_FOUND);
-        }
-
-        return projectEntity;
+        this.assertValidUsers(dto.getAssignedUserIdList());
+        this.assertValidUsers(dto.getAdminUserIdList());
     }
 
     /**
-     * Assert the specified user is an admin or is assigned to the specified project
+     * Assert the specified user can view the specified project.
+     * The user can view the project if :
+     * He is admin
+     * OR he is a project admin of specified project
+     * OR he is assigned to the specified project
      *
-     * @param user    The user
-     * @param project The project to check
+     * @param projectId The project id
+     * @param userId    The user id
+     * @param errorKey  The error key if error (Null for default value : PROJECT_NOT_FOUND)
+     * @param status    The status if error (NULL for default value : NOT_FOUND)
      */
-    public boolean userIsNotAssigned(UserEntity user, ProjectEntity project) {
-        boolean isAssigned = false;
+    public ProjectEntity assertUserCanView(Long projectId, Long userId, String errorKey, Status status) {
+        TechnicalAssert.notNull(projectId);
+        TechnicalAssert.notNull(userId);
 
-        if (user == null) {
-            throw new BusinessException(ProjectConstant.Error.NOT_FOUND, Status.NOT_FOUND);
+        UserEntity loggedUser = this.userService.findById(userId);
+
+        ProjectEntity project = this.findById(projectId);
+
+        // If the user doesn't have the rights to view this project, throw error
+        BusinessAssert.isTrue(this.userService.userIsAdmin(loggedUser) ||
+                this.userIsProjectAdmin(project, loggedUser) ||
+                this.userIsAssigned(project, loggedUser),
+            (errorKey == null ? ProjectConstant.Error.NOT_FOUND : errorKey),
+            (status == null ? Status.NOT_FOUND : status)
+        );
+
+        return project;
+    }
+
+    /**
+     * Assert the specified user can view the specified project.
+     * The user can view the project if :
+     * He is admin
+     * OR he is a project admin of specified project
+     * OR he is assigned to the specified project
+     *
+     * @param projectId The project id
+     * @param userId    The user id
+     */
+    public ProjectEntity assertUserCanView(Long projectId, Long userId) {
+        return this.assertUserCanView(projectId, userId, null, null);
+    }
+
+    /**
+     * Assert the logged user can view the specified project.
+     * The user can view the project if :
+     * He is admin
+     * OR he is a project admin of specified project
+     * OR he is assigned to the specified project
+     *
+     * @param projectId The project id
+     * @param errorKey  The error key if error (Null for default value : PROJECT_NOT_FOUND)
+     * @param status    The status if error (NULL for default value : NOT_FOUND)
+     */
+    public ProjectEntity assertLoggedUserCanView(Long projectId, String errorKey, Status status) {
+        this.userService.assertLogged();
+
+        UserEntity loggedUser = this.userService.getLoggedUser();
+
+        ProjectEntity project = this.findById(projectId);
+
+        // If the user doesn't have the rights to view this project, throw error
+        BusinessAssert.isTrue(this.userService.userIsAdmin(loggedUser) ||
+                this.userIsProjectAdmin(project, loggedUser) ||
+                this.userIsAssigned(project, loggedUser),
+            (errorKey == null ? ProjectConstant.Error.NOT_FOUND : errorKey),
+            (status == null ? Status.NOT_FOUND : status)
+        );
+
+        return project;
+    }
+
+    /**
+     * Assert the logged user can view the specified project.
+     * The user can view the project if :
+     * He is admin
+     * OR he is a project admin of specified project
+     * OR he is assigned to the specified project
+     *
+     * @param projectId The project id
+     */
+    public ProjectEntity assertLoggedUserCanView(Long projectId) {
+        return this.assertLoggedUserCanView(projectId, null, null);
+    }
+
+    /**
+     * Assert the logged user can edit or delete the specified project.
+     * The user can edit or delete the project if :
+     * He is admin
+     * OR he is a project admin of specified project
+     *
+     * @param projectId The project id
+     */
+    public ProjectEntity assertLoggedUserCanEditOrDelete(Long projectId) {
+        this.userService.assertLogged();
+
+        UserEntity loggedUser = this.userService.getLoggedUser();
+
+        ProjectEntity project = this.findById(projectId);
+
+        // If the user doesn't have the rights to view this project, throw error
+        BusinessAssert.isTrue(this.userService.userIsAdmin(loggedUser) || this.userIsProjectAdmin(project, loggedUser),
+            ProjectConstant.Error.NOT_FOUND,
+            Status.NOT_FOUND
+        );
+
+        return project;
+    }
+
+    /**
+     * Assert the specified users are valid
+     *
+     * @param users The value to check
+     */
+    private void assertValidUsers(Set<Long> users) {
+        if (users != null) {
+            users.removeIf(Objects::isNull);
+            users.forEach(userId -> userValidator.findById(userId));
         }
+    }
 
-        if (user.getId() == null || project == null) {
-            throw new TechnicalException();
-        }
+    /**
+     * Check if the specified user is assigned to the specified project
+     *
+     * @param project The project to check
+     * @param user    The user
+     *
+     * @return TRUE if the specified user is assigned to the specified project, FALSE otherwise
+     */
+    private boolean userIsAssigned(ProjectEntity project, UserEntity user) {
+        TechnicalAssert.notNull(project);
+        TechnicalAssert.notNull(user);
 
-        if (project.getAssignedUsers() != null) {
-            for (UserEntity assignedUser : project.getAssignedUsers()) {
-                if (assignedUser.getId().equals(user.getId())) {
-                    isAssigned = true;
+        return this.containsId(project.getAssignedUsers(), user.getId());
+    }
+
+    /**
+     * Check if the specified user is project admin of the specified project
+     *
+     * @param project The project to check
+     * @param user    The user
+     *
+     * @return TRUE if the specified user is project admin of the specified project, FALSE otherwise
+     */
+    private boolean userIsProjectAdmin(ProjectEntity project, UserEntity user) {
+        TechnicalAssert.notNull(project);
+        TechnicalAssert.notNull(user);
+
+        return this.containsId(project.getAdminUsers(), user.getId());
+    }
+
+    /**
+     * Check if the specified user list contains the specified user id
+     *
+     * @param users The user list to check
+     * @param id    The ID to find
+     *
+     * @return TRUE if the specified user id is not in the specified user list, FALSE otherwise
+     */
+    private boolean containsId(Set<UserEntity> users, Long id) {
+        boolean isPresent = false;
+
+        if (users != null && id != null) {
+            for (UserEntity user : users) {
+                if (user.getId().equals(id)) {
+                    isPresent = true;
                     break;
                 }
             }
         }
 
-        return !isAssigned && !this.userService.userIsAdmin(user);
-    }
-
-    /**
-     * Assert the specified assigned users is valid
-     *
-     * @param assignedUsers The value to check
-     */
-    private void assertValidAssignedUsers(Set<Long> assignedUsers) {
-        if (assignedUsers != null) {
-            assignedUsers.removeIf(Objects::isNull);
-            assignedUsers.forEach(userId -> userValidator.assertExists(userId));
-        }
+        return isPresent;
     }
 }

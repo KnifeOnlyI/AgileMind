@@ -3,22 +3,16 @@ package com.knife.agilemind.service.task;
 import com.knife.agilemind.constant.project.ProjectConstant;
 import com.knife.agilemind.constant.story.StoryConstant;
 import com.knife.agilemind.constant.task.TaskConstant;
-import com.knife.agilemind.constant.user.UserConstant;
-import com.knife.agilemind.domain.project.ProjectEntity;
 import com.knife.agilemind.domain.story.StoryEntity;
-import com.knife.agilemind.domain.task.TaskEntity;
-import com.knife.agilemind.domain.user.UserEntity;
 import com.knife.agilemind.dto.task.CreateTaskDTO;
 import com.knife.agilemind.dto.task.TaskDTO;
-import com.knife.agilemind.exception.BusinessException;
-import com.knife.agilemind.exception.TechnicalException;
-import com.knife.agilemind.repository.project.ProjectRepository;
-import com.knife.agilemind.repository.story.StoryRepository;
+import com.knife.agilemind.exception.BusinessAssert;
+import com.knife.agilemind.exception.TechnicalAssert;
 import com.knife.agilemind.repository.task.TaskRepository;
-import com.knife.agilemind.repository.user.UserRepository;
 import com.knife.agilemind.service.project.ProjectValidator;
+import com.knife.agilemind.service.story.StoryService;
+import com.knife.agilemind.service.story.StoryValidator;
 import com.knife.agilemind.service.user.UserService;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.zalando.problem.Status;
@@ -30,52 +24,32 @@ import org.zalando.problem.Status;
  */
 @Service
 public class TaskValidator {
-    @Autowired
-    private ProjectValidator projectValidator;
-
-    @Autowired
-    private UserService userService;
 
     @Autowired
     private TaskStatusService taskStatusService;
 
     @Autowired
-    private ProjectRepository projectRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
     private TaskRepository taskRepository;
 
     @Autowired
-    private StoryRepository storyRepository;
+    private StoryValidator storyValidator;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private StoryService storyService;
+
+    @Autowired
+    private ProjectValidator projectValidator;
 
     /**
-     * Asserts all commons data
+     * Check if the specified task id exists in database
      *
-     * @param name          The name
-     * @param points        The points
-     * @param businessValue The business value
-     * @param status        The status
-     * @param storyId       The story id
-     * @param assignedUser  The assigned user id
+     * @param id The task id to check
      */
-    private void assertValidCommon(
-        String name,
-        Long points,
-        Long businessValue,
-        Long status,
-        Long storyId,
-        Long assignedUser
-    ) {
-        this.assertValidName(name);
-        this.assertValidPoints(points);
-        this.assertValidBusinessValue(businessValue);
-        this.assertValidStatus(status);
-        this.assertValidStory(storyId);
-        this.assertValidUser(storyId, assignedUser);
-        this.assertLoggedUserCanCreateOrUpdate(storyId);
+    public void assertExists(Long id) {
+        BusinessAssert.isTrue(this.taskRepository.existsById(id), TaskConstant.Error.NOT_FOUND, Status.NOT_FOUND);
     }
 
     /**
@@ -84,16 +58,14 @@ public class TaskValidator {
      * @param dto The task to create
      */
     public void assertValid(CreateTaskDTO dto) {
-        this.assertNotNull(dto);
+        TechnicalAssert.notNull(dto);
 
-        assertValidCommon(
-            dto.getName(),
-            dto.getEstimatedTime(),
-            dto.getLoggedTime(),
-            dto.getStatusId(),
-            dto.getStoryId(),
-            dto.getAssignedUserId()
-        );
+        this.assertValidName(dto.getName());
+        this.assertValidEstimatedTime(dto.getEstimatedTime());
+        this.assertValidLoggedTime(dto.getLoggedTime());
+        this.assertValidStatus(dto.getStatusId());
+        this.assertValidStory(dto.getStoryId());
+        this.assertValidUser(dto.getStoryId(), dto.getAssignedUserId());
     }
 
     /**
@@ -101,34 +73,49 @@ public class TaskValidator {
      *
      * @param dto The task to update
      */
-    public TaskEntity assertValid(TaskDTO dto) {
-        this.assertNotNull(dto);
-        this.assertValidID(dto.getId());
-        assertValidCommon(dto.getName(), dto.getEstimatedTime(), dto.getLoggedTime(), dto.getStatusId(), dto.getStoryId(), dto.getAssignedUserId());
+    public void assertValid(TaskDTO dto) {
+        TechnicalAssert.notNull(dto);
 
-        return this.taskRepository.findById(dto.getId()).orElseThrow(TechnicalException::new);
+        this.assertValidId(dto.getId());
+        this.assertValidName(dto.getName());
+        this.assertValidEstimatedTime(dto.getEstimatedTime());
+        this.assertValidLoggedTime(dto.getLoggedTime());
+        this.assertValidStatus(dto.getStatusId());
+        this.assertValidStory(dto.getStoryId());
+        this.assertValidUser(dto.getStoryId(), dto.getAssignedUserId());
     }
 
     /**
-     * Assert the specified dto is not null
+     * Assert the logged user can perform all actions on tasks
      *
-     * @param dto The DTO to check
+     * @param storyId  The story id
+     * @param errorKey The error key if error (Null for default value : PROJECT_NOT_FOUND)
+     * @param status   The status if error (NULL for default value : NOT_FOUND)
      */
-    public void assertNotNull(CreateTaskDTO dto) {
-        if (dto == null) {
-            throw new TechnicalException();
-        }
+    public void assertLoggedUserCanAll(Long storyId, String errorKey, Status status) {
+        this.userService.assertLogged();
+
+        TechnicalAssert.notNull(storyId);
+
+        StoryEntity story = this.storyValidator.assertLoggedUserCanView(storyId, errorKey, status);
+
+        TechnicalAssert.notNull(story.getProject());
+        TechnicalAssert.notNull(story.getProject().getId());
+
+        this.projectValidator.assertLoggedUserCanView(
+            story.getProject().getId(),
+            (errorKey == null ? StoryConstant.Error.NOT_FOUND : errorKey),
+            (status == null ? Status.NOT_FOUND : status)
+        );
     }
 
     /**
-     * Assert the specified dto is not null
+     * Assert the logged user can perform all actions on tasks
      *
-     * @param dto The DTO to check
+     * @param storyId The story id
      */
-    public void assertNotNull(TaskDTO dto) {
-        if (dto == null) {
-            throw new TechnicalException();
-        }
+    public void assertLoggedUserCanAll(Long storyId) {
+        this.assertLoggedUserCanAll(storyId, null, null);
     }
 
     /**
@@ -136,81 +123,60 @@ public class TaskValidator {
      *
      * @param id The ID to check
      */
-    public void assertValidID(Long id) {
-        if (id == null) {
-            throw new BusinessException(TaskConstant.Error.ID_NULL, Status.BAD_REQUEST);
-        }
+    private void assertValidId(Long id) {
+        BusinessAssert.notNull(id, TaskConstant.Error.ID_NULL, Status.BAD_REQUEST);
 
-        TaskEntity taskEntity = this.taskRepository.findById(id).orElse(null);
-
-        if (taskEntity == null) {
-            throw new BusinessException(TaskConstant.Error.NOT_FOUND, Status.NOT_FOUND);
-        }
+        this.assertExists(id);
     }
 
     /**
-     * Assert the specicied name is valid
+     * Assert the specicied value is valid
      *
-     * @param name The name to check
+     * @param value The value to check
      */
-    public void assertValidName(String name) {
-        if (name == null) {
-            throw new BusinessException(TaskConstant.Error.NAME_NULL, Status.BAD_REQUEST);
-        } else if (StringUtils.isBlank(name)) {
-            throw new BusinessException(TaskConstant.Error.NAME_EMPTY, Status.BAD_REQUEST);
-        }
+    private void assertValidName(String value) {
+        BusinessAssert.notNull(value, TaskConstant.Error.NAME_NULL, Status.BAD_REQUEST);
+        BusinessAssert.notEmpty(value, TaskConstant.Error.NAME_EMPTY, Status.BAD_REQUEST);
     }
 
     /**
-     * Assert the specicied points is valid
+     * Assert the specicied estimated time is valid
      *
-     * @param points The points to check
+     * @param value The estimated time to check
      */
-    public void assertValidPoints(Long points) {
-        if (points != null && points < 0) {
-            throw new BusinessException(TaskConstant.Error.ESTIMATED_TIME_LESS_0, Status.BAD_REQUEST);
-        }
+    private void assertValidEstimatedTime(Long value) {
+        BusinessAssert.greaterOrEqualsThan(value, 0L, TaskConstant.Error.ESTIMATED_TIME_LESS_0, Status.BAD_REQUEST);
     }
 
     /**
-     * Assert the specicied business value is valid
+     * Assert the specified logged time is valid
      *
-     * @param businessValue The business value to check
+     * @param value The value to check
      */
-    public void assertValidBusinessValue(Long businessValue) {
-        if (businessValue != null && businessValue < 0) {
-            throw new BusinessException(TaskConstant.Error.LOGGED_TIME_LESS_0, Status.BAD_REQUEST);
-        }
+    private void assertValidLoggedTime(Long value) {
+        BusinessAssert.greaterOrEqualsThan(value, 0L, TaskConstant.Error.LOGGED_TIME_LESS_0, Status.BAD_REQUEST);
     }
 
     /**
-     * Assert the specicied statusId is valid
+     * Assert the specicied value is valid
      *
-     * @param statusId The statusId to check
+     * @param value The value to check
      */
-    public void assertValidStatus(Long statusId) {
-        if (statusId == null) {
-            throw new BusinessException(TaskConstant.Error.STATUS_ID_NULL, Status.BAD_REQUEST);
-        }
+    private void assertValidStatus(Long value) {
+        BusinessAssert.notNull(value, TaskConstant.Error.STATUS_ID_NULL, Status.BAD_REQUEST);
 
-        this.taskStatusService.assertExists(statusId);
+        this.taskStatusService.assertExists(value);
     }
 
     /**
-     * Assert the specicied storyId is valid
+     * Assert the specicied value is valid
      *
-     * @param storyId The storyId to check
+     * @param value The value to check
      */
-    public void assertValidStory(Long storyId) {
-        if (storyId == null) {
-            throw new BusinessException(TaskConstant.Error.STORY_ID_NULL, Status.BAD_REQUEST);
-        }
+    private void assertValidStory(Long value) {
+        BusinessAssert.notNull(value, TaskConstant.Error.STORY_ID_NULL, Status.BAD_REQUEST);
 
-        StoryEntity story = this.storyRepository.findById(storyId).orElse(null);
-
-        if (story == null) {
-            throw new BusinessException(StoryConstant.Error.NOT_FOUND, Status.NOT_FOUND);
-        }
+        this.storyValidator.assertExists(value);
     }
 
     /**
@@ -219,39 +185,11 @@ public class TaskValidator {
      * @param storyId The story id contains the task
      * @param userId  The user id to check
      */
-    public void assertValidUser(Long storyId, Long userId) {
+    private void assertValidUser(Long storyId, Long userId) {
         if (userId != null) {
-            StoryEntity story = this.storyRepository.findById(storyId).orElseThrow(TechnicalException::new);
-            ProjectEntity project = this.projectRepository.findById(story.getProject().getId()).orElseThrow(TechnicalException::new);
-            UserEntity assignedUser = this.userRepository.findById(userId).orElse(null);
+            TechnicalAssert.notNull(storyId);
 
-            if (assignedUser == null) {
-                throw new BusinessException(UserConstant.Error.NOT_FOUND, Status.BAD_REQUEST);
-            }
-
-            if (this.projectValidator.userIsNotAssigned(assignedUser, project)) {
-                throw new BusinessException(ProjectConstant.Error.USER_NOT_ASSIGNED, Status.BAD_REQUEST);
-            }
-        }
-    }
-
-    /**
-     * Check if the logged user can create or update the task
-     *
-     * @param storyId The story contains the task
-     */
-    public void assertLoggedUserCanCreateOrUpdate(Long storyId) {
-        UserEntity loggedUser = this.userService.getLoggedUser();
-
-        if (loggedUser == null) {
-            throw new BusinessException(Status.BAD_REQUEST);
-        }
-
-        StoryEntity story = this.storyRepository.findById(storyId).orElseThrow(TechnicalException::new);
-        ProjectEntity project = this.projectRepository.findById(story.getProject().getId()).orElseThrow(TechnicalException::new);
-
-        if (this.projectValidator.userIsNotAssigned(loggedUser, project)) {
-            throw new BusinessException(TaskConstant.Error.NOT_FOUND, Status.NOT_FOUND);
+            this.storyValidator.assertUserCanView(storyId, userId, ProjectConstant.Error.USER_NOT_ASSIGNED, Status.BAD_REQUEST);
         }
     }
 }

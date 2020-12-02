@@ -2,11 +2,14 @@ package com.knife.agilemind.service.user;
 
 import com.knife.agilemind.domain.user.AuthorityEntity;
 import com.knife.agilemind.domain.user.UserEntity;
+import com.knife.agilemind.exception.BusinessException;
+import com.knife.agilemind.exception.TechnicalAssert;
 import com.knife.agilemind.exception.TechnicalException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.zalando.problem.Status;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -28,8 +31,10 @@ public class UserService extends DefaultUserService {
      *
      * @return The founded user
      */
-    public UserEntity get(Long id) {
-        this.userValidator.assertNotNullID(id);
+    public UserEntity findById(Long id) {
+        this.assertLogged();
+
+        TechnicalAssert.notNull(id);
 
         return this.userValidator.findById(id);
     }
@@ -63,6 +68,33 @@ public class UserService extends DefaultUserService {
     }
 
     /**
+     * Check if the user is logged
+     *
+     * @return TRUE if the user is logged, FALSE otherwise
+     */
+    public boolean userIsLogged() {
+        return this.getLoggedUser() != null;
+    }
+
+    /**
+     * Assert the current user is logged
+     */
+    public void assertLogged() {
+        if (!this.userIsLogged()) {
+            throw new BusinessException(Status.NOT_FOUND);
+        }
+    }
+
+    /**
+     * Assert the current user is logged
+     */
+    public void assertAdmin() {
+        if (!this.loggedUserIsAdmin()) {
+            throw new BusinessException(Status.NOT_FOUND);
+        }
+    }
+
+    /**
      * Check if the specified user is admin
      *
      * @return TRUE if the specified user is admin, FALSE otherwise
@@ -83,11 +115,11 @@ public class UserService extends DefaultUserService {
     }
 
     /**
-     * Check if the authenticated user is admin
+     * Check if the logged user is admin
      *
      * @return TRUE if he is admin, FALSE otherwise
      */
-    public boolean currentIsAdmin() {
+    public boolean loggedUserIsAdmin() {
         boolean isAdmin = false;
 
         UserEntity authenticatedUser = this.getLoggedUser();
@@ -105,30 +137,24 @@ public class UserService extends DefaultUserService {
     }
 
     /**
-     * Convert the specified user entity to ID
+     * Convert the entities to IDs
      *
-     * @param userEntity The user entity
+     * @param entities The entities
      *
-     * @return The ID
+     * @return The IDs
      */
-    public Long toId(UserEntity userEntity) {
-        return (userEntity != null) ? userEntity.getId() : null;
-    }
+    public Set<Long> toIds(Set<UserEntity> entities) {
+        Set<Long> ids = new HashSet<>();
 
-    /**
-     * Find user in database by the specified ID
-     *
-     * @param id The user id to find
-     */
-    public UserEntity findById(Long id) {
-        UserEntity results = null;
-
-        if (id != null) {
-            results = this.userRepository.findById(id).orElse(null);
+        if (entities != null) {
+            for (UserEntity entity : entities) {
+                if (entity != null) {
+                    ids.add(entity.getId());
+                }
+            }
         }
 
-
-        return results;
+        return ids;
     }
 
     /**

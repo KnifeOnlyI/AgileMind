@@ -15,6 +15,7 @@ public final class UserConstant {
      * @author Dany Pignoux (dany.pignoux@outlook.fr)
      */
     public static final class Error {
+        public static final String ID_NULL = "user.error.id.null";
         public static final String NOT_FOUND = "user.error.not_found";
 
         private Error() {

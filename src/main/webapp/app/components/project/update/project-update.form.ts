@@ -22,11 +22,13 @@ export class ProjectUpdateForm extends ProjectCreateForm {
 
     this.form.addControl('id', new FormControl(null, Validators.required));
     this.form.addControl('assignedUserIdList', new FormControl(null));
+    this.form.addControl('adminUserIdList', new FormControl(null));
 
     this.form.patchValue({id: project.id});
     this.form.patchValue({name: project.name});
     this.form.patchValue({description: project.description});
     this.form.patchValue({assignedUserIdList: project.assignedUserIdList});
+    this.form.patchValue({adminUserIdList: project.adminUserIdList});
   }
 
   // region Forms control
@@ -47,6 +49,15 @@ export class ProjectUpdateForm extends ProjectCreateForm {
    */
   public get assignedUserIdListFormControl(): FormControl {
     return this.getFormControl('assignedUserIdList');
+  }
+
+  /**
+   * Get the adminUserIdList form control
+   *
+   * @return The adminUserIdList form control
+   */
+  public get adminUserIdListFormControl(): FormControl {
+    return this.getFormControl('adminUserIdList');
   }
 
   // endregion
@@ -72,6 +83,15 @@ export class ProjectUpdateForm extends ProjectCreateForm {
     return this.assignedUserIdListFormControl.value;
   }
 
+  /**
+   * Get the adminUserIdList
+   *
+   * @return The adminUserIdList
+   */
+  public get adminUserIdList(): Array<number> {
+    return this.adminUserIdListFormControl.value;
+  }
+
   // endregion
 
   /**
@@ -84,6 +104,7 @@ export class ProjectUpdateForm extends ProjectCreateForm {
 
     project.id = this.id;
     project.assignedUserIdList = this.assignedUserIdList;
+    project.adminUserIdList = this.adminUserIdList;
 
     return project;
   }

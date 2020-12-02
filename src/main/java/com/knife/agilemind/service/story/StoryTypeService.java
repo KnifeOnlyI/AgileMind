@@ -3,7 +3,9 @@ package com.knife.agilemind.service.story;
 import com.knife.agilemind.constant.story.StoryTypeConstant;
 import com.knife.agilemind.domain.story.StoryTypeEntity;
 import com.knife.agilemind.dto.story.StoryTypeDTO;
+import com.knife.agilemind.exception.BusinessAssert;
 import com.knife.agilemind.exception.BusinessException;
+import com.knife.agilemind.exception.TechnicalAssert;
 import com.knife.agilemind.repository.story.StoryTypeRepository;
 import com.knife.agilemind.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,10 +70,10 @@ public class StoryTypeService {
      * @param id The story type id to check
      */
     public void assertExists(Long id) {
-        StoryTypeEntity results = this.findById(id);
+        this.userService.assertLogged();
 
-        if (results == null) {
-            throw new BusinessException(StoryTypeConstant.Error.NOT_FOUND, Status.NOT_FOUND);
-        }
+        TechnicalAssert.notNull(id);
+
+        BusinessAssert.notNull(this.findById(id), StoryTypeConstant.Error.NOT_FOUND, Status.NOT_FOUND);
     }
 }

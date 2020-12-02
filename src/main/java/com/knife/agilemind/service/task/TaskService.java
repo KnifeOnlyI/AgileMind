@@ -2,15 +2,15 @@ package com.knife.agilemind.service.task;
 
 import com.knife.agilemind.constant.story.StoryConstant;
 import com.knife.agilemind.constant.task.TaskConstant;
-import com.knife.agilemind.domain.story.StoryEntity;
 import com.knife.agilemind.domain.task.TaskEntity;
 import com.knife.agilemind.dto.task.CreateTaskDTO;
 import com.knife.agilemind.dto.task.TaskDTO;
-import com.knife.agilemind.exception.BusinessException;
-import com.knife.agilemind.exception.TechnicalException;
+import com.knife.agilemind.exception.BusinessAssert;
+import com.knife.agilemind.exception.TechnicalAssert;
 import com.knife.agilemind.repository.task.TaskRepository;
 import com.knife.agilemind.service.project.ProjectValidator;
 import com.knife.agilemind.service.story.StoryService;
+import com.knife.agilemind.service.story.StoryValidator;
 import com.knife.agilemind.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,6 +38,9 @@ public class TaskService {
     private TaskValidator taskValidator;
 
     @Autowired
+    private StoryValidator storyValidator;
+
+    @Autowired
     private TaskStatusService taskStatusService;
 
     @Autowired
@@ -54,7 +57,10 @@ public class TaskService {
      * @return The created task
      */
     public TaskDTO create(CreateTaskDTO createTaskDTO) {
+        this.userService.assertLogged();
+
         this.taskValidator.assertValid(createTaskDTO);
+        this.taskValidator.assertLoggedUserCanAll(createTaskDTO.getStoryId(), StoryConstant.Error.NOT_FOUND, Status.NOT_FOUND);
 
         return this.toDTO(this.taskRepository.save(new TaskEntity()
             .setName(createTaskDTO.getName())
@@ -75,24 +81,20 @@ public class TaskService {
      * @return The task
      */
     public TaskDTO get(Long id) {
-        if (id == null) {
-            throw new TechnicalException();
-        }
+        this.userService.assertLogged();
 
-        if (this.userService.userIsNotLogged()) {
-            throw new BusinessException(Status.NOT_FOUND);
-        }
+        TechnicalAssert.notNull(id);
 
-        TaskEntity taskEntity = this.taskRepository.findById(id).orElse(null);
+        TaskEntity task = this.taskRepository.findById(id).orElse(null);
 
-        // If the task's not exists or user is not assigned, throw "TASK_NOT_FOUND" error
-        if (taskEntity == null ||
-            this.projectValidator.userIsNotAssigned(this.userService.getLoggedUser(), taskEntity.getStory().getProject())
-        ) {
-            throw new BusinessException(TaskConstant.Error.NOT_FOUND, Status.NOT_FOUND);
-        }
+        BusinessAssert.notNull(task, TaskConstant.Error.NOT_FOUND, Status.NOT_FOUND);
 
-        return this.toDTO(taskEntity);
+        TechnicalAssert.notNull(task.getStory());
+        TechnicalAssert.notNull(task.getStory().getProject());
+
+        this.projectValidator.assertLoggedUserCanView(task.getStory().getProject().getId(), TaskConstant.Error.NOT_FOUND, Status.NOT_FOUND);
+
+        return this.toDTO(task);
     }
 
     /**
@@ -103,23 +105,22 @@ public class TaskService {
      * @return The task list
      */
     public List<TaskDTO> getAllFromStory(Long storyId) {
+        this.userService.assertLogged();
+
         List<TaskDTO> results = new ArrayList<>();
 
-        if (this.userService.userIsNotLogged()) {
-            throw new BusinessException(Status.NOT_FOUND);
-        }
+        this.storyValidator.assertExists(storyId);
 
-        StoryEntity story = this.storyService.findById(storyId);
+        TaskEntity task = this.findById(storyId);
 
-        // If the story's not exists or user is not assigned, throw "STORY_NOT_FOUND" error
-        if (story == null ||
-            this.projectValidator.userIsNotAssigned(this.userService.getLoggedUser(), story.getProject())
-        ) {
-            throw new BusinessException(StoryConstant.Error.NOT_FOUND, Status.NOT_FOUND);
-        }
+        TechnicalAssert.notNull(task.getStory());
+        TechnicalAssert.notNull(task.getStory().getProject());
+        TechnicalAssert.notNull(task.getStory().getProject().getId());
 
-        for (TaskEntity task : story.getTasks()) {
-            results.add(this.toDTO(task));
+        this.taskValidator.assertLoggedUserCanAll(task.getStory().getProject().getId());
+
+        for (TaskEntity tmpTask : task.getStory().getTasks()) {
+            results.add(this.toDTO(tmpTask));
         }
 
         return results;
@@ -133,15 +134,32 @@ public class TaskService {
      * @return The updated task
      */
     public TaskDTO update(TaskDTO taskDTO) {
-        return this.toDTO(this.taskValidator.assertValid(taskDTO)
-            .setName(taskDTO.getName())
+        this.userService.assertLogged();
+
+        this.taskValidator.assertValid(taskDTO);
+
+        TaskEntity task = this.findById(taskDTO.getId());
+
+        TechnicalAssert.notNull(task.getStory());
+        TechnicalAssert.notNull(task.getStory().getProject());
+        TechnicalAssert.notNull(task.getStory().getProject().getId());
+
+        this.taskValidator.assertLoggedUserCanAll(task.getStory().getProject().getId());
+
+        task.setName(taskDTO.getName())
             .setDescription(taskDTO.getDescription())
             .setEstimatedTime(taskDTO.getEstimatedTime())
             .setLoggedTime(taskDTO.getLoggedTime())
             .setStatus(this.taskStatusService.findById(taskDTO.getStatusId()))
-            .setAssignedUser(this.userService.findById(taskDTO.getAssignedUserId()))
-            .setStory(this.storyService.findById(taskDTO.getStoryId()))
-        );
+            .setStory(this.storyService.findById(taskDTO.getStoryId()));
+
+        if (taskDTO.getAssignedUserId() != null) {
+            task.setAssignedUser(this.userService.findById(taskDTO.getAssignedUserId()));
+        } else {
+            task.setAssignedUser(null);
+        }
+
+        return this.toDTO(task);
     }
 
     /**
@@ -150,34 +168,57 @@ public class TaskService {
      * @param id The ID of task to delete
      */
     public void delete(Long id) {
-        if (this.userService.userIsNotLogged()) {
-            throw new BusinessException(Status.NOT_FOUND);
-        }
+        this.userService.assertLogged();
 
-        if (id == null) {
-            throw new TechnicalException();
-        }
+        TechnicalAssert.notNull(id);
 
-        TaskEntity taskEntity = this.taskRepository.findById(id).orElse(null);
+        TaskEntity task = this.findById(id);
 
-        if (taskEntity == null ||
-            this.projectValidator.userIsNotAssigned(this.userService.getLoggedUser(), taskEntity.getStory().getProject())
-        ) {
-            throw new BusinessException(TaskConstant.Error.NOT_FOUND, Status.NOT_FOUND);
-        }
+        TechnicalAssert.notNull(task.getStory());
+        TechnicalAssert.notNull(task.getStory().getProject());
+        TechnicalAssert.notNull(task.getStory().getProject().getId());
 
-        this.taskRepository.delete(taskEntity);
+        this.taskValidator.assertLoggedUserCanAll(task.getStory().getProject().getId(), TaskConstant.Error.NOT_FOUND, Status.NOT_FOUND);
+
+        this.taskRepository.delete(task);
     }
 
     /**
-     * Find all stories by the specified ids
+     * Find task in database with the specified id
+     *
+     * @return The task
+     */
+    public TaskEntity findById(Long id) {
+        TechnicalAssert.notNull(id);
+
+        TaskEntity task = this.taskRepository.findById(id).orElse(null);
+
+        BusinessAssert.notNull(task, TaskConstant.Error.NOT_FOUND, Status.NOT_FOUND);
+
+        return task;
+    }
+
+    /**
+     * Find all tasks by the specified ids
      *
      * @param ids The IDs
      *
      * @return The stories
      */
     public Set<TaskEntity> findAllById(Set<Long> ids) {
-        return new HashSet<>(this.taskRepository.findAllById(ids));
+        this.userService.assertLogged();
+
+        List<TaskEntity> tasks = this.taskRepository.findAllById(ids);
+
+        for (TaskEntity task : tasks) {
+            TechnicalAssert.notNull(task.getStory());
+            TechnicalAssert.notNull(task.getStory().getProject());
+            TechnicalAssert.notNull(task.getStory().getProject().getId());
+
+            this.taskValidator.assertLoggedUserCanAll(task.getStory().getProject().getId());
+        }
+
+        return new HashSet<>(tasks);
     }
 
     /**

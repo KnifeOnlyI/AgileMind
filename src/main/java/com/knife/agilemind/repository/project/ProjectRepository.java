@@ -15,11 +15,15 @@ import java.util.List;
 @Repository
 public interface ProjectRepository extends JpaRepository<ProjectEntity, Long> {
     /**
-     * Get all projects assigned to the specified user
+     * Get all projects if there are assigned to user or user is admin of them
      *
-     * @param userEntity The user
+     * @param assignedUser The assigned user
+     * @param adminUser    The admin user
      *
-     * @return The projects assigned to the specified user
+     * @return The projects
      */
-    List<ProjectEntity> getAllByAssignedUsersContains(UserEntity userEntity);
+    List<ProjectEntity> getAllByAssignedUsersContainsOrAdminUsersContains(
+        UserEntity assignedUser,
+        UserEntity adminUser
+    );
 }

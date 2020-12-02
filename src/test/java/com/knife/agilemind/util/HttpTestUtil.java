@@ -24,7 +24,7 @@ public class HttpTestUtil {
      *
      * @return The HTTP response body
      */
-    public <T> T getNotNullBody(ResponseEntity<T> response, HttpStatus expectedStatus) {
+    public <T> T assertNotNullBody(ResponseEntity<T> response, HttpStatus expectedStatus) {
         Assertions.assertNotNull(response, "The HTTP response MUST NOT be null");
 
         if (expectedStatus != null) {

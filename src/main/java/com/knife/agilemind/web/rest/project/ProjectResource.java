@@ -80,6 +80,8 @@ public class ProjectResource {
      * Delete the project with the specified id
      *
      * @param id The id
+     *
+     * @return The HTTP response
      */
     @DeleteMapping("/project/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {

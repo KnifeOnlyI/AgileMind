@@ -5,7 +5,7 @@
         </div>
 
         <div class="col-1 text-right">
-            <button *jhiHasAnyAuthority="'ROLE_ADMIN'" [routerLink]="['/project/edit/', project.id]"
+            <button *ngIf="showProjectSettingsBtn" [routerLink]="['/project/edit/', project.id]"
                     class="btn btn-secondary" type="button">
                 <fa-icon icon="cog"></fa-icon>
             </button>

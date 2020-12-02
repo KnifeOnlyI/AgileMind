@@ -70,7 +70,7 @@ public class AccountResource {
     @ResponseStatus(HttpStatus.CREATED)
     public void registerAccount(@Valid @RequestBody ManagedUserVM managedUserVM) {
         // If the user is not logged or is not an administrator, he cannot create user
-        if (!this.userService.currentIsAdmin()) {
+        if (!this.userService.loggedUserIsAdmin()) {
             throw new BusinessException(Status.NOT_FOUND);
         }
 

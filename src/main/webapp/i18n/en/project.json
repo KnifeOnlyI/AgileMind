@@ -18,7 +18,8 @@
       },
       "form": {
         "invalid": "Invalid form"
-      }
+      },
+      "not_found": "Not found project"
     },
     "alert": {
       "created": "Project created",

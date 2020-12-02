@@ -27,6 +27,15 @@ export class ProjectService {
   }
 
   /**
+   * Check if the specified user is
+   *
+   * @return HTTP response (Observable)
+   */
+  public loggedUserIsAssigned(id: number): Observable<boolean> {
+    return this.http.get<boolean>(`${ProjectService.BASE_URL}/${id}/logged-user-is-assigned`);
+  }
+
+  /**
    * Save the specified project
    *
    * @param project The project to save

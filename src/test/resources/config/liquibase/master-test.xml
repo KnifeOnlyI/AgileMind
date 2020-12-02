@@ -9,6 +9,7 @@
     <include file="changelog/project_user/maj.xml" relativeToChangelogFile="true"/>
     <include file="changelog/story/maj.xml" relativeToChangelogFile="true"/>
     <include file="changelog/task/maj.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/project_admin_user/maj.xml" relativeToChangelogFile="true"/>
 
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->

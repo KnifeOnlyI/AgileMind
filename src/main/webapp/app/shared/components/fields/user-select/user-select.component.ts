@@ -13,7 +13,7 @@ import {UserService} from 'app/core/user/user.service';
   template: `
     <div *ngIf="control && users" class="form-group">
       <label for="assignedUserId">
-        <span [jhiTranslate]="multiple ? 'global.form.field.assignedUsers' : 'global.form.field.assignedUser'">
+        <span [jhiTranslate]="label">
         </span>
       </label>
       <ng-container *ngIf="multiple">
@@ -44,6 +44,9 @@ export class UserSelectComponent implements OnInit {
    */
   @Input()
   public multiple = false;
+
+  @Input()
+  public label = 'global.form.field.assignedUser';
 
   /**
    * Users list
