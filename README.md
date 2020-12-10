@@ -55,3 +55,11 @@ Mounted volumes :
 # Generate Certbot certificate
 sudo certbot certonly --standalone
 ```
+
+# Create database backup
+
+```bash
+docker exec -ti docker_agilemind-postgresql_1 bash
+pg_dump -U agilemind agilemind > /opt/agilemind.sql
+```
+

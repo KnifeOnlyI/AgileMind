@@ -2,6 +2,7 @@ package com.knife.agilemind.service.task;
 
 import com.knife.agilemind.constant.story.StoryConstant;
 import com.knife.agilemind.constant.task.TaskConstant;
+import com.knife.agilemind.domain.story.StoryEntity;
 import com.knife.agilemind.domain.task.TaskEntity;
 import com.knife.agilemind.dto.task.CreateTaskDTO;
 import com.knife.agilemind.dto.task.TaskDTO;
@@ -111,15 +112,14 @@ public class TaskService {
 
         this.storyValidator.assertExists(storyId);
 
-        TaskEntity task = this.findById(storyId);
+        StoryEntity story = this.storyService.findById(storyId);
 
-        TechnicalAssert.notNull(task.getStory());
-        TechnicalAssert.notNull(task.getStory().getProject());
-        TechnicalAssert.notNull(task.getStory().getProject().getId());
+        TechnicalAssert.notNull(story.getProject());
+        TechnicalAssert.notNull(story.getProject().getId());
 
-        this.taskValidator.assertLoggedUserCanAll(task.getStory().getProject().getId());
+        this.taskValidator.assertLoggedUserCanAll(story.getProject().getId());
 
-        for (TaskEntity tmpTask : task.getStory().getTasks()) {
+        for (TaskEntity tmpTask : story.getTasks()) {
             results.add(this.toDTO(tmpTask));
         }
 
