@@ -1,5 +1,6 @@
 {
   "error": {
+    "technical_exception": "Server error. Please contact administrator.",
     "title": "Error page!",
     "http": {
       "400": "Bad request.",

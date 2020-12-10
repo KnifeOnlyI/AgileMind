@@ -1,5 +1,6 @@
 {
   "error": {
+    "technical_exception": "Erreur serveur. Contactez l'administrateur.",
     "title": "Page d'erreur !",
     "http": {
       "400": "Mauvaise requête.",

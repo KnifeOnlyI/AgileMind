@@ -52,8 +52,8 @@
             <caption hidden="hidden"></caption>
             <thead class="thead-dark">
             <tr>
+                <th scope="col"></th>
                 <th class="text-left" jhiTranslate="global.form.field.name" scope="col"></th>
-                <th jhiTranslate="global.form.field.status" scope="col"></th>
                 <th jhiTranslate="task.form.field.estimatedTime" scope="col"></th>
                 <th jhiTranslate="task.form.field.loggedTime" scope="col"></th>
                 <th jhiTranslate="global.form.field.assignedUser" scope="col"></th>
@@ -65,10 +65,10 @@
                 [routerLink]="['/task', 'edit', task.id]"
                 style="cursor: pointer;" title="{{task.description}}"
             >
-                <td class="text-left">{{task.name}}</td>
-                <td>
+                <td class="text-center">
                     <ag-task-status [id]="task.statusId!"></ag-task-status>
                 </td>
+                <td class="text-left">{{task.name}}</td>
                 <td class="text-justify">{{task.estimatedTime}}</td>
                 <td class="text-justify">{{task.loggedTime}}</td>
                 <td>

@@ -63,15 +63,19 @@ public class TaskService {
         this.taskValidator.assertValid(createTaskDTO);
         this.taskValidator.assertLoggedUserCanAll(createTaskDTO.getStoryId(), StoryConstant.Error.NOT_FOUND, Status.NOT_FOUND);
 
-        return this.toDTO(this.taskRepository.save(new TaskEntity()
+        TaskEntity task = new TaskEntity()
             .setName(createTaskDTO.getName())
             .setDescription(createTaskDTO.getDescription())
             .setEstimatedTime(createTaskDTO.getEstimatedTime())
             .setLoggedTime(createTaskDTO.getLoggedTime())
             .setStatus(this.taskStatusService.findById(createTaskDTO.getStatusId()))
-            .setAssignedUser(this.userService.findById(createTaskDTO.getAssignedUserId()))
-            .setStory(this.storyService.findById(createTaskDTO.getStoryId()))
-        ));
+            .setStory(this.storyService.findById(createTaskDTO.getStoryId()));
+
+        if (createTaskDTO.getAssignedUserId() != null) {
+            task.setAssignedUser(this.userService.findById(createTaskDTO.getAssignedUserId()));
+        }
+
+        return this.toDTO(this.taskRepository.save(task));
     }
 
     /**

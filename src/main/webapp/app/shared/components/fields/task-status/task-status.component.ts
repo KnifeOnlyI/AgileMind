@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {TaskStatus} from 'app/entities/task-status.entity';
 import {TaskStatusService} from 'app/service/task-status.service';
+import {IconName} from '@fortawesome/fontawesome-svg-core';
 
 /**
  * Component to manage task status displaying
@@ -10,7 +11,8 @@ import {TaskStatusService} from 'app/service/task-status.service';
 @Component({
   selector: 'ag-task-status',
   template: `
-    <span *ngIf="status" [ngStyle]="{'color': color}" jhiTranslate="{{status.key}}"></span>`
+    <fa-icon [ngStyle]="styles" [icon]="icon"></fa-icon>
+  `
 })
 // @ts-ignore
 export class TaskStatusComponent implements OnInit {
@@ -23,9 +25,14 @@ export class TaskStatusComponent implements OnInit {
   public status?: TaskStatus;
 
   /**
-   * The class
+   * The icon
    */
-  public color = 'red';
+  public icon: IconName = 'check';
+
+  /**
+   * The color
+   */
+  public styles = {'color': 'green'};
 
   /**
    * Constructor
@@ -47,10 +54,12 @@ export class TaskStatusComponent implements OnInit {
     this.taskStatusService.get(this.id).subscribe((taskStatus) => {
       this.status = taskStatus;
 
-      if (this.status.id === 2) {
-        this.color = 'blue';
-      } else if (this.status.id === 3) {
-        this.color = 'green';
+      if (this.status.id === 1) {
+        this.icon = 'circle';
+        this.styles.color = 'red';
+      } else if (this.status.id === 2) {
+        this.icon = 'spinner';
+        this.styles.color = 'blue';
       }
     });
   }

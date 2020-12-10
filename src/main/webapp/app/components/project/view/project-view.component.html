@@ -7,7 +7,7 @@
         <div class="col-1 text-right">
             <button *ngIf="showProjectSettingsBtn" [routerLink]="['/project/edit/', project.id]"
                     class="btn btn-secondary" type="button">
-                <fa-icon icon="cog"></fa-icon>
+                <fa-icon icon="cogs"></fa-icon>
             </button>
         </div>
     </div>
@@ -55,6 +55,7 @@
             <caption hidden="hidden"></caption>
             <thead class="thead-dark">
             <tr class="text-center">
+                <th scope="col" style="width: 1%"></th>
                 <th class="text-left" jhiTranslate="global.form.field.name" scope="col" style="width: 30%"></th>
                 <th jhiTranslate="story.form.field.points" scope="col" style="width: 5%"></th>
                 <th jhiTranslate="story.form.field.businessValue" scope="col" style="width: 5%"></th>
@@ -66,8 +67,16 @@
             <!-- Display all stories of the current display status selected -->
             <tr *ngFor="let story of stories[currentDisplayStatus]; let i = index"
                 [routerLink]="['/story/edit', story.id]"
-                [ngStyle]="getStyles(story)" class="text-center"
+                class="text-center"
+                style="cursor: pointer;"
                 title="{{story.description}}">
+                <td [ngStyle]="getStyles(story)">
+                    <ng-container [ngSwitch]="story.typeId">
+                        <fa-icon *ngSwitchCase="1" icon="user-circle"></fa-icon>
+                        <fa-icon *ngSwitchCase="2" icon="bug"></fa-icon>
+                        <fa-icon *ngSwitchCase="3" icon="wrench"></fa-icon>
+                    </ng-container>
+                </td>
                 <td class="text-left">{{story.name}}</td>
                 <td>{{story.points}}</td>
                 <td>{{story.businessValue }}</td>

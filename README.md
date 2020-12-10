@@ -61,5 +61,6 @@ sudo certbot certonly --standalone
 ```bash
 docker exec -ti docker_agilemind-postgresql_1 bash
 pg_dump -U agilemind agilemind > /opt/agilemind.sql
+psql -U agilemind agilemind < /opt/agilemind.sql
 ```
 

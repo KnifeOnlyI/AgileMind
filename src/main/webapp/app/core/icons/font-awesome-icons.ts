@@ -36,6 +36,12 @@ import {faCog} from '@fortawesome/free-solid-svg-icons/faCog';
 import {faTrash} from '@fortawesome/free-solid-svg-icons/faTrash';
 import {faAsterisk} from '@fortawesome/free-solid-svg-icons/faAsterisk';
 import {faPenAlt} from '@fortawesome/free-solid-svg-icons/faPenAlt';
+import {faBug} from '@fortawesome/free-solid-svg-icons';
+import {faCogs} from '@fortawesome/free-solid-svg-icons/faCogs';
+import {faUserCircle} from '@fortawesome/free-solid-svg-icons/faUserCircle';
+import {faCheck} from '@fortawesome/free-solid-svg-icons/faCheck';
+import {faCircle} from '@fortawesome/free-solid-svg-icons/faCircle';
+import {faSpinner} from '@fortawesome/free-solid-svg-icons/faSpinner';
 
 export const fontAwesomeIcons = [
   faUser,
@@ -75,10 +81,17 @@ export const fontAwesomeIcons = [
   faSearch,
   faPlus,
   faCog,
+  faCogs,
   faTrash,
   faBan,
   faSave,
   faAsterisk,
   faPenAlt,
+  faBug,
+  faWrench,
+  faUserCircle,
+  faCheck,
+  faCircle,
+  faSpinner,
   // jhipster-needle-add-icon-import
 ];
