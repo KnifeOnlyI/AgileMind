@@ -42,6 +42,7 @@ import {faUserCircle} from '@fortawesome/free-solid-svg-icons/faUserCircle';
 import {faCheck} from '@fortawesome/free-solid-svg-icons/faCheck';
 import {faCircle} from '@fortawesome/free-solid-svg-icons/faCircle';
 import {faSpinner} from '@fortawesome/free-solid-svg-icons/faSpinner';
+import {faChartLine} from '@fortawesome/free-solid-svg-icons/faChartLine';
 
 export const fontAwesomeIcons = [
   faUser,
@@ -93,5 +94,6 @@ export const fontAwesomeIcons = [
   faCheck,
   faCircle,
   faSpinner,
+  faChartLine,
   // jhipster-needle-add-icon-import
 ];

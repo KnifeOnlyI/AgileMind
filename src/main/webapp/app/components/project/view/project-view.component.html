@@ -51,41 +51,29 @@
     <hr>
 
     <ng-container *ngIf="totalNbStories > 0; else NoStories">
-        <table class="table table-borderless table-hover">
-            <caption hidden="hidden"></caption>
-            <thead class="thead-dark">
-            <tr class="text-center">
-                <th scope="col" style="width: 1%"></th>
-                <th class="text-left" jhiTranslate="global.form.field.name" scope="col" style="width: 30%"></th>
-                <th jhiTranslate="story.form.field.points" scope="col" style="width: 5%"></th>
-                <th jhiTranslate="story.form.field.businessValue" scope="col" style="width: 5%"></th>
-                <th jhiTranslate="global.form.field.assignedUser" scope="col" style="width: 20%"></th>
-            </tr>
-            </thead>
-
-            <tbody>
-            <!-- Display all stories of the current display status selected -->
-            <tr *ngFor="let story of stories[currentDisplayStatus]; let i = index"
-                [routerLink]="['/story/edit', story.id]"
-                class="text-center"
-                style="cursor: pointer;"
-                title="{{story.description}}">
-                <td [ngStyle]="getStyles(story)">
-                    <ng-container [ngSwitch]="story.typeId">
-                        <fa-icon *ngSwitchCase="1" icon="user-circle"></fa-icon>
-                        <fa-icon *ngSwitchCase="2" icon="bug"></fa-icon>
-                        <fa-icon *ngSwitchCase="3" icon="wrench"></fa-icon>
-                    </ng-container>
-                </td>
-                <td class="text-left">{{story.name}}</td>
-                <td>{{story.points}}</td>
-                <td>{{story.businessValue }}</td>
-                <td>
-                    <ag-user *ngIf="story.assignedUserId" [id]="story.assignedUserId"></ag-user>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+        <div class="row">
+            <div *ngFor="let story of stories[currentDisplayStatus]" [title]="story.description" style="padding: 25px; cursor: pointer;">
+                <div [routerLink]="['/story/edit', story.id]" class="card bg-light mb-3">
+                    <div class="card-body" style="width: 250px;">
+                        <ng-container [ngSwitch]="story.typeId">
+                            <fa-icon *ngSwitchCase="1" [ngStyle]="getStyles(story)" icon="user-circle"></fa-icon>
+                            <fa-icon *ngSwitchCase="2" [ngStyle]="getStyles(story)" icon="bug"></fa-icon>
+                            <fa-icon *ngSwitchCase="3" [ngStyle]="getStyles(story)" icon="wrench"></fa-icon>
+                        </ng-container>&nbsp;
+                        {{story.name}}
+                        <hr>
+                        <div class="row">
+                            <div class="col text-left">
+                                <fa-icon icon="user-circle"></fa-icon>&ngsp; {{story.points}}
+                            </div>
+                            <div class="col text-right">
+                                <fa-icon icon="chart-line"></fa-icon>&ngsp; {{story.businessValue}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </ng-container>
 
     <ng-template #NoStories>
