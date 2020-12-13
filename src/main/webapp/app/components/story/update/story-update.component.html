@@ -31,53 +31,23 @@
         </div>
         <div class="col-9 form-group">
             <label for="description"><span jhiTranslate="global.form.field.description"></span></label>
-            <textarea [formControl]="form.descriptionFormControl" class="form-control" id="description" rows="15"></textarea>
+            <textarea [formControl]="form.descriptionFormControl" class="form-control" id="description" rows="19"></textarea>
         </div>
     </div>
 
+    <br>
+
     <div class="row">
-        <div class="col-11">
-            <h2 jhiTranslate="story.form.field.tasks"></h2>
-        </div>
-        <div class="col-1 text-right">
+        <div class="col-12">
             <button [routerLink]="['/story', form.id, 'task', 'new']"
                     class="btn btn-primary" type="button">
                 <fa-icon icon="plus"></fa-icon>
             </button>
         </div>
+
     </div>
 
-    <ng-container *ngIf="tasks && tasks.length > 0; else NoTasks">
-        <table class="table table-borderless table-hover">
-            <caption hidden="hidden"></caption>
-            <thead class="thead-dark">
-            <tr>
-                <th scope="col"></th>
-                <th class="text-left" jhiTranslate="global.form.field.name" scope="col"></th>
-                <th jhiTranslate="task.form.field.estimatedTime" scope="col"></th>
-                <th jhiTranslate="task.form.field.loggedTime" scope="col"></th>
-                <th jhiTranslate="global.form.field.assignedUser" scope="col"></th>
-            </tr>
-            </thead>
-
-            <tbody>
-            <tr *ngFor="let task of tasks; let i = index"
-                [routerLink]="['/task', 'edit', task.id]"
-                style="cursor: pointer;" title="{{task.description}}"
-            >
-                <td class="text-center">
-                    <ag-task-status [id]="task.statusId!"></ag-task-status>
-                </td>
-                <td class="text-left">{{task.name}}</td>
-                <td class="text-justify">{{task.estimatedTime}}</td>
-                <td class="text-justify">{{task.loggedTime}}</td>
-                <td>
-                    <ag-user *ngIf="task.assignedUserId" [id]="task.assignedUserId!"></ag-user>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </ng-container>
+    <ag-task-list [storyId]="storyId"></ag-task-list>
 
     <hr>
 
@@ -86,7 +56,3 @@
         <ag-button-save [disabled]="!form.isValid"></ag-button-save>
     </div>
 </form>
-
-<ng-template #NoTasks>
-    <h3 class="text-center alert alert-secondary" jhiTranslate="task.list.noResults"></h3>
-</ng-template>

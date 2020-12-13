@@ -3,6 +3,7 @@
     "technical_exception": "Server error. Please contact administrator.",
     "title": "Error page!",
     "http": {
+      "0": "No internet connection.",
       "400": "Bad request.",
       "403": "You are not authorized to access this page.",
       "404": "The page does not exist.",

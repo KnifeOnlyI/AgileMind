@@ -11,8 +11,6 @@ import {
   ConfirmDialogType,
   ExitState
 } from 'app/shared/components/dialogs/confirm/confirm-dialog.component';
-import {Task} from 'app/entities/task.entity';
-import {TaskService} from 'app/service/task.service';
 
 /**
  * Component to manage story update
@@ -29,15 +27,14 @@ export class StoryUpdateComponent implements OnInit {
   public form!: StoryUpdateForm;
 
   /**
-   * The story's task
+   * The story ID
    */
-  public tasks = new Array<Task>();
+  public storyId!: number;
 
   /**
    * Constructor
    *
    * @param storyService The story service
-   * @param taskService The task service
    * @param router The router service
    * @param routerService The router service
    * @param alertService The alert service
@@ -45,7 +42,6 @@ export class StoryUpdateComponent implements OnInit {
    */
   public constructor(
     private storyService: StoryService,
-    private taskService: TaskService,
     private router: Router,
     private routerService: ActivatedRoute,
     private alertService: AlertService,
@@ -103,15 +99,9 @@ export class StoryUpdateComponent implements OnInit {
    * @param id The story id
    */
   private getStory(id: number): void {
-    this.storyService.get(id).subscribe(story => {
-        this.form = new StoryUpdateForm(story);
+    this.storyId = id;
 
-        this.taskService.getAllFromStory(id).subscribe((tasks) => {
-          tasks.sort((a, b) => a.id! - b.id!);
-
-          tasks.forEach(task => this.tasks.push(task));
-        });
-      },
+    this.storyService.get(id).subscribe(story => this.form = new StoryUpdateForm(story),
       (error: HttpErrorResponse) => {
         if (error.status === 404) {
           this.router.navigate(['404']).then();

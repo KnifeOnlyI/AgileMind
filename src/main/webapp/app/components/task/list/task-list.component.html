@@ -1,0 +1,48 @@
+<ng-container *ngIf="initialized">
+    <div class="row">
+        <div class="col-4 text-center">
+            <h2 jhiTranslate="taskStatus.key.todo"></h2>
+
+            <div #todoList="cdkDropList" (cdkDropListDropped)="moveTask($event, taskStatusConstants.ID.TODO)"
+                 [cdkDropListConnectedTo]="[inProgressList, doneList]"
+                 [cdkDropListData]="todo"
+                 cdkDropList
+                 class="task-list"
+            >
+                <div *ngFor="let item of todo" [routerLink]="['/task', 'edit', item.id]" cdkDrag class="task">
+                    {{item.name}}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-4 text-center">
+            <h2 jhiTranslate="taskStatus.key.inProgress"></h2>
+
+            <div #inProgressList="cdkDropList" (cdkDropListDropped)="moveTask($event, taskStatusConstants.ID.IN_PROGRESS)"
+                 [cdkDropListConnectedTo]="[todoList, doneList]"
+                 [cdkDropListData]="inProgress"
+                 cdkDropList
+                 class="task-list"
+            >
+                <div *ngFor="let item of inProgress" [routerLink]="['/task', 'edit', item.id]" cdkDrag class="task">
+                    {{item.name}}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-4 text-center">
+            <h2 jhiTranslate="taskStatus.key.done"></h2>
+
+            <div #doneList="cdkDropList" (cdkDropListDropped)="moveTask($event, taskStatusConstants.ID.DONE)"
+                 [cdkDropListConnectedTo]="[todoList, inProgressList]"
+                 [cdkDropListData]="done"
+                 cdkDropList
+                 class="task-list"
+            >
+                <div *ngFor="let item of done" [routerLink]="['/task', 'edit', item.id]" cdkDrag class="task">
+                    {{item.name}}
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-container>

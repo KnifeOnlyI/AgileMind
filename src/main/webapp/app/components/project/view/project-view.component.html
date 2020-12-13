@@ -52,7 +52,7 @@
 
     <ng-container *ngIf="totalNbStories > 0; else NoStories">
         <div class="row">
-            <div *ngFor="let story of stories[currentDisplayStatus]" [title]="story.description" style="padding: 25px; cursor: pointer;">
+            <div *ngFor="let story of stories[currentDisplayStatus]" [title]="story.description ? story.description : ''" style="padding: 25px; cursor: pointer;">
                 <div [routerLink]="['/story/edit', story.id]" class="card bg-light mb-3">
                     <div class="card-body" style="width: 250px;">
                         <ng-container [ngSwitch]="story.typeId">

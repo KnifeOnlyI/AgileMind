@@ -3,6 +3,7 @@
     "technical_exception": "Erreur serveur. Contactez l'administrateur.",
     "title": "Page d'erreur !",
     "http": {
+      "0": "Pas de connexion internet.",
       "400": "Mauvaise requête.",
       "403": "Vous n'avez pas les droits pour accéder à cette page.",
       "404": "La page n'existe pas.",
