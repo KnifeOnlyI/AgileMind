@@ -1,0 +1,27 @@
+<div class="form-group">
+    <label for="assignedUserId">
+        <span [jhiTranslate]="label"></span>
+    </label>
+    <ng-container *ngIf="initialized; else NotInitialized">
+        <ng-container *ngIf="multiple; else NotMultiple">
+            <select [formControl]="control" [multiple]="multiple" class="form-control" id="assignedUserId"
+                    name="assignedUserId">
+                <option [value]="null">---</option>
+                <option *ngFor="let user of users" [value]="user.id">{{ user.login }}</option>
+            </select>
+        </ng-container>
+    </ng-container>
+</div>
+
+<ng-template #NotMultiple>
+    <select [formControl]="control" class="form-control" id="assignedUserId" name="assignedUserId">
+        <option [value]="null">---</option>
+        <option *ngFor="let user of users" [value]="user.id">{{ user.login }}</option>
+    </select>
+</ng-template>
+
+<ng-template #NotInitialized>
+    <br>
+    <fa-icon [spin]="true" icon="spinner"></fa-icon>&nbsp;
+    <span jhiTranslate="users.loading"></span>
+</ng-template>

@@ -23,7 +23,15 @@ import {Project} from 'app/entities/project.entity';
   templateUrl: './project-update.component.html',
 })
 export class ProjectUpdateComponent implements OnInit {
+  /**
+   * The project form data
+   */
   public form!: ProjectUpdateForm;
+
+  /**
+   * TRUE if the component is initialized, FALSE otherwise
+   */
+  public initialized = false;
 
   /**
    * Constructor
@@ -127,6 +135,8 @@ export class ProjectUpdateComponent implements OnInit {
    */
   private onSuccess(body: Project): void {
     this.form = new ProjectUpdateForm(body);
+
+    this.initialized = true;
   }
 
   /**

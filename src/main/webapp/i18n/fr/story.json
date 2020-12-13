@@ -39,6 +39,7 @@
       "created": "Story créée",
       "updated": "Story mise à jour",
       "deleted": "Story supprimée"
-    }
+    },
+    "loading": "Chargement de la story"
   }
 }

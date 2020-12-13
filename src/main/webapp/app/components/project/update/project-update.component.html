@@ -1,35 +1,41 @@
-<div class="row">
-    <div class="col-11">
-        <h1 jhiTranslate="project.title.edit"></h1>
-    </div>
-    <div class="col-1 text-right">
-        <ag-button-delete (onClick)="confirmDelete()"></ag-button-delete>
-    </div>
-</div>
-
-<hr>
-
-<form (ngSubmit)="onSubmit()" *ngIf="form" [formGroup]="form.form">
+<ng-container *ngIf="initialized; else NotInitialized">
     <div class="row">
-        <div class="col-3">
-            <div class="form-group">
-                <label for="projectName"><span jhiTranslate="global.form.field.name"></span></label>
-                <input [formControl]="form.nameFormControl" class="form-control" id="projectName" type="text">
-            </div>
-
-            <ag-user-select [control]="form.adminUserIdListFormControl" [multiple]="true" label="global.form.field.adminUsers"></ag-user-select>
-            <ag-user-select [control]="form.assignedUserIdListFormControl" [multiple]="true" label="global.form.field.assignedUsers"></ag-user-select>
+        <div class="col-11">
+            <h1 jhiTranslate="project.title.edit"></h1>
         </div>
-        <div class="col-9 form-group">
-            <label for="description"><span jhiTranslate="global.form.field.description"></span></label>
-            <textarea [formControl]="form.descriptionFormControl" class="form-control" id="description" rows="7"></textarea>
+        <div class="col-1 text-right">
+            <ag-button-delete (onClick)="confirmDelete()"></ag-button-delete>
         </div>
     </div>
 
     <hr>
 
-    <div class="text-left">
-        <ag-button-cancel [routerLink]="['/project', form.idFormControl.value]"></ag-button-cancel>
-        <ag-button-save [disabled]="!form.isValid"></ag-button-save>
-    </div>
-</form>
+    <form (ngSubmit)="onSubmit()" *ngIf="form" [formGroup]="form.form">
+        <div class="row">
+            <div class="col-3">
+                <div class="form-group">
+                    <label for="projectName"><span jhiTranslate="global.form.field.name"></span></label>
+                    <input [formControl]="form.nameFormControl" class="form-control" id="projectName" type="text">
+                </div>
+
+                <ag-user-select [control]="form.adminUserIdListFormControl" [multiple]="true" label="global.form.field.adminUsers"></ag-user-select>
+                <ag-user-select [control]="form.assignedUserIdListFormControl" [multiple]="true" label="global.form.field.assignedUsers"></ag-user-select>
+            </div>
+            <div class="col-9 form-group">
+                <label for="description"><span jhiTranslate="global.form.field.description"></span></label>
+                <textarea [formControl]="form.descriptionFormControl" class="form-control" id="description" rows="7"></textarea>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="text-left">
+            <ag-button-cancel [routerLink]="['/project', form.idFormControl.value]"></ag-button-cancel>
+            <ag-button-save [disabled]="!form.isValid"></ag-button-save>
+        </div>
+    </form>
+</ng-container>
+
+<ng-template #NotInitialized>
+    <ag-main-loading label="project.loading"></ag-main-loading>
+</ng-template>

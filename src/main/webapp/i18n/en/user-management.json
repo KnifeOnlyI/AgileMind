@@ -26,5 +26,8 @@
     "createdDate": "Created date",
     "lastModifiedBy": "Modified by",
     "lastModifiedDate": "Modified date"
+  },
+  "users": {
+    "loading": "Users loading"
   }
 }

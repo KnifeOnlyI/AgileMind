@@ -22,6 +22,11 @@ export class ProjectListComponent implements OnInit {
   public projects!: Array<Project>;
 
   /**
+   * TRUE if the component is initialized, FALSE otherwise
+   */
+  public initialized = false;
+
+  /**
    * Constructor
    *
    * @param projectService The project service
@@ -42,6 +47,8 @@ export class ProjectListComponent implements OnInit {
     // Fetch all projects from back API
     this.projectService.getAll().subscribe(projects => {
       this.projects = projects.sort((a, b) => a.id! - b.id!);
+
+      this.initialized = true;
     });
   }
 }

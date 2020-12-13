@@ -27,6 +27,11 @@ export class TaskUpdateComponent implements OnInit {
   public form!: TaskUpdateForm;
 
   /**
+   * TRUE if the component is initialized, FALSE otherwise
+   */
+  public initialized = false;
+
+  /**
    * Constructor
    *
    * @param taskService The task service
@@ -113,6 +118,8 @@ export class TaskUpdateComponent implements OnInit {
   private getTask(id: number): void {
     this.taskService.get(id).subscribe(task => {
         this.form = new TaskUpdateForm(task);
+
+        this.initialized = true;
       },
       (error: HttpErrorResponse) => {
         if (error.status === 404) {

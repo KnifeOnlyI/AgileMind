@@ -27,6 +27,11 @@ export class StoryUpdateComponent implements OnInit {
   public form!: StoryUpdateForm;
 
   /**
+   * TRUE if the component is initialized, FALSE otherwise
+   */
+  public initialized = false;
+
+  /**
    * The story ID
    */
   public storyId!: number;
@@ -101,12 +106,17 @@ export class StoryUpdateComponent implements OnInit {
   private getStory(id: number): void {
     this.storyId = id;
 
-    this.storyService.get(id).subscribe(story => this.form = new StoryUpdateForm(story),
+    this.storyService.get(id).subscribe(story => {
+        this.form = new StoryUpdateForm(story);
+
+        this.initialized = true;
+      },
       (error: HttpErrorResponse) => {
         if (error.status === 404) {
           this.router.navigate(['404']).then();
         }
-      });
+      }
+    );
   }
 
   /**

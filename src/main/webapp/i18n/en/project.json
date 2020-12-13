@@ -6,9 +6,6 @@
       "edit": "Update project",
       "view": "Project"
     },
-    "list": {
-      "noResults": "No created project"
-    },
     "error": {
       "name": {
         "empty": "The project name cannot be empty"
@@ -25,6 +22,11 @@
       "created": "Project created",
       "updated": "Project updated",
       "deleted": "Project deleted"
-    }
+    },
+    "loading": "Loading project"
+  },
+  "projects": {
+    "noResults": "No created project",
+    "loading": "Projects loading"
   }
 }

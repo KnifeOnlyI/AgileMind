@@ -6,9 +6,6 @@
       "edit": "Mise à jour d'un projet",
       "view": "Projet"
     },
-    "list": {
-      "noResults": "Aucun projet créé"
-    },
     "error": {
       "name": {
         "empty": "Le nom du projet ne doit pas être vide"
@@ -25,6 +22,11 @@
       "created": "Projet créé",
       "updated": "Projet mis à jour",
       "deleted": "Projet supprimé"
-    }
+    },
+    "loading": "Chargement du projet"
+  },
+  "projects": {
+    "noResults": "Aucun projet créé",
+    "loading": "Chargement des projets"
   }
 }

@@ -10,26 +10,7 @@ import {UserService} from 'app/core/user/user.service';
  */
 @Component({
   selector: 'ag-user-select',
-  template: `
-    <div *ngIf="control && users" class="form-group">
-      <label for="assignedUserId">
-        <span [jhiTranslate]="label">
-        </span>
-      </label>
-      <ng-container *ngIf="multiple">
-        <select class="form-control" id="assignedUserId" name="assignedUserId" [formControl]="control"
-                [multiple]="multiple">
-          <option [value]="null">---</option>
-          <option *ngFor="let user of users" [value]="user.id">{{ user.login }}</option>
-        </select>
-      </ng-container>
-      <ng-container *ngIf="!multiple">
-        <select class="form-control" id="assignedUserId" name="assignedUserId" [formControl]="control">
-          <option [value]="null">---</option>
-          <option *ngFor="let user of users" [value]="user.id">{{ user.login }}</option>
-        </select>
-      </ng-container>
-    </div>`
+  templateUrl: './user-select.component.html',
 })
 // @ts-ignore
 export class UserSelectComponent implements OnInit {
@@ -45,8 +26,16 @@ export class UserSelectComponent implements OnInit {
   @Input()
   public multiple = false;
 
+  /**
+   * The label
+   */
   @Input()
   public label = 'global.form.field.assignedUser';
+
+  /**
+   * TRUE if the component is initialized, FALSE otherwise
+   */
+  public initialized = false;
 
   /**
    * Users list
@@ -71,6 +60,8 @@ export class UserSelectComponent implements OnInit {
 
     this.userService.query().subscribe((users) => {
       this.users = users.body ? users.body : new Array<IUser>();
+
+      this.initialized = true;
     });
   }
 }

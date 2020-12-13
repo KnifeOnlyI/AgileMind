@@ -13,20 +13,26 @@
 
 <hr>
 
-<ng-container *ngIf="projects && projects.length > 0; else NoProjects">
-    <div class="row">
-        <div *ngFor="let project of projects" class="col-3" style="padding: 25px; cursor: pointer;">
-            <div [routerLink]="['/project/', project.id]" class="card bg-light mb-3" style="width: 18rem;">
-                <div class="card-body">
-                    <h5 class="card-title text-center">{{project.name}}</h5>
-                    <hr>
-                    <p class="card-text text-justify">{{project.description}}</p>
+<ng-container *ngIf="initialized; else NotInitialized">
+    <ng-container *ngIf="projects.length > 0; else NoProjects">
+        <div class="row">
+            <div *ngFor="let project of projects" class="col-3" style="padding: 25px; cursor: pointer;">
+                <div [routerLink]="['/project/', project.id]" class="card bg-light mb-3" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">{{project.name}}</h5>
+                        <hr>
+                        <p class="card-text text-justify">{{project.description}}</p>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </ng-container>
 </ng-container>
 
 <ng-template #NoProjects>
-    <h1 class="text-center alert alert-secondary" jhiTranslate="project.list.noResults"></h1>
+    <h1 class="text-center alert alert-secondary" jhiTranslate="projects.noResults"></h1>
+</ng-template>
+
+<ng-template #NotInitialized>
+    <ag-main-loading label="projects.loading"></ag-main-loading>
 </ng-template>

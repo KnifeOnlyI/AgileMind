@@ -1,4 +1,4 @@
-<ng-container *ngIf="initialized">
+<ng-container *ngIf="initialized; else NotInitialized">
     <div class="row">
         <div class="col-4 text-center">
             <h2 jhiTranslate="taskStatus.key.todo"></h2>
@@ -46,3 +46,7 @@
         </div>
     </div>
 </ng-container>
+
+<ng-template #NotInitialized>
+    <ag-main-loading label="tasks.loading"></ag-main-loading>
+</ng-template>

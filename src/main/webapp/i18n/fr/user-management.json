@@ -26,5 +26,8 @@
     "createdDate": "Créé le",
     "lastModifiedBy": "Modifié par",
     "lastModifiedDate": "Modifié le"
+  },
+  "users": {
+    "loading": "Chargement des utilisateurs"
   }
 }

@@ -1,4 +1,4 @@
-<ng-container *ngIf="project">
+<ng-container *ngIf="initialized; else NotInitialized">
     <div class="row">
         <div class="col-11">
             <h1>{{project.name}}</h1>
@@ -75,8 +75,12 @@
             </div>
         </div>
     </ng-container>
-
-    <ng-template #NoStories>
-        <h1 class="text-center alert alert-secondary" jhiTranslate="story.list.noResults"></h1>
-    </ng-template>
 </ng-container>
+
+<ng-template #NotInitialized>
+    <ag-main-loading label="project.loading"></ag-main-loading>
+</ng-template>
+
+<ng-template #NoStories>
+    <h1 class="text-center alert alert-secondary" jhiTranslate="story.list.noResults"></h1>
+</ng-template>

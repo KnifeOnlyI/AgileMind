@@ -30,6 +30,10 @@
       "created": "Task created",
       "updated": "Task updated",
       "deleted": "Task deleted"
-    }
+    },
+    "loading": "Task loading"
+  },
+  "tasks": {
+    "loading": "Tasks loading"
   }
 }

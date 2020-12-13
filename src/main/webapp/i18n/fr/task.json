@@ -30,6 +30,10 @@
       "created": "Tâche créée",
       "updated": "Tâche mise à jour",
       "deleted": "Tâche supprimée"
-    }
+    },
+    "loading": "Chargement de la tâche"
+  },
+  "tasks": {
+    "loading": "Chargement des tâches"
   }
 }
