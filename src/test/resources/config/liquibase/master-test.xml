@@ -7,6 +7,7 @@
 
     <include file="changelog/project/maj.xml" relativeToChangelogFile="true"/>
     <include file="changelog/project_user/maj.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/release/maj.xml" relativeToChangelogFile="true"/>
     <include file="changelog/story/maj.xml" relativeToChangelogFile="true"/>
     <include file="changelog/task/maj.xml" relativeToChangelogFile="true"/>
     <include file="changelog/project_admin_user/maj.xml" relativeToChangelogFile="true"/>

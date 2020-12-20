@@ -1,7 +1,7 @@
 <ng-container *ngIf="initialized; else NotInitialized">
     <div class="row">
         <div class="col-4 text-center">
-            <h2 jhiTranslate="taskStatus.key.todo"></h2>
+            <h3 jhiTranslate="taskStatus.key.todo"></h3>
 
             <div #todoList="cdkDropList" (cdkDropListDropped)="moveTask($event, taskStatusConstants.ID.TODO)"
                  [cdkDropListConnectedTo]="[inProgressList, doneList]"
@@ -16,7 +16,7 @@
         </div>
 
         <div class="col-4 text-center">
-            <h2 jhiTranslate="taskStatus.key.inProgress"></h2>
+            <h3 jhiTranslate="taskStatus.key.inProgress"></h3>
 
             <div #inProgressList="cdkDropList" (cdkDropListDropped)="moveTask($event, taskStatusConstants.ID.IN_PROGRESS)"
                  [cdkDropListConnectedTo]="[todoList, doneList]"
@@ -31,7 +31,7 @@
         </div>
 
         <div class="col-4 text-center">
-            <h2 jhiTranslate="taskStatus.key.done"></h2>
+            <h3 jhiTranslate="taskStatus.key.done"></h3>
 
             <div #doneList="cdkDropList" (cdkDropListDropped)="moveTask($event, taskStatusConstants.ID.DONE)"
                  [cdkDropListConnectedTo]="[todoList, inProgressList]"

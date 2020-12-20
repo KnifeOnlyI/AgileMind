@@ -61,18 +61,18 @@ public class TaskService {
         this.userService.assertLogged();
 
         this.taskValidator.assertValid(createTaskDTO);
-        this.taskValidator.assertLoggedUserCanAll(createTaskDTO.getStoryId(), StoryConstant.Error.NOT_FOUND, Status.NOT_FOUND);
+        this.storyValidator.assertLoggedUserCanView(createTaskDTO.getStory(), StoryConstant.Error.NOT_FOUND, Status.NOT_FOUND);
 
         TaskEntity task = new TaskEntity()
             .setName(createTaskDTO.getName())
             .setDescription(createTaskDTO.getDescription())
             .setEstimatedTime(createTaskDTO.getEstimatedTime())
             .setLoggedTime(createTaskDTO.getLoggedTime())
-            .setStatus(this.taskStatusService.findById(createTaskDTO.getStatusId()))
-            .setStory(this.storyService.findById(createTaskDTO.getStoryId()));
+            .setStatus(this.taskStatusService.findById(createTaskDTO.getStatus()))
+            .setStory(this.storyService.findById(createTaskDTO.getStory()));
 
-        if (createTaskDTO.getAssignedUserId() != null) {
-            task.setAssignedUser(this.userService.findById(createTaskDTO.getAssignedUserId()));
+        if (createTaskDTO.getAssignedUser() != null) {
+            task.setAssignedUser(this.userService.findById(createTaskDTO.getAssignedUser()));
         }
 
         return this.toDTO(this.taskRepository.save(task));
@@ -121,7 +121,7 @@ public class TaskService {
         TechnicalAssert.notNull(story.getProject());
         TechnicalAssert.notNull(story.getProject().getId());
 
-        this.taskValidator.assertLoggedUserCanAll(story.getProject().getId());
+        this.projectValidator.assertLoggedUserCanView(story.getProject().getId());
 
         for (TaskEntity tmpTask : story.getTasks()) {
             results.add(this.toDTO(tmpTask));
@@ -148,17 +148,17 @@ public class TaskService {
         TechnicalAssert.notNull(task.getStory().getProject());
         TechnicalAssert.notNull(task.getStory().getProject().getId());
 
-        this.taskValidator.assertLoggedUserCanAll(task.getStory().getProject().getId());
+        this.storyValidator.assertLoggedUserCanView(task.getStory().getId());
 
         task.setName(taskDTO.getName())
             .setDescription(taskDTO.getDescription())
             .setEstimatedTime(taskDTO.getEstimatedTime())
             .setLoggedTime(taskDTO.getLoggedTime())
-            .setStatus(this.taskStatusService.findById(taskDTO.getStatusId()))
-            .setStory(this.storyService.findById(taskDTO.getStoryId()));
+            .setStatus(this.taskStatusService.findById(taskDTO.getStatus()))
+            .setStory(this.storyService.findById(taskDTO.getStory()));
 
-        if (taskDTO.getAssignedUserId() != null) {
-            task.setAssignedUser(this.userService.findById(taskDTO.getAssignedUserId()));
+        if (taskDTO.getAssignedUser() != null) {
+            task.setAssignedUser(this.userService.findById(taskDTO.getAssignedUser()));
         } else {
             task.setAssignedUser(null);
         }
@@ -182,7 +182,7 @@ public class TaskService {
         TechnicalAssert.notNull(task.getStory().getProject());
         TechnicalAssert.notNull(task.getStory().getProject().getId());
 
-        this.taskValidator.assertLoggedUserCanAll(task.getStory().getProject().getId(), TaskConstant.Error.NOT_FOUND, Status.NOT_FOUND);
+        this.projectValidator.assertLoggedUserCanView(task.getStory().getProject().getId(), TaskConstant.Error.NOT_FOUND, Status.NOT_FOUND);
 
         this.taskRepository.delete(task);
     }
@@ -219,7 +219,7 @@ public class TaskService {
             TechnicalAssert.notNull(task.getStory().getProject());
             TechnicalAssert.notNull(task.getStory().getProject().getId());
 
-            this.taskValidator.assertLoggedUserCanAll(task.getStory().getProject().getId());
+            this.storyValidator.assertLoggedUserCanView(task.getStory().getId());
         }
 
         return new HashSet<>(tasks);
@@ -243,16 +243,16 @@ public class TaskService {
             results.setLoggedTime(entity.getLoggedTime());
 
             if (entity.getStatus() != null) {
-                results.setStatusId(entity.getStatus().getId());
+                results.setStatus(entity.getStatus().getId());
             }
 
             if (entity.getAssignedUser() != null) {
 
-                results.setAssignedUserId(entity.getAssignedUser().getId());
+                results.setAssignedUser(entity.getAssignedUser().getId());
             }
 
             if (entity.getStory() != null) {
-                results.setStoryId(entity.getStory().getId());
+                results.setStory(entity.getStory().getId());
             }
         }
 

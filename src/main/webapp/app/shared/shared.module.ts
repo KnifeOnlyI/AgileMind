@@ -17,6 +17,7 @@ import {ButtonBackComponent} from 'app/shared/components/buttons/button-back.com
 import {TaskStatusSelectComponent} from 'app/shared/components/fields/task-status-select/task-status-select.component';
 import {StoryTypeSelectComponent} from 'app/shared/components/fields/story-type-select/story-type-select.component';
 import {MainLoadingComponent} from 'app/shared/components/loadings/main-loading.component';
+import {ReleaseSelectComponent} from 'app/shared/components/fields/release/release-select.component';
 
 @NgModule({
   imports: [AgileMindSharedLibsModule],
@@ -38,6 +39,7 @@ import {MainLoadingComponent} from 'app/shared/components/loadings/main-loading.
     UserComponent,
     ConfirmDialogComponent,
     MainLoadingComponent,
+    ReleaseSelectComponent,
   ],
   entryComponents: [LoginModalComponent],
   exports: [
@@ -59,6 +61,7 @@ import {MainLoadingComponent} from 'app/shared/components/loadings/main-loading.
     UserComponent,
     ConfirmDialogComponent,
     MainLoadingComponent,
+    ReleaseSelectComponent,
   ],
 })
 export class AgileMindSharedModule {

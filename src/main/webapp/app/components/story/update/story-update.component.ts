@@ -83,7 +83,7 @@ export class StoryUpdateComponent implements OnInit {
     this.storyService.delete(this.form.id).subscribe(() => {
       this.alertService.add(new Alert(AlertLevel.SUCCESS, new AlertContent('story.alert.deleted')));
 
-      this.router.navigate(['/project/', this.form.projectId]).then();
+      this.router.navigate(['/project/', this.form.project]).then();
     });
   }
 

@@ -15,7 +15,7 @@ export class TaskUpdateForm extends TaskCreateForm {
    * @param task The task to update
    */
   public constructor(task: Task) {
-    super(task.storyId!);
+    super(task.story!);
 
     this.form.addControl('id', new FormControl(task.id, Validators.required));
 
@@ -23,9 +23,9 @@ export class TaskUpdateForm extends TaskCreateForm {
     this.form.patchValue({description: task.description});
     this.form.patchValue({estimatedTime: task.estimatedTime});
     this.form.patchValue({loggedTime: task.loggedTime});
-    this.form.patchValue({statusId: task.statusId});
-    this.form.patchValue({assignedUserId: task.assignedUserId});
-    this.form.patchValue({storyId: task.storyId});
+    this.form.patchValue({status: task.status});
+    this.form.patchValue({assignedUser: task.assignedUser});
+    this.form.patchValue({story: task.story});
   }
 
   // region Forms control

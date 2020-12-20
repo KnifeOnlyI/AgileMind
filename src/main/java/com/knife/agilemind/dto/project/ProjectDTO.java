@@ -30,17 +30,22 @@ public class ProjectDTO implements Serializable {
     /**
      * The assigned user id list
      */
-    private Set<Long> assignedUserIdList = new HashSet<>();
+    private Set<Long> assignedUsers = new HashSet<>();
 
     /**
      * The project administrator user id list
      */
-    private Set<Long> adminUserIdList = new HashSet<>();
+    private Set<Long> adminUsers = new HashSet<>();
 
     /**
      * The story id list
      */
-    private Set<Long> storyIdList = new HashSet<>();
+    private Set<Long> stories = new HashSet<>();
+
+    /**
+     * The release id list
+     */
+    private Set<Long> releases = new HashSet<>();
 
     /**
      * Get the value of : serialVersionUID
@@ -115,65 +120,86 @@ public class ProjectDTO implements Serializable {
     }
 
     /**
-     * Get the value of : assignedUserIdList
+     * Get the value of : assignedUsers
      *
-     * @return assignedUserIdList
+     * @return assignedUsers
      */
-    public Set<Long> getAssignedUserIdList() {
-        return assignedUserIdList;
+    public Set<Long> getAssignedUsers() {
+        return assignedUsers;
     }
 
     /**
-     * Set value of : assignedUserIdList
+     * Set value of : assignedUsers
      *
-     * @param assignedUserIdList The new value
+     * @param assignedUsers The new value
      *
      * @return this
      */
-    public ProjectDTO setAssignedUserIdList(Set<Long> assignedUserIdList) {
-        this.assignedUserIdList = assignedUserIdList;
+    public ProjectDTO setAssignedUsers(Set<Long> assignedUsers) {
+        this.assignedUsers = assignedUsers;
         return this;
     }
 
     /**
-     * Get the value of : adminUserIdList
+     * Get the value of : adminUsers
      *
-     * @return adminUserIdList
+     * @return adminUsers
      */
-    public Set<Long> getAdminUserIdList() {
-        return adminUserIdList;
+    public Set<Long> getAdminUsers() {
+        return adminUsers;
     }
 
     /**
-     * Set value of : adminUserIdList
+     * Set value of : adminUsers
      *
-     * @param adminUserIdList The new value
+     * @param adminUsers The new value
      *
      * @return this
      */
-    public ProjectDTO setAdminUserIdList(Set<Long> adminUserIdList) {
-        this.adminUserIdList = adminUserIdList;
+    public ProjectDTO setAdminUsers(Set<Long> adminUsers) {
+        this.adminUsers = adminUsers;
         return this;
     }
 
     /**
-     * Get the value of : storyIdList
+     * Get the value of : stories
      *
-     * @return storyIdList
+     * @return stories
      */
-    public Set<Long> getStoryIdList() {
-        return storyIdList;
+    public Set<Long> getStories() {
+        return stories;
     }
 
     /**
-     * Set value of : storyIdList
+     * Set value of : stories
      *
-     * @param storyIdList The new value
+     * @param stories The new value
      *
      * @return this
      */
-    public ProjectDTO setStoryIdList(Set<Long> storyIdList) {
-        this.storyIdList = storyIdList;
+    public ProjectDTO setStories(Set<Long> stories) {
+        this.stories = stories;
+        return this;
+    }
+
+    /**
+     * Get the value of : releases
+     *
+     * @return releases
+     */
+    public Set<Long> getReleases() {
+        return releases;
+    }
+
+    /**
+     * Set value of : releases
+     *
+     * @param releases The new value
+     *
+     * @return this
+     */
+    public ProjectDTO setReleases(Set<Long> releases) {
+        this.releases = releases;
         return this;
     }
 }

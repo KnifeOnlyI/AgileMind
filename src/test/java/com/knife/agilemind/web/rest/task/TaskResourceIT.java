@@ -46,9 +46,9 @@ class TaskResourceIT {
             .setDescription("Description")
             .setEstimatedTime(1L)
             .setLoggedTime(1L)
-            .setStatusId(TaskStatusConstant.DB.TODO_ID)
-            .setAssignedUserId(3L)
-            .setStoryId(1000L);
+            .setStatus(TaskStatusConstant.DB.TODO_ID)
+            .setAssignedUser(3L)
+            .setStory(1000L);
 
         // Test response
 
@@ -59,9 +59,9 @@ class TaskResourceIT {
         Assertions.assertEquals(newTask.getDescription(), response.getDescription());
         Assertions.assertEquals(newTask.getEstimatedTime(), response.getEstimatedTime());
         Assertions.assertEquals(newTask.getLoggedTime(), response.getLoggedTime());
-        Assertions.assertEquals(newTask.getStatusId(), response.getStatusId());
-        Assertions.assertEquals(newTask.getAssignedUserId(), response.getAssignedUserId());
-        Assertions.assertEquals(newTask.getStoryId(), response.getStoryId());
+        Assertions.assertEquals(newTask.getStatus(), response.getStatus());
+        Assertions.assertEquals(newTask.getAssignedUser(), response.getAssignedUser());
+        Assertions.assertEquals(newTask.getStory(), response.getStory());
 
         // Test database
 
@@ -76,11 +76,11 @@ class TaskResourceIT {
         Assertions.assertEquals(newTask.getEstimatedTime(), taskEntity.getEstimatedTime());
         Assertions.assertEquals(newTask.getLoggedTime(), taskEntity.getLoggedTime());
         Assertions.assertNotNull(taskEntity.getStatus());
-        Assertions.assertEquals(newTask.getStatusId(), taskEntity.getStatus().getId());
+        Assertions.assertEquals(newTask.getStatus(), taskEntity.getStatus().getId());
         Assertions.assertNotNull(taskEntity.getAssignedUser());
-        Assertions.assertEquals(newTask.getAssignedUserId(), taskEntity.getAssignedUser().getId());
+        Assertions.assertEquals(newTask.getAssignedUser(), taskEntity.getAssignedUser().getId());
         Assertions.assertNotNull(taskEntity.getStory());
-        Assertions.assertEquals(newTask.getStoryId(), taskEntity.getStory().getId());
+        Assertions.assertEquals(newTask.getStory(), taskEntity.getStory().getId());
     }
 
     /**
@@ -97,9 +97,9 @@ class TaskResourceIT {
         Assertions.assertEquals("AgileMind - Task description #1", response.getDescription());
         Assertions.assertEquals(60, response.getEstimatedTime());
         Assertions.assertEquals(0, response.getLoggedTime());
-        Assertions.assertEquals(1, response.getStatusId());
-        Assertions.assertEquals(3, response.getAssignedUserId());
-        Assertions.assertEquals(1000L, response.getStoryId());
+        Assertions.assertEquals(1, response.getStatus());
+        Assertions.assertEquals(3, response.getAssignedUser());
+        Assertions.assertEquals(1000L, response.getStory());
 
         TaskEntity taskEntity = this.taskRepository.getOne(1000L);
 
@@ -177,8 +177,8 @@ class TaskResourceIT {
         TaskDTO taskDTO = new TaskDTO()
             .setId(1000L)
             .setName("Updated name")
-            .setStatusId(3L)
-            .setStoryId(1001L);
+            .setStatus(3L)
+            .setStory(1001L);
 
         // Test response
 
@@ -189,9 +189,9 @@ class TaskResourceIT {
         Assertions.assertEquals(taskDTO.getDescription(), response.getDescription());
         Assertions.assertEquals(taskDTO.getEstimatedTime(), response.getEstimatedTime());
         Assertions.assertEquals(taskDTO.getLoggedTime(), response.getLoggedTime());
-        Assertions.assertEquals(taskDTO.getStatusId(), response.getStatusId());
-        Assertions.assertEquals(taskDTO.getAssignedUserId(), response.getAssignedUserId());
-        Assertions.assertEquals(taskDTO.getStoryId(), response.getStoryId());
+        Assertions.assertEquals(taskDTO.getStatus(), response.getStatus());
+        Assertions.assertEquals(taskDTO.getAssignedUser(), response.getAssignedUser());
+        Assertions.assertEquals(taskDTO.getStory(), response.getStory());
 
         // Test database
 
@@ -203,10 +203,10 @@ class TaskResourceIT {
         Assertions.assertEquals(taskDTO.getEstimatedTime(), taskEntity.getEstimatedTime());
         Assertions.assertEquals(taskDTO.getLoggedTime(), taskEntity.getLoggedTime());
         Assertions.assertNotNull(taskEntity.getStatus());
-        Assertions.assertEquals(taskDTO.getStatusId(), taskEntity.getStatus().getId());
+        Assertions.assertEquals(taskDTO.getStatus(), taskEntity.getStatus().getId());
         Assertions.assertNull(taskEntity.getAssignedUser());
         Assertions.assertNotNull(taskEntity.getStory());
-        Assertions.assertEquals(taskDTO.getStoryId(), taskEntity.getStory().getId());
+        Assertions.assertEquals(taskDTO.getStory(), taskEntity.getStory().getId());
     }
 
     /**
@@ -278,7 +278,7 @@ class TaskResourceIT {
         // With invalid status, a TASK_STATUS_NOT_FOUND must be returned
         this.httpTestUtil.assertBusinessException(() -> this.taskResource.create(new CreateTaskDTO()
                 .setName("Name")
-                .setStatusId(Long.MAX_VALUE)
+                .setStatus(Long.MAX_VALUE)
             ),
             TaskStatusConstant.Error.NOT_FOUND,
             Status.NOT_FOUND
@@ -287,7 +287,7 @@ class TaskResourceIT {
         // Without story, a STORY_ID_NULL must be returned
         this.httpTestUtil.assertBusinessException(() -> this.taskResource.create(new CreateTaskDTO()
                 .setName("Name")
-                .setStatusId(1L)
+                .setStatus(1L)
             ),
             TaskConstant.Error.STORY_ID_NULL,
             Status.BAD_REQUEST
@@ -296,8 +296,8 @@ class TaskResourceIT {
         // With invalid story, a STORY_STATUS_NOT_FOUND must be returned
         this.httpTestUtil.assertBusinessException(() -> this.taskResource.create(new CreateTaskDTO()
                 .setName("Name")
-                .setStatusId(1L)
-                .setStoryId(Long.MAX_VALUE)
+                .setStatus(1L)
+                .setStory(Long.MAX_VALUE)
             ),
             StoryConstant.Error.NOT_FOUND,
             Status.NOT_FOUND
@@ -306,9 +306,9 @@ class TaskResourceIT {
         // Error when trying to assign to task a user not assigned to story
         this.httpTestUtil.assertBusinessException(() -> this.taskResource.create(new CreateTaskDTO()
             .setName("Name")
-            .setStatusId(1L)
-            .setStoryId(1000L)
-            .setAssignedUserId(4L)
+            .setStatus(1L)
+            .setStory(1000L)
+            .setAssignedUser(4L)
         ), ProjectConstant.Error.USER_NOT_ASSIGNED, Status.BAD_REQUEST);
     }
 
@@ -321,8 +321,8 @@ class TaskResourceIT {
     void testInvalidCreateBecauseNotAssigned() {
         this.httpTestUtil.assertBusinessException(() -> this.taskResource.create(new CreateTaskDTO()
                 .setName("Name")
-                .setStatusId(1L)
-                .setStoryId(1000L)
+                .setStatus(1L)
+                .setStory(1000L)
             ), StoryConstant.Error.NOT_FOUND, Status.NOT_FOUND
         );
     }
@@ -389,14 +389,14 @@ class TaskResourceIT {
             new TaskDTO()
                 .setId(1000L)
                 .setName("UpdatedName")
-                .setStatusId(Long.MAX_VALUE)
+                .setStatus(Long.MAX_VALUE)
         ), TaskStatusConstant.Error.NOT_FOUND, Status.NOT_FOUND);
 
         this.httpTestUtil.assertBusinessException(() -> this.taskResource.update(
             new TaskDTO()
                 .setId(1000L)
                 .setName("UpdatedName")
-                .setStatusId(3L)
+                .setStatus(3L)
                 .setEstimatedTime(-1L)
         ), TaskConstant.Error.ESTIMATED_TIME_LESS_0, Status.BAD_REQUEST);
 
@@ -404,9 +404,9 @@ class TaskResourceIT {
             new TaskDTO()
                 .setId(1000L)
                 .setName("UpdatedName")
-                .setStatusId(3L)
-                .setStoryId(1000L)
-                .setAssignedUserId(Long.MAX_VALUE)
+                .setStatus(3L)
+                .setStory(1000L)
+                .setAssignedUser(Long.MAX_VALUE)
         ), UserConstant.Error.NOT_FOUND, Status.NOT_FOUND);
 
         // Error when trying to assign to task a user not assigned to story
@@ -414,9 +414,9 @@ class TaskResourceIT {
             new TaskDTO()
                 .setId(1000L)
                 .setName("UpdatedName")
-                .setStatusId(3L)
-                .setAssignedUserId(4L)
-                .setStoryId(1000L)
+                .setStatus(3L)
+                .setAssignedUser(4L)
+                .setStory(1000L)
         ), ProjectConstant.Error.USER_NOT_ASSIGNED, Status.BAD_REQUEST);
     }
 

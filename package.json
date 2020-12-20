@@ -9,6 +9,7 @@
   ],
   "dependencies": {
     "@angular/animations": "^10.2.0",
+    "@angular/cdk": "10.0.0",
     "@angular/common": "10.0.0",
     "@angular/compiler": "10.0.0",
     "@angular/core": "10.0.0",
@@ -17,7 +18,6 @@
     "@angular/platform-browser": "10.0.0",
     "@angular/platform-browser-dynamic": "10.0.0",
     "@angular/router": "10.0.0",
-    "@angular/cdk": "10.0.0",
     "@fortawesome/angular-fontawesome": "0.6.1",
     "@fortawesome/fontawesome-svg-core": "1.2.29",
     "@fortawesome/free-solid-svg-icons": "5.13.1",
@@ -26,6 +26,7 @@
     "@ngx-translate/http-loader": "5.0.0",
     "bootstrap": "4.5.0",
     "moment": "2.27.0",
+    "moment-timezone": "^0.5.32",
     "ng-jhipster": "0.15.0",
     "ngx-cookie-service": "3.0.4",
     "ngx-infinite-scroll": "9.0.0",

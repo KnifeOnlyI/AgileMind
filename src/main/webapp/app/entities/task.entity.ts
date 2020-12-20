@@ -12,9 +12,9 @@ export class Task {
    * @param description The description
    * @param estimatedTime The estimated time (in minutes)
    * @param loggedTime The logged time (in minutes)
-   * @param statusId The status id
-   * @param assignedUserId The assigned user id
-   * @param storyId The story id
+   * @param status The status id
+   * @param assignedUser The assigned user id
+   * @param story The story id
    */
   public constructor(
     public id?: number,
@@ -22,9 +22,9 @@ export class Task {
     public description?: string,
     public estimatedTime?: number,
     public loggedTime?: number,
-    public statusId?: number,
-    public assignedUserId?: number,
-    public storyId?: number,
+    public status?: number,
+    public assignedUser?: number,
+    public story?: number,
   ) {
   }
 }

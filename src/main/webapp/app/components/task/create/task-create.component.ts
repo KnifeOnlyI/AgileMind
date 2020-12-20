@@ -68,7 +68,7 @@ export class TaskCreateComponent implements OnInit {
         new AlertContent('task.alert.created', {taskName: task.name})
       ));
 
-      this.router.navigate(['/story', 'edit', this.form.storyId]).then();
+      this.router.navigate(['/story', 'edit', this.form.story]).then();
     }, (error: HttpErrorResponse) => {
       this.alertService.add(new Alert(AlertLevel.ERROR, new AlertContent(error.error.title)));
     });

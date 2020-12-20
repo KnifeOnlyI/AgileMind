@@ -46,10 +46,10 @@ class StoryResourceIT {
             .setDescription("Description")
             .setPoints(1.5)
             .setBusinessValue(1L)
-            .setStatusId(StoryStatusConstant.DB.TODO_ID)
-            .setTypeId(StoryTypeConstant.DB.TODO_ID)
-            .setAssignedUserId(3L)
-            .setProjectId(1000L);
+            .setStatus(StoryStatusConstant.DB.TODO_ID)
+            .setType(StoryTypeConstant.DB.TODO_ID)
+            .setAssignedUser(3L)
+            .setProject(1000L);
 
         // Test response
 
@@ -59,9 +59,9 @@ class StoryResourceIT {
         Assertions.assertEquals(newStory.getName(), response.getName());
         Assertions.assertEquals(newStory.getDescription(), response.getDescription());
         Assertions.assertEquals(newStory.getPoints(), response.getPoints());
-        Assertions.assertEquals(newStory.getStatusId(), response.getStatusId());
-        Assertions.assertEquals(newStory.getTypeId(), response.getTypeId());
-        Assertions.assertEquals(newStory.getAssignedUserId(), response.getAssignedUserId());
+        Assertions.assertEquals(newStory.getStatus(), response.getStatus());
+        Assertions.assertEquals(newStory.getType(), response.getType());
+        Assertions.assertEquals(newStory.getAssignedUser(), response.getAssignedUser());
 
         // Test database
 
@@ -76,11 +76,11 @@ class StoryResourceIT {
         Assertions.assertEquals(newStory.getPoints(), storyEntity.getPoints());
         Assertions.assertEquals(newStory.getBusinessValue(), storyEntity.getBusinessValue());
         Assertions.assertNotNull(storyEntity.getStatus());
-        Assertions.assertEquals(newStory.getStatusId(), storyEntity.getStatus().getId());
+        Assertions.assertEquals(newStory.getStatus(), storyEntity.getStatus().getId());
         Assertions.assertNotNull(storyEntity.getType());
-        Assertions.assertEquals(newStory.getTypeId(), storyEntity.getType().getId());
+        Assertions.assertEquals(newStory.getType(), storyEntity.getType().getId());
         Assertions.assertNotNull(storyEntity.getAssignedUser());
-        Assertions.assertEquals(newStory.getAssignedUserId(), storyEntity.getAssignedUser().getId());
+        Assertions.assertEquals(newStory.getAssignedUser(), storyEntity.getAssignedUser().getId());
     }
 
     /**
@@ -97,10 +97,10 @@ class StoryResourceIT {
         Assertions.assertEquals("AgileMind - Story description #1", response.getDescription());
         Assertions.assertEquals(1, response.getPoints());
         Assertions.assertEquals(1, response.getBusinessValue());
-        Assertions.assertEquals(1, response.getStatusId());
-        Assertions.assertEquals(1, response.getTypeId());
-        Assertions.assertEquals(3, response.getAssignedUserId());
-        Assertions.assertEquals(1000L, response.getProjectId());
+        Assertions.assertEquals(1, response.getStatus());
+        Assertions.assertEquals(1, response.getType());
+        Assertions.assertEquals(3, response.getAssignedUser());
+        Assertions.assertEquals(1000L, response.getProject());
 
         StoryEntity storyEntity = this.storyRepository.getOne(1000L);
 
@@ -182,9 +182,9 @@ class StoryResourceIT {
         StoryDTO storyDTO = new StoryDTO()
             .setId(1000L)
             .setName("Updated name")
-            .setTypeId(3L)
-            .setStatusId(3L)
-            .setProjectId(1001L);
+            .setType(3L)
+            .setStatus(3L)
+            .setProject(1001L);
 
         // Test response
 
@@ -195,10 +195,10 @@ class StoryResourceIT {
         Assertions.assertEquals(storyDTO.getDescription(), response.getDescription());
         Assertions.assertEquals(storyDTO.getPoints(), response.getPoints());
         Assertions.assertEquals(storyDTO.getBusinessValue(), response.getBusinessValue());
-        Assertions.assertEquals(storyDTO.getStatusId(), response.getStatusId());
-        Assertions.assertEquals(storyDTO.getTypeId(), response.getTypeId());
-        Assertions.assertEquals(storyDTO.getAssignedUserId(), response.getAssignedUserId());
-        Assertions.assertEquals(storyDTO.getProjectId(), response.getProjectId());
+        Assertions.assertEquals(storyDTO.getStatus(), response.getStatus());
+        Assertions.assertEquals(storyDTO.getType(), response.getType());
+        Assertions.assertEquals(storyDTO.getAssignedUser(), response.getAssignedUser());
+        Assertions.assertEquals(storyDTO.getProject(), response.getProject());
 
         // Test database
 
@@ -210,12 +210,12 @@ class StoryResourceIT {
         Assertions.assertEquals(storyDTO.getPoints(), storyEntity.getPoints());
         Assertions.assertEquals(storyDTO.getBusinessValue(), storyEntity.getBusinessValue());
         Assertions.assertNotNull(storyEntity.getStatus());
-        Assertions.assertEquals(storyDTO.getStatusId(), storyEntity.getStatus().getId());
+        Assertions.assertEquals(storyDTO.getStatus(), storyEntity.getStatus().getId());
         Assertions.assertNotNull(storyEntity.getType());
-        Assertions.assertEquals(storyDTO.getTypeId(), storyEntity.getType().getId());
+        Assertions.assertEquals(storyDTO.getType(), storyEntity.getType().getId());
         Assertions.assertNull(storyEntity.getAssignedUser());
         Assertions.assertNotNull(storyEntity.getProject());
-        Assertions.assertEquals(storyDTO.getProjectId(), storyEntity.getProject().getId());
+        Assertions.assertEquals(storyDTO.getProject(), storyEntity.getProject().getId());
     }
 
     /**
@@ -287,7 +287,7 @@ class StoryResourceIT {
         // With invalid status, a STORY_STATUS_NOT_FOUND must be returned
         this.httpTestUtil.assertBusinessException(() -> this.storyResource.create(new CreateStoryDTO()
                 .setName("Name")
-                .setStatusId(Long.MAX_VALUE)
+                .setStatus(Long.MAX_VALUE)
             ),
             StoryStatusConstant.Error.NOT_FOUND,
             Status.NOT_FOUND
@@ -296,7 +296,7 @@ class StoryResourceIT {
         // Without type, a STORY_TYPE_ID_NULL must be returned
         this.httpTestUtil.assertBusinessException(() -> this.storyResource.create(new CreateStoryDTO()
                 .setName("Name")
-                .setStatusId(3L)
+                .setStatus(3L)
             ),
             StoryConstant.Error.TYPE_ID_NULL,
             Status.BAD_REQUEST
@@ -305,8 +305,8 @@ class StoryResourceIT {
         // With invalid type, a STORY_TYPE_NOT_FOUND must be returned
         this.httpTestUtil.assertBusinessException(() -> this.storyResource.create(new CreateStoryDTO()
                 .setName("Name")
-                .setStatusId(3L)
-                .setTypeId(Long.MAX_VALUE)
+                .setStatus(3L)
+                .setType(Long.MAX_VALUE)
             ),
             StoryTypeConstant.Error.NOT_FOUND,
             Status.NOT_FOUND
@@ -315,8 +315,8 @@ class StoryResourceIT {
         // Without project, a PROJECT_ID_NULL must be returned
         this.httpTestUtil.assertBusinessException(() -> this.storyResource.create(new CreateStoryDTO()
                 .setName("Name")
-                .setStatusId(1L)
-                .setTypeId(1L)
+                .setStatus(1L)
+                .setType(1L)
             ),
             StoryConstant.Error.PROJECT_ID_NULL,
             Status.BAD_REQUEST
@@ -325,9 +325,9 @@ class StoryResourceIT {
         // With invalid project, a PROJECT_STATUS_NOT_FOUND must be returned
         this.httpTestUtil.assertBusinessException(() -> this.storyResource.create(new CreateStoryDTO()
                 .setName("Name")
-                .setStatusId(1L)
-                .setTypeId(1L)
-                .setProjectId(Long.MAX_VALUE)
+                .setStatus(1L)
+                .setType(1L)
+                .setProject(Long.MAX_VALUE)
             ),
             ProjectConstant.Error.NOT_FOUND,
             Status.NOT_FOUND
@@ -336,10 +336,10 @@ class StoryResourceIT {
         // Error when trying to assign to story a user not assigned to project
         this.httpTestUtil.assertBusinessException(() -> this.storyResource.create(new CreateStoryDTO()
             .setName("Name")
-            .setStatusId(1L)
-            .setTypeId(1L)
-            .setProjectId(1000L)
-            .setAssignedUserId(4L)
+            .setStatus(1L)
+            .setType(1L)
+            .setProject(1000L)
+            .setAssignedUser(4L)
         ), ProjectConstant.Error.USER_NOT_ASSIGNED, Status.BAD_REQUEST);
     }
 
@@ -352,9 +352,9 @@ class StoryResourceIT {
     void testInvalidCreateBecauseNotAssigned() {
         this.httpTestUtil.assertBusinessException(() -> this.storyResource.create(new CreateStoryDTO()
                 .setName("Name")
-                .setStatusId(1L)
-                .setTypeId(1L)
-                .setProjectId(1000L)
+                .setStatus(1L)
+                .setType(1L)
+                .setProject(1000L)
             ), ProjectConstant.Error.NOT_FOUND, Status.NOT_FOUND
         );
     }
@@ -421,30 +421,30 @@ class StoryResourceIT {
             new StoryDTO()
                 .setId(1000L)
                 .setName("UpdatedName")
-                .setStatusId(Long.MAX_VALUE)
+                .setStatus(Long.MAX_VALUE)
         ), StoryStatusConstant.Error.NOT_FOUND, Status.NOT_FOUND);
 
         this.httpTestUtil.assertBusinessException(() -> this.storyResource.update(
             new StoryDTO()
                 .setId(1000L)
                 .setName("UpdatedName")
-                .setStatusId(3L)
+                .setStatus(3L)
         ), StoryConstant.Error.TYPE_ID_NULL, Status.BAD_REQUEST);
 
         this.httpTestUtil.assertBusinessException(() -> this.storyResource.update(
             new StoryDTO()
                 .setId(1000L)
                 .setName("UpdatedName")
-                .setStatusId(3L)
-                .setTypeId(Long.MAX_VALUE)
+                .setStatus(3L)
+                .setType(Long.MAX_VALUE)
         ), StoryTypeConstant.Error.NOT_FOUND, Status.NOT_FOUND);
 
         this.httpTestUtil.assertBusinessException(() -> this.storyResource.update(
             new StoryDTO()
                 .setId(1000L)
                 .setName("UpdatedName")
-                .setStatusId(3L)
-                .setTypeId(3L)
+                .setStatus(3L)
+                .setType(3L)
                 .setPoints(-1.5)
         ), StoryConstant.Error.POINTS_LESS_0, Status.BAD_REQUEST);
 
@@ -452,10 +452,10 @@ class StoryResourceIT {
             new StoryDTO()
                 .setId(1000L)
                 .setName("UpdatedName")
-                .setStatusId(3L)
-                .setTypeId(3L)
-                .setProjectId(1000L)
-                .setAssignedUserId(Long.MAX_VALUE)
+                .setStatus(3L)
+                .setType(3L)
+                .setProject(1000L)
+                .setAssignedUser(Long.MAX_VALUE)
         ), UserConstant.Error.NOT_FOUND, Status.NOT_FOUND);
 
         // Error when trying to assign to story a user not assigned to project
@@ -463,10 +463,10 @@ class StoryResourceIT {
             new StoryDTO()
                 .setId(1000L)
                 .setName("UpdatedName")
-                .setStatusId(3L)
-                .setTypeId(3L)
-                .setAssignedUserId(4L)
-                .setProjectId(1000L)
+                .setStatus(3L)
+                .setType(3L)
+                .setAssignedUser(4L)
+                .setProject(1000L)
         ), ProjectConstant.Error.USER_NOT_ASSIGNED, Status.BAD_REQUEST);
     }
 

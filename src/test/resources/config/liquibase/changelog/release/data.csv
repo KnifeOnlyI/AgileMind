@@ -1,0 +1,5 @@
+id;name;description;date;project_id
+
+1000;AgileMind - ReleaseEntity v1.0.0;Description v1.0.0;null;1000
+1001;AgileMind - ReleaseEntity v1.1.0;Description v1.1.0;null;1000
+1002;PXEngine - ReleaseEntity v1.0.0;Description v1.0.0;null;1001

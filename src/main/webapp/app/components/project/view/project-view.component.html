@@ -17,13 +17,16 @@
     <hr>
 
     <div class="row">
-        <div class="col-1">
+        <div class="col-8">
             <button [routerLink]="['/project', project.id, 'story', 'new']"
                     class="btn btn-primary" type="button">
                 <fa-icon icon="plus"></fa-icon>
             </button>
         </div>
-        <div class="col-11 text-right">
+        <div class="col-2 text-right">
+            <ag-release-select [control]="selectedRelease" [projectId]="project.id!" [showLabel]="false"></ag-release-select>
+        </div>
+        <div class="col-2 text-right">
             <!-- Filter to show TO DO stories -->
             <button (click)="setCurrentDiplayStatus('todo')"
                     [class]="currentDisplayStatus === 'todo' ? 'btn btn-dark' : 'btn btn-outline-dark'"
@@ -52,27 +55,29 @@
 
     <ng-container *ngIf="totalNbStories > 0; else NoStories">
         <div class="row">
-            <div *ngFor="let story of stories[currentDisplayStatus]" [title]="story.description ? story.description : ''" style="padding: 25px; cursor: pointer;">
-                <div [routerLink]="['/story/edit', story.id]" class="card bg-light mb-3">
-                    <div class="card-body" style="width: 250px;">
-                        <ng-container [ngSwitch]="story.typeId">
-                            <fa-icon *ngSwitchCase="1" [ngStyle]="getStyles(story)" icon="user-circle"></fa-icon>
-                            <fa-icon *ngSwitchCase="2" [ngStyle]="getStyles(story)" icon="bug"></fa-icon>
-                            <fa-icon *ngSwitchCase="3" [ngStyle]="getStyles(story)" icon="wrench"></fa-icon>
-                        </ng-container>&nbsp;
-                        {{story.name}}
-                        <hr>
-                        <div class="row">
-                            <div class="col text-left">
-                                <fa-icon icon="user-circle"></fa-icon>&ngsp; {{story.points}}
-                            </div>
-                            <div class="col text-right">
-                                <fa-icon icon="chart-line"></fa-icon>&ngsp; {{story.businessValue}}
+            <ng-container *ngFor="let story of stories[currentDisplayStatus]">
+                <div *ngIf="showStory(story)" [title]="story.description ? story.description : ''" style="padding: 25px; cursor: pointer;">
+                    <div [routerLink]="['/story/edit', story.id]" class="card bg-light mb-3">
+                        <div class="card-body" style="width: 250px;">
+                            <ng-container [ngSwitch]="story.type">
+                                <fa-icon *ngSwitchCase="1" [ngStyle]="getStyles(story)" icon="user-circle"></fa-icon>
+                                <fa-icon *ngSwitchCase="2" [ngStyle]="getStyles(story)" icon="bug"></fa-icon>
+                                <fa-icon *ngSwitchCase="3" [ngStyle]="getStyles(story)" icon="wrench"></fa-icon>
+                            </ng-container>&nbsp;
+                            {{story.name}}
+                            <hr>
+                            <div class="row">
+                                <div class="col text-left">
+                                    <fa-icon icon="user-circle"></fa-icon>&ngsp; {{story.points}}
+                                </div>
+                                <div class="col text-right">
+                                    <fa-icon icon="chart-line"></fa-icon>&ngsp; {{story.businessValue}}
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </ng-container>
         </div>
     </ng-container>
 </ng-container>

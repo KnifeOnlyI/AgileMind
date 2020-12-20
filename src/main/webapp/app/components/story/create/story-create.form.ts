@@ -20,10 +20,11 @@ export class StoryCreateForm extends BaseForm {
     this.form.addControl('description', new FormControl(null));
     this.form.addControl('points', new FormControl(0, [Validators.min(0)]));
     this.form.addControl('businessValue', new FormControl(0, [Validators.min(0)]));
-    this.form.addControl('statusId', new FormControl(1, Validators.required));
-    this.form.addControl('typeId', new FormControl(1, Validators.required));
-    this.form.addControl('assignedUserId', new FormControl(null));
-    this.form.addControl('projectId', new FormControl(projectId, Validators.required));
+    this.form.addControl('status', new FormControl(1, Validators.required));
+    this.form.addControl('type', new FormControl(1, Validators.required));
+    this.form.addControl('assignedUser', new FormControl(null));
+    this.form.addControl('release', new FormControl(null));
+    this.form.addControl('project', new FormControl(projectId, Validators.required));
   }
 
   // region Forms control
@@ -69,8 +70,8 @@ export class StoryCreateForm extends BaseForm {
    *
    * @return The status form control
    */
-  public get statusIdFormControl(): FormControl {
-    return this.getFormControl('statusId');
+  public get statusFormControl(): FormControl {
+    return this.getFormControl('status');
   }
 
   /**
@@ -78,8 +79,8 @@ export class StoryCreateForm extends BaseForm {
    *
    * @return The status form control
    */
-  public get typeIdFormControl(): FormControl {
-    return this.getFormControl('typeId');
+  public get typeFormControl(): FormControl {
+    return this.getFormControl('type');
   }
 
   /**
@@ -87,8 +88,17 @@ export class StoryCreateForm extends BaseForm {
    *
    * @return The assigned user form control
    */
-  public get assignedUserIdFormControl(): FormControl {
-    return this.getFormControl('assignedUserId');
+  public get assignedUserFormControl(): FormControl {
+    return this.getFormControl('assignedUser');
+  }
+
+  /**
+   * Get the release form control
+   *
+   * @return The release form control
+   */
+  public get releaseFormControl(): FormControl {
+    return this.getFormControl('release');
   }
 
   /**
@@ -96,8 +106,8 @@ export class StoryCreateForm extends BaseForm {
    *
    * @return The project form control
    */
-  public get projectIdFormControl(): FormControl {
-    return this.getFormControl('projectId');
+  public get projectFormControl(): FormControl {
+    return this.getFormControl('project');
   }
 
   // endregion
@@ -141,21 +151,21 @@ export class StoryCreateForm extends BaseForm {
   }
 
   /**
-   * Get the statusId
+   * Get the status
    *
-   * @return The statusId
+   * @return The status
    */
-  public get statusId(): number {
-    return this.statusIdFormControl.value;
+  public get status(): number {
+    return this.statusFormControl.value;
   }
 
   /**
-   * Get the typeId
+   * Get the type
    *
-   * @return The typeId
+   * @return The type
    */
-  public get typeId(): number {
-    return this.typeIdFormControl.value;
+  public get type(): number {
+    return this.typeFormControl.value;
   }
 
   /**
@@ -163,8 +173,8 @@ export class StoryCreateForm extends BaseForm {
    *
    * @return The assigned user id
    */
-  public get assignedUserId(): number {
-    let value = this.assignedUserIdFormControl.value;
+  public get assignedUser(): number {
+    let value = this.assignedUserFormControl.value;
 
     if (value instanceof Array && value.length > 0) {
       value = value[0] as number;
@@ -174,12 +184,21 @@ export class StoryCreateForm extends BaseForm {
   }
 
   /**
-   * Get the projectId
+   * Get the release
    *
-   * @return The projectId
+   * @return The release
    */
-  public get projectId(): number {
-    return this.projectIdFormControl.value;
+  public get release(): number {
+    return this.releaseFormControl.value;
+  }
+
+  /**
+   * Get the project
+   *
+   * @return The project
+   */
+  public get project(): number {
+    return this.projectFormControl.value;
   }
 
   // endregion
@@ -200,10 +219,11 @@ export class StoryCreateForm extends BaseForm {
       this.description,
       this.points,
       this.businessValue,
-      this.statusId,
-      this.typeId,
-      this.assignedUserId,
-      this.projectId
+      this.status,
+      this.type,
+      this.assignedUser,
+      this.release,
+      this.project
     );
   }
 }

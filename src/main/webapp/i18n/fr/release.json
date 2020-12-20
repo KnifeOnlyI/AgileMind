@@ -1,0 +1,21 @@
+{
+  "release": {
+    "title": {
+      "new": "Création d'une release",
+      "edit": "Mise à jour d'une release",
+      "list": "Releases"
+    },
+    "list": {
+      "noResults": "Aucune release créée"
+    },
+    "alert": {
+      "created": "Release créée",
+      "updated": "Release mise à jour",
+      "deleted": "Release supprimée"
+    },
+    "loading": "Chargement de la release"
+  },
+  "releases": {
+    "loading": "Chargement des releases"
+  }
+}

@@ -1,6 +1,7 @@
 package com.knife.agilemind.domain.story;
 
 import com.knife.agilemind.domain.project.ProjectEntity;
+import com.knife.agilemind.domain.release.ReleaseEntity;
 import com.knife.agilemind.domain.task.TaskEntity;
 import com.knife.agilemind.domain.user.UserEntity;
 
@@ -86,6 +87,13 @@ public class StoryEntity implements Serializable {
      */
     @OneToMany(mappedBy = "story", orphanRemoval = true)
     private Set<TaskEntity> tasks = new HashSet<>();
+
+    /**
+     * The release
+     */
+    @ManyToOne
+    @JoinColumn(name = "release_id")
+    private ReleaseEntity release;
 
     /**
      * The project
@@ -289,6 +297,27 @@ public class StoryEntity implements Serializable {
      */
     public StoryEntity setTasks(Set<TaskEntity> tasks) {
         this.tasks = tasks;
+        return this;
+    }
+
+    /**
+     * Get the value of : release
+     *
+     * @return release
+     */
+    public ReleaseEntity getRelease() {
+        return release;
+    }
+
+    /**
+     * Set value of : release
+     *
+     * @param release The new value
+     *
+     * @return this
+     */
+    public StoryEntity setRelease(ReleaseEntity release) {
+        this.release = release;
         return this;
     }
 

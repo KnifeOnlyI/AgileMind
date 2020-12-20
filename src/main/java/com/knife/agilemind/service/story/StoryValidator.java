@@ -60,10 +60,10 @@ public class StoryValidator {
         this.assertValidName(dto.getName());
         this.assertValidPoints(dto.getPoints());
         this.assertValidBusinessValue(dto.getBusinessValue());
-        this.assertValidStatus(dto.getStatusId());
-        this.assertValidType(dto.getTypeId());
-        this.assertValidProject(dto.getProjectId());
-        this.assertValidUser(dto.getProjectId(), dto.getAssignedUserId());
+        this.assertValidStatus(dto.getStatus());
+        this.assertValidType(dto.getType());
+        this.assertValidProject(dto.getProject());
+        this.assertValidUser(dto.getProject(), dto.getAssignedUser());
     }
 
     /**
@@ -78,10 +78,10 @@ public class StoryValidator {
         this.assertValidName(dto.getName());
         this.assertValidPoints(dto.getPoints());
         this.assertValidBusinessValue(dto.getBusinessValue());
-        this.assertValidStatus(dto.getStatusId());
-        this.assertValidType(dto.getTypeId());
-        this.assertValidProject(dto.getProjectId());
-        this.assertValidUser(dto.getProjectId(), dto.getAssignedUserId());
+        this.assertValidStatus(dto.getStatus());
+        this.assertValidType(dto.getType());
+        this.assertValidProject(dto.getProject());
+        this.assertValidUser(dto.getProject(), dto.getAssignedUser());
     }
 
     /**

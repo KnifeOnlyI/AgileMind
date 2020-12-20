@@ -71,7 +71,7 @@ export class StoryCreateComponent implements OnInit {
     this.storyService.save(this.form.story).subscribe(() => {
       this.alertService.add(new Alert(AlertLevel.SUCCESS, new AlertContent('story.alert.created')));
 
-      this.router.navigate(['/project/', this.form.projectId]).then();
+      this.router.navigate(['/project/', this.form.project]).then();
     }, (error: HttpErrorResponse) => {
       this.alertService.add(new Alert(AlertLevel.ERROR, new AlertContent(error.error.title)));
     });

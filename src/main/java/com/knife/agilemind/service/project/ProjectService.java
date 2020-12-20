@@ -1,6 +1,7 @@
 package com.knife.agilemind.service.project;
 
 import com.knife.agilemind.domain.project.ProjectEntity;
+import com.knife.agilemind.domain.release.ReleaseEntity;
 import com.knife.agilemind.domain.story.StoryEntity;
 import com.knife.agilemind.dto.project.CreateProjectDTO;
 import com.knife.agilemind.dto.project.ProjectDTO;
@@ -113,10 +114,10 @@ public class ProjectService {
         projectEntity
             .setName(projectDTO.getName())
             .setDescription(projectDTO.getDescription())
-            .setAssignedUsers(this.userService.findAllById(projectDTO.getAssignedUserIdList()))
-            .setAdminUsers(this.userService.findAllById(projectDTO.getAdminUserIdList()));
+            .setAssignedUsers(this.userService.findAllById(projectDTO.getAssignedUsers()))
+            .setAdminUsers(this.userService.findAllById(projectDTO.getAdminUsers()));
 
-        Set<StoryEntity> stories = this.storyService.findAllById(projectDTO.getStoryIdList());
+        Set<StoryEntity> stories = this.storyService.findAllById(projectDTO.getStories());
 
         for (StoryEntity storyEntity : stories) {
             projectEntity.getStories().add(storyEntity);
@@ -166,12 +167,18 @@ public class ProjectService {
             results.setName(entity.getName());
             results.setDescription(entity.getDescription());
 
-            results.setAssignedUserIdList(this.userService.toIds(entity.getAssignedUsers()));
-            results.setAdminUserIdList(this.userService.toIds(entity.getAdminUsers()));
+            results.setAssignedUsers(this.userService.toIds(entity.getAssignedUsers()));
+            results.setAdminUsers(this.userService.toIds(entity.getAdminUsers()));
 
             if (entity.getStories() != null) {
                 for (StoryEntity story : entity.getStories()) {
-                    results.getStoryIdList().add(story.getId());
+                    results.getStories().add(story.getId());
+                }
+            }
+
+            if (entity.getReleases() != null) {
+                for (ReleaseEntity release : entity.getReleases()) {
+                    results.getReleases().add(release.getId());
                 }
             }
         }

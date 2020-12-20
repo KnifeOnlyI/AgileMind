@@ -1,0 +1,42 @@
+<ng-container *ngIf="initialized; else NotInitialized">
+    <div class="row">
+        <div class="col-11">
+            <h1 jhiTranslate="release.title.edit"></h1>
+        </div>
+        <div class="col-1 text-right">
+            <ag-button-delete (onClick)="confirmDelete()"></ag-button-delete>
+        </div>
+    </div>
+
+    <hr>
+
+    <form (ngSubmit)="onSubmit()" *ngIf="form" [formGroup]="form.form">
+        <div class="row">
+            <div class="col-3">
+                <div class="form-group">
+                    <label for="projectName"><span jhiTranslate="global.form.field.name"></span></label>
+                    <input [formControl]="form.nameFormControl" class="form-control" id="projectName" type="text">
+                </div>
+                <div class="form-group">
+                    <label for="releaseDate"><span jhiTranslate="global.form.field.date"></span></label>
+                    <input [formControl]="form.dateFormControl" class="form-control" id="releaseDate" type="date">
+                </div>
+            </div>
+            <div class="col-9 form-group">
+                <label for="description"><span jhiTranslate="global.form.field.description"></span></label>
+                <textarea [formControl]="form.descriptionFormControl" class="form-control" id="description" rows="5"></textarea>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="text-left">
+            <ag-button-cancel [routerLink]="['project', 'edit', form.project]"></ag-button-cancel>
+            <ag-button-save [disabled]="!form.isValid"></ag-button-save>
+        </div>
+    </form>
+</ng-container>
+
+<ng-template #NotInitialized>
+    <ag-main-loading label="release.loading"></ag-main-loading>
+</ng-template>

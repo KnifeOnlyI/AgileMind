@@ -1,0 +1,32 @@
+<ng-container *ngIf="initialized; else NotInitialized">
+    <table *ngIf="releases.length > 0; else NoReleases" class="table table-borderless table-hover">
+        <caption hidden="hidden"></caption>
+        <thead class="thead-dark">
+        <tr class="text-center">
+            <th class="text-left" jhiTranslate="global.form.field.name" scope="col" style="width: 10%"></th>
+            <th jhiTranslate="global.form.field.date" scope="col" class="text-left" style="width: 10%"></th>
+            <th jhiTranslate="global.form.field.description" scope="col" class="text-left" style="width: 80%" ></th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <!-- Display all stories of the current display status selected -->
+        <tr *ngFor="let release of releases; let i = index" [routerLink]="['/release/edit', release.id]"
+            class="text-center"
+            style="cursor: pointer;"
+            title="{{release.description}}">
+            <td class="text-left">{{release.name}}</td>
+            <td class="text-left">{{release.date | date:'dd / MM / yyyy'}}</td>
+            <td class="text-left">{{release.description}}</td>
+        </tr>
+        </tbody>
+    </table>
+</ng-container>
+
+<ng-template #NotInitialized>
+    <ag-main-loading label="releases.loading"></ag-main-loading>
+</ng-template>
+
+<ng-template #NoReleases>
+    <h1 class="text-center alert alert-secondary" jhiTranslate="release.list.noResults"></h1>
+</ng-template>

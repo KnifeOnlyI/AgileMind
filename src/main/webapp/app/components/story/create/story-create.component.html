@@ -18,9 +18,10 @@
                 <input [formControl]="form.businessValueFormControl" class="form-control" id="businessValue" min="0" type="number"/>
             </div>
 
-            <ag-story-type-select [control]="form.typeIdFormControl"></ag-story-type-select>
-            <ag-story-status-select [control]="form.statusIdFormControl"></ag-story-status-select>
-            <ag-user-select [control]="form.assignedUserIdFormControl"></ag-user-select>
+            <ag-story-type-select [control]="form.typeFormControl"></ag-story-type-select>
+            <ag-story-status-select [control]="form.statusFormControl"></ag-story-status-select>
+            <ag-user-select [control]="form.assignedUserFormControl"></ag-user-select>
+            <ag-release-select [control]="form.releaseFormControl" [projectId]="form.project"></ag-release-select>
         </div>
         <div class="col-9 form-group">
             <label for="description"><span jhiTranslate="global.form.field.description"></span></label>
@@ -31,7 +32,7 @@
     <hr>
 
     <div class="text-left">
-        <ag-button-cancel [routerLink]="['/project/', form.projectId]"></ag-button-cancel>
+        <ag-button-cancel [routerLink]="['/project/', form.project]"></ag-button-cancel>
         <ag-button-save [disabled]="!form.isValid"></ag-button-save>
     </div>
 </form>

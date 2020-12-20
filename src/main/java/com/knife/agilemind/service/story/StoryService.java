@@ -8,6 +8,7 @@ import com.knife.agilemind.exception.TechnicalAssert;
 import com.knife.agilemind.repository.story.StoryRepository;
 import com.knife.agilemind.service.project.ProjectService;
 import com.knife.agilemind.service.project.ProjectValidator;
+import com.knife.agilemind.service.release.ReleaseService;
 import com.knife.agilemind.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,6 +46,9 @@ public class StoryService {
     @Autowired
     private ProjectValidator projectValidator;
 
+    @Autowired
+    private ReleaseService releaseService;
+
     /**
      * Create the specified story in database
      *
@@ -56,22 +60,26 @@ public class StoryService {
         this.userService.assertLogged();
 
         this.storyValidator.assertValid(storyDTO);
-        this.storyValidator.assertLoggedUserCanCreateOrUpdateOrDelete(storyDTO.getProjectId());
+        this.storyValidator.assertLoggedUserCanCreateOrUpdateOrDelete(storyDTO.getProject());
 
         StoryEntity story = new StoryEntity()
             .setName(storyDTO.getName())
             .setDescription(storyDTO.getDescription())
             .setPoints(storyDTO.getPoints())
             .setBusinessValue(storyDTO.getBusinessValue())
-            .setType(this.storyTypeService.findById(storyDTO.getTypeId()))
-            .setProject(this.projectService.findById(storyDTO.getProjectId()));
+            .setType(this.storyTypeService.findById(storyDTO.getType()))
+            .setProject(this.projectService.findById(storyDTO.getProject()));
 
-        if (storyDTO.getStatusId() != null) {
-            story.setStatus(this.storyStatusService.findById(storyDTO.getStatusId()));
+        if (storyDTO.getStatus() != null) {
+            story.setStatus(this.storyStatusService.findById(storyDTO.getStatus()));
         }
 
-        if (storyDTO.getAssignedUserId() != null) {
-            story.setAssignedUser(this.userService.findById(storyDTO.getAssignedUserId()));
+        if (storyDTO.getAssignedUser() != null) {
+            story.setAssignedUser(this.userService.findById(storyDTO.getAssignedUser()));
+        }
+
+        if (storyDTO.getRelease() != null) {
+            story.setRelease(this.releaseService.findById(storyDTO.getRelease()));
         }
 
         return this.toDTO(this.storyRepository.save(story));
@@ -132,19 +140,25 @@ public class StoryService {
             .setDescription(storyDTO.getDescription())
             .setPoints(storyDTO.getPoints())
             .setBusinessValue(storyDTO.getBusinessValue())
-            .setType(this.storyTypeService.findById(storyDTO.getTypeId()))
-            .setProject(this.projectService.findById(storyDTO.getProjectId()));
+            .setType(this.storyTypeService.findById(storyDTO.getType()))
+            .setProject(this.projectService.findById(storyDTO.getProject()));
 
-        if (storyDTO.getStatusId() != null) {
-            story.setStatus(this.storyStatusService.findById(storyDTO.getStatusId()));
+        if (storyDTO.getStatus() != null) {
+            story.setStatus(this.storyStatusService.findById(storyDTO.getStatus()));
         } else {
             story.setStatus(null);
         }
 
-        if (storyDTO.getAssignedUserId() != null) {
-            story.setAssignedUser(this.userService.findById(storyDTO.getAssignedUserId()));
+        if (storyDTO.getAssignedUser() != null) {
+            story.setAssignedUser(this.userService.findById(storyDTO.getAssignedUser()));
         } else {
             story.setAssignedUser(null);
+        }
+
+        if (storyDTO.getRelease() != null) {
+            story.setRelease(this.releaseService.findById(storyDTO.getRelease()));
+        } else {
+            story.setRelease(null);
         }
 
         return this.toDTO(story);
@@ -216,23 +230,11 @@ public class StoryService {
             results.setDescription(entity.getDescription());
             results.setPoints(entity.getPoints());
             results.setBusinessValue(entity.getBusinessValue());
-
-            if (entity.getStatus() != null) {
-                results.setStatusId(entity.getStatus().getId());
-            }
-
-            if (entity.getType() != null) {
-                results.setTypeId(entity.getType().getId());
-            }
-
-            if (entity.getAssignedUser() != null) {
-
-                results.setAssignedUserId(entity.getAssignedUser().getId());
-            }
-
-            if (entity.getProject() != null) {
-                results.setProjectId(entity.getProject().getId());
-            }
+            results.setStatus(entity.getStatus() != null ? entity.getStatus().getId() : null);
+            results.setType(entity.getType() != null ? entity.getType().getId() : null);
+            results.setAssignedUser(entity.getAssignedUser() != null ? entity.getAssignedUser().getId() : null);
+            results.setRelease(entity.getRelease() != null ? entity.getRelease().getId() : null);
+            results.setProject(entity.getProject() != null ? entity.getProject().getId() : null);
         }
 
         return results;

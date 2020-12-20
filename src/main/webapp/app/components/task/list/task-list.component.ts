@@ -86,14 +86,14 @@ export class TaskListComponent implements OnInit {
       tasks.sort((a, b) => a.id! - b.id!);
 
       tasks.forEach(task => {
-        if (task.statusId === TaskStatusConstants.ID.TODO) {
+        if (task.status === TaskStatusConstants.ID.TODO) {
           this.todo.push(task);
-        } else if (task.statusId === TaskStatusConstants.ID.IN_PROGRESS) {
+        } else if (task.status === TaskStatusConstants.ID.IN_PROGRESS) {
           this.inProgress.push(task);
-        } else if (task.statusId === TaskStatusConstants.ID.DONE) {
+        } else if (task.status === TaskStatusConstants.ID.DONE) {
           this.done.push(task);
         } else {
-          throw new Error(`Not managed task status : ${task.statusId}`);
+          throw new Error(`Not managed task status : ${task.status}`);
         }
       });
 
@@ -110,18 +110,18 @@ export class TaskListComponent implements OnInit {
   public moveTask(event: CdkDragDrop<Array<Task>>, newStatusId: number): void {
     const task = event.previousContainer.data[event.previousIndex];
 
-    const oldStatusId = task.statusId;
+    const oldStatusId = task.status;
 
-    if (task.statusId === newStatusId) {
+    if (task.status === newStatusId) {
       TaskListComponent.moveItem(event);
     } else {
-      task.statusId = newStatusId;
+      task.status = newStatusId;
 
       this.taskService.save(task).subscribe(
         () => TaskListComponent.moveItem(event),
         (error: HttpErrorResponse) => {
           // If error, cancel status change
-          task.statusId = oldStatusId;
+          task.status = oldStatusId;
 
           this.onError(error);
         }

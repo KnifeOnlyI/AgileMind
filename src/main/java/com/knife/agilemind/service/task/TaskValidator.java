@@ -3,7 +3,7 @@ package com.knife.agilemind.service.task;
 import com.knife.agilemind.constant.project.ProjectConstant;
 import com.knife.agilemind.constant.story.StoryConstant;
 import com.knife.agilemind.constant.task.TaskConstant;
-import com.knife.agilemind.domain.story.StoryEntity;
+import com.knife.agilemind.domain.project.ProjectEntity;
 import com.knife.agilemind.dto.task.CreateTaskDTO;
 import com.knife.agilemind.dto.task.TaskDTO;
 import com.knife.agilemind.exception.BusinessAssert;
@@ -63,9 +63,9 @@ public class TaskValidator {
         this.assertValidName(dto.getName());
         this.assertValidEstimatedTime(dto.getEstimatedTime());
         this.assertValidLoggedTime(dto.getLoggedTime());
-        this.assertValidStatus(dto.getStatusId());
-        this.assertValidStory(dto.getStoryId());
-        this.assertValidUser(dto.getStoryId(), dto.getAssignedUserId());
+        this.assertValidStatus(dto.getStatus());
+        this.assertValidStory(dto.getStory());
+        this.assertValidUser(dto.getStory(), dto.getAssignedUser());
     }
 
     /**
@@ -80,30 +80,30 @@ public class TaskValidator {
         this.assertValidName(dto.getName());
         this.assertValidEstimatedTime(dto.getEstimatedTime());
         this.assertValidLoggedTime(dto.getLoggedTime());
-        this.assertValidStatus(dto.getStatusId());
-        this.assertValidStory(dto.getStoryId());
-        this.assertValidUser(dto.getStoryId(), dto.getAssignedUserId());
+        this.assertValidStatus(dto.getStatus());
+        this.assertValidStory(dto.getStory());
+        this.assertValidUser(dto.getStory(), dto.getAssignedUser());
     }
 
     /**
      * Assert the logged user can perform all actions on tasks
      *
-     * @param storyId  The story id
-     * @param errorKey The error key if error (Null for default value : PROJECT_NOT_FOUND)
-     * @param status   The status if error (NULL for default value : NOT_FOUND)
+     * @param projectId The project id
+     * @param errorKey  The error key if error (Null for default value : PROJECT_NOT_FOUND)
+     * @param status    The status if error (NULL for default value : NOT_FOUND)
      */
-    public void assertLoggedUserCanAll(Long storyId, String errorKey, Status status) {
+    public void assertLoggedUserCanAll(Long projectId, String errorKey, Status status) {
         this.userService.assertLogged();
 
-        TechnicalAssert.notNull(storyId);
+        TechnicalAssert.notNull(projectId);
 
-        StoryEntity story = this.storyValidator.assertLoggedUserCanView(storyId, errorKey, status);
+        ProjectEntity project = this.projectValidator.assertLoggedUserCanView(projectId, errorKey, status);
 
-        TechnicalAssert.notNull(story.getProject());
-        TechnicalAssert.notNull(story.getProject().getId());
+        TechnicalAssert.notNull(project);
+        TechnicalAssert.notNull(project.getId());
 
         this.projectValidator.assertLoggedUserCanView(
-            story.getProject().getId(),
+            project.getId(),
             (errorKey == null ? StoryConstant.Error.NOT_FOUND : errorKey),
             (status == null ? Status.NOT_FOUND : status)
         );
@@ -112,10 +112,10 @@ public class TaskValidator {
     /**
      * Assert the logged user can perform all actions on tasks
      *
-     * @param storyId The story id
+     * @param projectId The story id
      */
-    public void assertLoggedUserCanAll(Long storyId) {
-        this.assertLoggedUserCanAll(storyId, null, null);
+    public void assertLoggedUserCanAll(Long projectId) {
+        this.assertLoggedUserCanAll(projectId, null, null);
     }
 
     /**

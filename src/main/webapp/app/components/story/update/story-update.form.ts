@@ -14,7 +14,7 @@ export class StoryUpdateForm extends StoryCreateForm {
    * @param story The story to update
    */
   public constructor(story: Story) {
-    super(story.projectId!);
+    super(story.project!);
 
     this.form.addControl('id', new FormControl(story.id, Validators.required));
 
@@ -22,9 +22,10 @@ export class StoryUpdateForm extends StoryCreateForm {
     this.form.patchValue({description: story.description});
     this.form.patchValue({points: story.points});
     this.form.patchValue({businessValue: story.businessValue});
-    this.form.patchValue({statusId: story.statusId});
-    this.form.patchValue({typeId: story.typeId});
-    this.form.patchValue({assignedUserId: story.assignedUserId});
+    this.form.patchValue({status: story.status});
+    this.form.patchValue({type: story.type});
+    this.form.patchValue({assignedUser: story.assignedUser});
+    this.form.patchValue({release: story.release});
   }
 
   // region Forms control

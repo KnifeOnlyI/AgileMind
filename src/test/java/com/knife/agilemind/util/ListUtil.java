@@ -1,5 +1,6 @@
 package com.knife.agilemind.util;
 
+import com.knife.agilemind.domain.release.ReleaseEntity;
 import com.knife.agilemind.domain.story.StoryEntity;
 import com.knife.agilemind.domain.user.UserEntity;
 import org.junit.jupiter.api.Assertions;
@@ -54,6 +55,31 @@ public class ListUtil {
             }
         }
     }
+
+    /**
+     * Assert the actual releases contains the expected ids
+     *
+     * @param actual   The release entity list to test
+     * @param expected The ID list to find
+     */
+    public void assertContainsReleases(Set<ReleaseEntity> actual, Long... expected) {
+        int expectedSize = expected != null ? expected.length : 0;
+        int actualSize = actual != null ? actual.size() : 0;
+
+        Assertions.assertEquals(expectedSize, actualSize, "The lists doesn't have same size");
+
+        if (actual != null && expected != null) {
+            for (Long id : expected) {
+                Assertions.assertNotNull(id, "The expected ID CANNOT be null");
+
+                Assertions.assertTrue(
+                    actual.stream().anyMatch(story -> story.getId().equals(id)),
+                    String.format("Cannot find '%s' in actual", id)
+                );
+            }
+        }
+    }
+
 
     /**
      * Assert actual list contains the expected list

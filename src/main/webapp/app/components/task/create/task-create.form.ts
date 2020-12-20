@@ -20,9 +20,9 @@ export class TaskCreateForm extends BaseForm {
     this.form.addControl('description', new FormControl(null));
     this.form.addControl('estimatedTime', new FormControl(0, [Validators.min(0)]));
     this.form.addControl('loggedTime', new FormControl(0, [Validators.min(0)]));
-    this.form.addControl('statusId', new FormControl(1, Validators.required));
-    this.form.addControl('assignedUserId', new FormControl(null));
-    this.form.addControl('storyId', new FormControl(storyId, Validators.required));
+    this.form.addControl('status', new FormControl(1, Validators.required));
+    this.form.addControl('assignedUser', new FormControl(null));
+    this.form.addControl('story', new FormControl(storyId, Validators.required));
   }
 
   // region Forms control
@@ -68,8 +68,8 @@ export class TaskCreateForm extends BaseForm {
    *
    * @return The status form control
    */
-  public get statusIdFormControl(): FormControl {
-    return this.getFormControl('statusId');
+  public get statusFormControl(): FormControl {
+    return this.getFormControl('status');
   }
 
   /**
@@ -77,8 +77,8 @@ export class TaskCreateForm extends BaseForm {
    *
    * @return The assigned user form control
    */
-  public get assignedUserIdFormControl(): FormControl {
-    return this.getFormControl('assignedUserId');
+  public get assignedUserFormControl(): FormControl {
+    return this.getFormControl('assignedUser');
   }
 
   /**
@@ -86,8 +86,8 @@ export class TaskCreateForm extends BaseForm {
    *
    * @return The storyId form control
    */
-  public get storyIdFormControl(): FormControl {
-    return this.getFormControl('storyId');
+  public get storyFormControl(): FormControl {
+    return this.getFormControl('story');
   }
 
   // endregion
@@ -131,12 +131,12 @@ export class TaskCreateForm extends BaseForm {
   }
 
   /**
-   * Get the statusId
+   * Get the status
    *
-   * @return The statusId
+   * @return The status
    */
-  public get statusId(): number {
-    return this.statusIdFormControl.value;
+  public get status(): number {
+    return this.statusFormControl.value;
   }
 
   /**
@@ -144,8 +144,8 @@ export class TaskCreateForm extends BaseForm {
    *
    * @return The assigned user id
    */
-  public get assignedUserId(): number {
-    let value = this.assignedUserIdFormControl.value;
+  public get assignedUser(): number {
+    let value = this.assignedUserFormControl.value;
 
     if (value instanceof Array && value.length > 0) {
       value = value[0] as number;
@@ -155,12 +155,12 @@ export class TaskCreateForm extends BaseForm {
   }
 
   /**
-   * Get the storyId
+   * Get the story
    *
-   * @return The storyId
+   * @return The story
    */
-  public get storyId(): number {
-    return this.storyIdFormControl.value;
+  public get story(): number {
+    return this.storyFormControl.value;
   }
 
   // endregion
@@ -181,9 +181,9 @@ export class TaskCreateForm extends BaseForm {
       this.description,
       this.estimatedTime,
       this.loggedTime,
-      this.statusId,
-      this.assignedUserId,
-      this.storyId
+      this.status,
+      this.assignedUser,
+      this.story
     );
   }
 }

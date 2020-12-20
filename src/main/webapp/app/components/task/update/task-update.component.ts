@@ -78,7 +78,7 @@ export class TaskUpdateComponent implements OnInit {
     this.taskService.delete(this.form.id).subscribe(() => {
       this.alertService.add(new Alert(AlertLevel.SUCCESS, new AlertContent('task.alert.deleted')));
 
-      this.router.navigate(['/story', 'edit', this.form.storyId]).then();
+      this.router.navigate(['/story', 'edit', this.form.story]).then();
     });
   }
 
@@ -104,7 +104,7 @@ export class TaskUpdateComponent implements OnInit {
     this.taskService.save(this.form.task).subscribe((task) => {
       this.alertService.add(new Alert(AlertLevel.SUCCESS, new AlertContent('task.alert.updated')));
 
-      this.router.navigate(['/story', 'edit', task.storyId]).then();
+      this.router.navigate(['/story', 'edit', task.story]).then();
     }, (error: HttpErrorResponse) => {
       this.alertService.add(new Alert(AlertLevel.ERROR, new AlertContent(error.error.title)));
     });

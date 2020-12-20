@@ -1,5 +1,6 @@
 package com.knife.agilemind.domain.project;
 
+import com.knife.agilemind.domain.release.ReleaseEntity;
 import com.knife.agilemind.domain.story.StoryEntity;
 import com.knife.agilemind.domain.user.UserEntity;
 
@@ -75,6 +76,12 @@ public class ProjectEntity implements Serializable {
      */
     @OneToMany(mappedBy = "project", orphanRemoval = true)
     private Set<StoryEntity> stories = new HashSet<>();
+
+    /**
+     * The stories
+     */
+    @OneToMany(mappedBy = "project", orphanRemoval = true)
+    private Set<ReleaseEntity> releases = new HashSet<>();
 
     /**
      * Get the value of : serialVersionUID
@@ -208,6 +215,27 @@ public class ProjectEntity implements Serializable {
      */
     public ProjectEntity setStories(Set<StoryEntity> stories) {
         this.stories = stories;
+        return this;
+    }
+
+    /**
+     * Get the value of : releases
+     *
+     * @return releases
+     */
+    public Set<ReleaseEntity> getReleases() {
+        return releases;
+    }
+
+    /**
+     * Set value of : releases
+     *
+     * @param releases The new value
+     *
+     * @return this
+     */
+    public ProjectEntity setReleases(Set<ReleaseEntity> releases) {
+        this.releases = releases;
         return this;
     }
 }

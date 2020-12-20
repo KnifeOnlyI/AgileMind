@@ -19,7 +19,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.transaction.annotation.Transactional;
 import org.zalando.problem.Status;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
@@ -58,8 +57,8 @@ class ProjectResourceIT {
         Assertions.assertNotNull(response.getId());
         Assertions.assertEquals(newProject.getName(), response.getName());
         Assertions.assertEquals(newProject.getDescription(), response.getDescription());
-        this.listUtil.assertContainsID(response.getAssignedUserIdList());
-        this.listUtil.assertContainsID(response.getStoryIdList());
+        this.listUtil.assertContainsID(response.getAssignedUsers());
+        this.listUtil.assertContainsID(response.getStories());
 
         // Test database
 
@@ -91,9 +90,10 @@ class ProjectResourceIT {
         Assertions.assertEquals(savedProject.getId(), response.getId());
         Assertions.assertEquals(savedProject.getName(), response.getName());
         Assertions.assertEquals(savedProject.getDescription(), response.getDescription());
-        this.listUtil.assertContainsID(response.getAssignedUserIdList(), 3L);
-        this.listUtil.assertContainsID(response.getAdminUserIdList(), 3L);
-        this.listUtil.assertContainsID(response.getStoryIdList(), 1000L, 1001L, 1002L, 1003L, 1004L);
+        this.listUtil.assertContainsID(response.getAssignedUsers(), 3L);
+        this.listUtil.assertContainsID(response.getAdminUsers(), 3L);
+        this.listUtil.assertContainsID(response.getStories(), 1000L, 1001L, 1002L, 1003L, 1004L);
+        this.listUtil.assertContainsID(response.getReleases(), 1000L, 1001L);
 
         // Test database
 
@@ -109,6 +109,7 @@ class ProjectResourceIT {
         this.listUtil.assertContainsUsers(savedProject.getAssignedUsers(), "admin");
         this.listUtil.assertContainsUsers(savedProject.getAdminUsers(), "admin");
         this.listUtil.assertContainsStories(savedProject.getStories(), 1000L, 1001L, 1002L, 1003L, 1004L);
+        this.listUtil.assertContainsReleases(savedProject.getReleases(), 1000L, 1001L);
     }
 
     /**
@@ -127,9 +128,9 @@ class ProjectResourceIT {
         Assertions.assertEquals(savedProject.getId(), response.getId());
         Assertions.assertEquals(savedProject.getName(), response.getName());
         Assertions.assertEquals(savedProject.getDescription(), response.getDescription());
-        this.listUtil.assertContainsID(response.getAssignedUserIdList());
-        this.listUtil.assertContainsID(response.getAdminUserIdList(), 4L);
-        this.listUtil.assertContainsID(response.getStoryIdList());
+        this.listUtil.assertContainsID(response.getAssignedUsers());
+        this.listUtil.assertContainsID(response.getAdminUsers(), 4L);
+        this.listUtil.assertContainsID(response.getStories());
 
         // Test database
 
@@ -158,36 +159,39 @@ class ProjectResourceIT {
         ProjectEntity project2 = this.projectRepository.getOne(1001L);
         ProjectEntity project3 = this.projectRepository.getOne(1002L);
 
-        List<ProjectEntity> list = Arrays.asList(project1, project2);
-
         List<ProjectDTO> response = this.httpTestUtil.assertNotNullBody(this.projectResource.getAll(), HttpStatus.OK);
 
         // Sort the lists with the same order
-        list.sort((o1, o2) -> (int) (o1.getId() - o2.getId()));
         response.sort((o1, o2) -> (int) (o1.getId() - o2.getId()));
 
         Assertions.assertEquals(3, response.size(), "2 projects MUST be founded (all)");
 
-        // Compare initial list and response list
-        for (int i = 0; i < list.size(); i++) {
-            Assertions.assertEquals(list.get(i).getId(), response.get(i).getId());
-            Assertions.assertEquals(list.get(i).getName(), response.get(i).getName());
-            Assertions.assertEquals(list.get(i).getDescription(), response.get(i).getDescription());
+        // Check project 1
+        Assertions.assertEquals(project1.getId(), response.get(0).getId());
+        Assertions.assertEquals(project1.getName(), response.get(0).getName());
+        Assertions.assertEquals(project1.getDescription(), response.get(0).getDescription());
+        this.listUtil.assertContainsID(response.get(0).getAssignedUsers(), 3L);
+        this.listUtil.assertContainsID(response.get(0).getAdminUsers(), 3L);
+        this.listUtil.assertContainsID(response.get(0).getStories(), 1000L, 1001L, 1002L, 1003L, 1004L);
+        this.listUtil.assertContainsID(response.get(0).getReleases(), 1000L, 1001L);
 
-            // If the current project is "project1"
-            // Else if, the project is "project2"
-            // Else if, the project is "project3"
-            if (list.get(i).getId().equals(project1.getId())) {
-                this.listUtil.assertContainsID(response.get(i).getAssignedUserIdList(), 3L);
-                this.listUtil.assertContainsID(response.get(i).getAdminUserIdList(), 3L);
-            } else if (list.get(i).getId().equals(project2.getId())) {
-                this.listUtil.assertContainsID(response.get(i).getAssignedUserIdList(), 3L, 4L);
-                this.listUtil.assertContainsID(response.get(i).getAdminUserIdList(), 3L, 4L);
-            } else if (list.get(i).getId().equals(project3.getId())) {
-                this.listUtil.assertContainsID(response.get(i).getAssignedUserIdList());
-                this.listUtil.assertContainsID(response.get(i).getAdminUserIdList(), 4L);
-            }
-        }
+        // Check project 2
+        Assertions.assertEquals(project2.getId(), response.get(1).getId());
+        Assertions.assertEquals(project2.getName(), response.get(1).getName());
+        Assertions.assertEquals(project2.getDescription(), response.get(1).getDescription());
+        this.listUtil.assertContainsID(response.get(1).getAssignedUsers(), 3L, 4L);
+        this.listUtil.assertContainsID(response.get(1).getAdminUsers(), 3L, 4L);
+        this.listUtil.assertContainsID(response.get(1).getStories(), 1005L, 1006L, 1007L, 1008L, 1009L);
+        this.listUtil.assertContainsID(response.get(1).getReleases(), 1002L);
+
+        // Check project 3
+        Assertions.assertEquals(project3.getId(), response.get(2).getId());
+        Assertions.assertEquals(project3.getName(), response.get(2).getName());
+        Assertions.assertEquals(project3.getDescription(), response.get(2).getDescription());
+        this.listUtil.assertContainsID(response.get(2).getAssignedUsers());
+        this.listUtil.assertContainsID(response.get(2).getAdminUsers(), 4L);
+        this.listUtil.assertContainsID(response.get(2).getStories());
+        this.listUtil.assertContainsID(response.get(2).getReleases());
     }
 
     /**
@@ -202,23 +206,25 @@ class ProjectResourceIT {
 
         List<ProjectDTO> response = this.httpTestUtil.assertNotNullBody(this.projectResource.getAll(), HttpStatus.OK);
 
-        Assertions.assertEquals(
-            2,
-            response.size(),
+        Assertions.assertEquals(2, response.size(),
             "2 project MUST be founded (all where 'user' is assigned or project's admin)"
         );
 
         Assertions.assertEquals(project.getId(), response.get(0).getId());
         Assertions.assertEquals(project.getName(), response.get(0).getName());
         Assertions.assertEquals(project.getName(), response.get(0).getName());
-        this.listUtil.assertContainsID(response.get(0).getAssignedUserIdList(), 3L, 4L);
-        this.listUtil.assertContainsID(response.get(0).getAdminUserIdList(), 3L, 4L);
+        this.listUtil.assertContainsID(response.get(0).getAssignedUsers(), 3L, 4L);
+        this.listUtil.assertContainsID(response.get(0).getAdminUsers(), 3L, 4L);
+        this.listUtil.assertContainsID(response.get(0).getStories(), 1005L, 1006L, 1007L, 1008L, 1009L);
+        this.listUtil.assertContainsID(response.get(0).getReleases(), 1002L);
 
         Assertions.assertEquals(project2.getId(), response.get(1).getId());
         Assertions.assertEquals(project2.getName(), response.get(1).getName());
         Assertions.assertEquals(project2.getName(), response.get(1).getName());
-        this.listUtil.assertContainsID(response.get(1).getAssignedUserIdList());
-        this.listUtil.assertContainsID(response.get(1).getAdminUserIdList(), 4L);
+        this.listUtil.assertContainsID(response.get(1).getAssignedUsers());
+        this.listUtil.assertContainsID(response.get(1).getAdminUsers(), 4L);
+        this.listUtil.assertContainsID(response.get(1).getStories());
+        this.listUtil.assertContainsID(response.get(1).getReleases());
     }
 
     /**
@@ -250,10 +256,10 @@ class ProjectResourceIT {
             .setDescription("UpdatedDescription");
 
         // Assign "user" to project and remove "admin"
-        updatedProjectDTO.setAssignedUserIdList(new HashSet<>()).getAssignedUserIdList().add(4L);
+        updatedProjectDTO.setAssignedUsers(new HashSet<>()).getAssignedUsers().add(4L);
 
         // Assign "user" to project admin and remove "admin"
-        updatedProjectDTO.setAdminUserIdList(new HashSet<>()).getAdminUserIdList().add(4L);
+        updatedProjectDTO.setAdminUsers(new HashSet<>()).getAdminUsers().add(4L);
 
         // Test response
 
@@ -264,8 +270,8 @@ class ProjectResourceIT {
         Assertions.assertEquals(updatedProjectDTO.getId(), response.getId());
         Assertions.assertEquals(updatedProjectDTO.getName(), response.getName());
         Assertions.assertEquals(updatedProjectDTO.getDescription(), response.getDescription());
-        this.listUtil.assertContainsID(response.getAssignedUserIdList(), 4L);
-        this.listUtil.assertContainsID(response.getAdminUserIdList(), 4L);
+        this.listUtil.assertContainsID(response.getAssignedUsers(), 4L);
+        this.listUtil.assertContainsID(response.getAdminUsers(), 4L);
 
         // Test database
 

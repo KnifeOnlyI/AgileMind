@@ -6,6 +6,7 @@
         "name": "Nom",
         "description": "Description",
         "status": "Statut",
+        "date": "Date",
         "assignedUser": "Utilisateur assigné",
         "assignedUsers": "Utilisateurs assignés",
         "adminUsers": "Administrateurs"

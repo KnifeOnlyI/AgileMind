@@ -9,6 +9,7 @@ import {AlertService} from 'app/service/alert.service';
 import {StoryStatusConstants} from 'app/constants/story-status.constants';
 import {AccountService} from 'app/core/auth/account.service';
 import {UserService} from 'app/core/user/user.service';
+import {FormControl} from '@angular/forms';
 
 /**
  * Component to manage project view
@@ -48,6 +49,11 @@ export class ProjectViewComponent implements OnInit {
    * The possible display status to display
    */
   public currentDisplayStatus: 'todo' | 'inProgress' | 'done' = 'todo';
+
+  /**
+   * The selected release criteria
+   */
+  public selectedRelease = new FormControl();
 
   /**
    * Determine if the logged user can view project settings button
@@ -129,7 +135,7 @@ export class ProjectViewComponent implements OnInit {
   public getStyles(story: Story): { [klass: string]: any; } {
     const style = {'cursor': 'pointer'};
 
-    switch (story.typeId) {
+    switch (story.type) {
       case 1:
         style['color'] = '#28a745';
         break;
@@ -140,10 +146,25 @@ export class ProjectViewComponent implements OnInit {
         style['color'] = '#a6a6a6';
         break;
       default:
-        throw Error(`Not managed story type : ${story.typeId}`);
+        throw Error(`Not managed story type : ${story.type}`);
     }
 
     return style;
+  }
+
+  /**
+   * Determine if the story must be displayed
+   *
+   * @param story the story to check
+   *
+   * @return TRUE if the story must be displayed, FALSE otherwise
+   */
+  public showStory(story: Story): boolean {
+    const releaseId: number | null = this.selectedRelease.value === 'null' ? null : parseInt(this.selectedRelease.value, 10);
+
+    return (!releaseId ||
+      !!releaseId && !!story.release && (story.release === releaseId)
+    );
   }
 
   /**
@@ -157,14 +178,14 @@ export class ProjectViewComponent implements OnInit {
 
       this.storyService.getAllFromProject(project.id!).subscribe((stories) => {
         stories.forEach((story) => {
-          if (story.statusId === StoryStatusConstants.ID.TODO) {
+          if (story.status === StoryStatusConstants.ID.TODO) {
             this.stories.todo.push(story);
-          } else if (story.statusId === StoryStatusConstants.ID.IN_PROGRESS) {
+          } else if (story.status === StoryStatusConstants.ID.IN_PROGRESS) {
             this.stories.inProgress.push(story);
-          } else if (story.statusId === StoryStatusConstants.ID.DONE) {
+          } else if (story.status === StoryStatusConstants.ID.DONE) {
             this.stories.done.push(story);
           } else {
-            throw new Error(`Not managed story status id : ${story.statusId}`);
+            throw new Error(`Not managed story status id : ${story.status}`);
           }
         });
 
@@ -181,7 +202,7 @@ export class ProjectViewComponent implements OnInit {
       // Determine if the user is admin or is project administrator
       this.userService.find(this.accountService.getLogin()).subscribe((user) => {
         const isAdmin = this.accountService.isAdmin();
-        const isProjectAdmin = this.project.adminUserIdList?.findIndex(userId => userId === user.id) !== -1;
+        const isProjectAdmin = this.project.adminUsers?.findIndex(userId => userId === user.id) !== -1;
 
         this.showProjectSettingsBtn = isAdmin || isProjectAdmin;
       });

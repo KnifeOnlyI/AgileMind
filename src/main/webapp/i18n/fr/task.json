@@ -2,7 +2,8 @@
   "task": {
     "title": {
       "new": "Nouvelle tâche",
-      "edit": "Mise à jour d'une tâche"
+      "edit": "Mise à jour d'une tâche",
+      "list": "Tâches"
     },
     "list": {
       "noResults": "Aucune tâche créée"

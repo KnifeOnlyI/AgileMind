@@ -20,8 +20,8 @@
                 <input [formControl]="form.loggedTimeFormControl" class="form-control" id="loggedTime" min="0" type="number"/>
             </div>
 
-            <ag-task-status-select [control]="form.statusIdFormControl"></ag-task-status-select>
-            <ag-user-select [control]="form.assignedUserIdFormControl"></ag-user-select>
+            <ag-task-status-select [control]="form.statusFormControl"></ag-task-status-select>
+            <ag-user-select [control]="form.assignedUserFormControl"></ag-user-select>
         </div>
         <div class="col-9 form-group">
             <label for="description"><span jhiTranslate="global.form.field.description"></span></label>
@@ -32,7 +32,7 @@
     <hr>
 
     <div class="text-left">
-        <ag-button-cancel [routerLink]="['/story', 'edit', form.storyId]"></ag-button-cancel>
+        <ag-button-cancel [routerLink]="['/story', 'edit', form.story]"></ag-button-cancel>
         <ag-button-save [disabled]="!form.isValid"></ag-button-save>
     </div>
 </form>

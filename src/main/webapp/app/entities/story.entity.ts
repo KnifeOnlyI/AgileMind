@@ -12,11 +12,12 @@ export class Story {
    * @param description The description
    * @param points The story points
    * @param businessValue The business value
-   * @param statusId The status id
-   * @param typeId The status id
-   * @param assignedUserId The assigned user id
-   * @param projectId The project id
-   * @param taskIdList The task id list
+   * @param status The status id
+   * @param type The status id
+   * @param assignedUser The assigned user id
+   * @param release The release id
+   * @param project The project id
+   * @param tasks The task id list
    */
   public constructor(
     public id?: number,
@@ -24,11 +25,12 @@ export class Story {
     public description?: string,
     public points?: number,
     public businessValue?: number,
-    public statusId?: number,
-    public typeId?: number,
-    public assignedUserId?: number,
-    public projectId?: number,
-    public taskIdList?: Array<number>,
+    public status?: number,
+    public type?: number,
+    public assignedUser?: number,
+    public release?: number,
+    public project?: number,
+    public tasks?: Array<number>,
   ) {
   }
 }

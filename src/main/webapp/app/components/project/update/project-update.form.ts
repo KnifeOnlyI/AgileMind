@@ -21,14 +21,14 @@ export class ProjectUpdateForm extends ProjectCreateForm {
     }
 
     this.form.addControl('id', new FormControl(null, Validators.required));
-    this.form.addControl('assignedUserIdList', new FormControl(null));
-    this.form.addControl('adminUserIdList', new FormControl(null));
+    this.form.addControl('assignedUsers', new FormControl(null));
+    this.form.addControl('adminUsers', new FormControl(null));
 
     this.form.patchValue({id: project.id});
     this.form.patchValue({name: project.name});
     this.form.patchValue({description: project.description});
-    this.form.patchValue({assignedUserIdList: project.assignedUserIdList});
-    this.form.patchValue({adminUserIdList: project.adminUserIdList});
+    this.form.patchValue({assignedUsers: project.assignedUsers});
+    this.form.patchValue({adminUsers: project.adminUsers});
   }
 
   // region Forms control
@@ -43,21 +43,21 @@ export class ProjectUpdateForm extends ProjectCreateForm {
   }
 
   /**
-   * Get the assigned users idf form control
+   * Get the assignedUsers form control
    *
-   * @return The assigned users idf form control
+   * @return The assignedUsers id form control
    */
-  public get assignedUserIdListFormControl(): FormControl {
-    return this.getFormControl('assignedUserIdList');
+  public get assignedUsersFormControl(): FormControl {
+    return this.getFormControl('assignedUsers');
   }
 
   /**
-   * Get the adminUserIdList form control
+   * Get the adminUsers form control
    *
-   * @return The adminUserIdList form control
+   * @return The adminUsers form control
    */
-  public get adminUserIdListFormControl(): FormControl {
-    return this.getFormControl('adminUserIdList');
+  public get adminUsersFormControl(): FormControl {
+    return this.getFormControl('adminUsers');
   }
 
   // endregion
@@ -75,21 +75,21 @@ export class ProjectUpdateForm extends ProjectCreateForm {
 
 
   /**
-   * Get the assignedUserIdList
+   * Get the assignedUsers
    *
-   * @return The assignedUserIdList
+   * @return The assignedUsers
    */
-  public get assignedUserIdList(): Array<number> {
-    return this.assignedUserIdListFormControl.value;
+  public get assignedUsers(): Array<number> {
+    return this.assignedUsersFormControl.value;
   }
 
   /**
-   * Get the adminUserIdList
+   * Get the adminUsers
    *
-   * @return The adminUserIdList
+   * @return The adminUsers
    */
-  public get adminUserIdList(): Array<number> {
-    return this.adminUserIdListFormControl.value;
+  public get adminUsers(): Array<number> {
+    return this.adminUsersFormControl.value;
   }
 
   // endregion
@@ -103,8 +103,8 @@ export class ProjectUpdateForm extends ProjectCreateForm {
     const project = super.project;
 
     project.id = this.id;
-    project.assignedUserIdList = this.assignedUserIdList;
-    project.adminUserIdList = this.adminUserIdList;
+    project.assignedUsers = this.assignedUsers;
+    project.adminUsers = this.adminUsers;
 
     return project;
   }

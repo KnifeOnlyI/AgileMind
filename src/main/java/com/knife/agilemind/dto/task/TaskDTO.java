@@ -38,17 +38,17 @@ public class TaskDTO implements Serializable {
     /**
      * The status id
      */
-    private Long statusId;
+    private Long status;
 
     /**
      * The assigned user id
      */
-    private Long assignedUserId;
+    private Long assignedUser;
 
     /**
      * The associated story id
      */
-    private Long storyId;
+    private Long story;
 
     /**
      * Get the value of : serialVersionUID
@@ -165,65 +165,65 @@ public class TaskDTO implements Serializable {
     }
 
     /**
-     * Get the value of : statusId
+     * Get the value of : status
      *
-     * @return statusId
+     * @return status
      */
-    public Long getStatusId() {
-        return statusId;
+    public Long getStatus() {
+        return status;
     }
 
     /**
-     * Set value of : statusId
+     * Set value of : status
      *
-     * @param statusId The new value
+     * @param status The new value
      *
      * @return this
      */
-    public TaskDTO setStatusId(Long statusId) {
-        this.statusId = statusId;
+    public TaskDTO setStatus(Long status) {
+        this.status = status;
         return this;
     }
 
     /**
-     * Get the value of : assignedUserId
+     * Get the value of : assignedUser
      *
-     * @return assignedUserId
+     * @return assignedUser
      */
-    public Long getAssignedUserId() {
-        return assignedUserId;
+    public Long getAssignedUser() {
+        return assignedUser;
     }
 
     /**
-     * Set value of : assignedUserId
+     * Set value of : assignedUser
      *
-     * @param assignedUserId The new value
+     * @param assignedUser The new value
      *
      * @return this
      */
-    public TaskDTO setAssignedUserId(Long assignedUserId) {
-        this.assignedUserId = assignedUserId;
+    public TaskDTO setAssignedUser(Long assignedUser) {
+        this.assignedUser = assignedUser;
         return this;
     }
 
     /**
-     * Get the value of : storyId
+     * Get the value of : story
      *
-     * @return storyId
+     * @return story
      */
-    public Long getStoryId() {
-        return storyId;
+    public Long getStory() {
+        return story;
     }
 
     /**
-     * Set value of : storyId
+     * Set value of : story
      *
-     * @param storyId The new value
+     * @param story The new value
      *
      * @return this
      */
-    public TaskDTO setStoryId(Long storyId) {
-        this.storyId = storyId;
+    public TaskDTO setStory(Long story) {
+        this.story = story;
         return this;
     }
 }

@@ -33,22 +33,27 @@ public class CreateStoryDTO implements Serializable {
     /**
      * The status id
      */
-    private Long statusId;
+    private Long status;
 
     /**
      * The type id
      */
-    private Long typeId;
+    private Long type;
 
     /**
      * The assigned user id
      */
-    private Long assignedUserId;
+    private Long assignedUser;
+
+    /**
+     * The release id
+     */
+    private Long release;
 
     /**
      * The associated project id
      */
-    private Long projectId;
+    private Long project;
 
     /**
      * Get the value of : serialVersionUID
@@ -144,86 +149,107 @@ public class CreateStoryDTO implements Serializable {
     }
 
     /**
-     * Get the value of : statusId
+     * Get the value of : status
      *
-     * @return statusId
+     * @return status
      */
-    public Long getStatusId() {
-        return statusId;
+    public Long getStatus() {
+        return status;
     }
 
     /**
-     * Set value of : statusId
+     * Set value of : status
      *
-     * @param statusId The new value
+     * @param status The new value
      *
      * @return this
      */
-    public CreateStoryDTO setStatusId(Long statusId) {
-        this.statusId = statusId;
+    public CreateStoryDTO setStatus(Long status) {
+        this.status = status;
         return this;
     }
 
     /**
-     * Get the value of : typeId
+     * Get the value of : type
      *
-     * @return typeId
+     * @return type
      */
-    public Long getTypeId() {
-        return typeId;
+    public Long getType() {
+        return type;
     }
 
     /**
-     * Set value of : typeId
+     * Set value of : type
      *
-     * @param typeId The new value
+     * @param type The new value
      *
      * @return this
      */
-    public CreateStoryDTO setTypeId(Long typeId) {
-        this.typeId = typeId;
+    public CreateStoryDTO setType(Long type) {
+        this.type = type;
         return this;
     }
 
     /**
-     * Get the value of : assignedUserId
+     * Get the value of : assignedUser
      *
-     * @return assignedUserId
+     * @return assignedUser
      */
-    public Long getAssignedUserId() {
-        return assignedUserId;
+    public Long getAssignedUser() {
+        return assignedUser;
     }
 
     /**
-     * Set value of : assignedUserId
+     * Set value of : assignedUser
      *
-     * @param assignedUserId The new value
+     * @param assignedUser The new value
      *
      * @return this
      */
-    public CreateStoryDTO setAssignedUserId(Long assignedUserId) {
-        this.assignedUserId = assignedUserId;
+    public CreateStoryDTO setAssignedUser(Long assignedUser) {
+        this.assignedUser = assignedUser;
         return this;
     }
 
     /**
-     * Get the value of : projectId
+     * Get the value of : release
      *
-     * @return projectId
+     * @return release
      */
-    public Long getProjectId() {
-        return projectId;
+    public Long getRelease() {
+        return release;
     }
 
     /**
-     * Set value of : projectId
+     * Set value of : release
      *
-     * @param projectId The new value
+     * @param release The new value
      *
      * @return this
      */
-    public CreateStoryDTO setProjectId(Long projectId) {
-        this.projectId = projectId;
+    public CreateStoryDTO setRelease(Long release) {
+        this.release = release;
+        return this;
+    }
+
+    /**
+     * Get the value of : project
+     *
+     * @return project
+     */
+    public Long getProject() {
+        return project;
+    }
+
+    /**
+     * Set value of : project
+     *
+     * @param project The new value
+     *
+     * @return this
+     */
+    public CreateStoryDTO setProject(Long project) {
+        this.project = project;
         return this;
     }
 }

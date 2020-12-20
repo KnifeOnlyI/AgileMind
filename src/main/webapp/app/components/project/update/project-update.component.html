@@ -18,8 +18,14 @@
                     <input [formControl]="form.nameFormControl" class="form-control" id="projectName" type="text">
                 </div>
 
-                <ag-user-select [control]="form.adminUserIdListFormControl" [multiple]="true" label="global.form.field.adminUsers"></ag-user-select>
-                <ag-user-select [control]="form.assignedUserIdListFormControl" [multiple]="true" label="global.form.field.assignedUsers"></ag-user-select>
+                <div class="row">
+                    <div class="col-6">
+                        <ag-user-select [control]="form.adminUsersFormControl" [multiple]="true" label="global.form.field.adminUsers"></ag-user-select>
+                    </div>
+                    <div class="col-6">
+                        <ag-user-select [control]="form.assignedUsersFormControl" [multiple]="true" label="global.form.field.assignedUsers"></ag-user-select>
+                    </div>
+                </div>
             </div>
             <div class="col-9 form-group">
                 <label for="description"><span jhiTranslate="global.form.field.description"></span></label>
@@ -29,8 +35,26 @@
 
         <hr>
 
+        <div class="row">
+            <div class="col-6">
+                <h2 jhiTranslate="release.title.list"></h2>
+            </div>
+            <div class="col-6 text-right">
+                <button [routerLink]="['/project', form.id, 'release', 'new']"
+                        class="btn btn-primary" type="button">
+                    <fa-icon icon="plus"></fa-icon>
+                </button>
+            </div>
+        </div>
+
+        <br>
+
+        <ag-release-list [projectId]="form.id"></ag-release-list>
+
+        <hr>
+
         <div class="text-left">
-            <ag-button-cancel [routerLink]="['/project', form.idFormControl.value]"></ag-button-cancel>
+            <ag-button-cancel [routerLink]="['project', form.idFormControl.value]"></ag-button-cancel>
             <ag-button-save [disabled]="!form.isValid"></ag-button-save>
         </div>
     </form>

@@ -70,8 +70,8 @@ public class ProjectValidator {
         BusinessAssert.notNull(dto.getName(), ProjectConstant.Error.NAME_NULL, Status.BAD_REQUEST);
         BusinessAssert.notEmpty(dto.getName(), ProjectConstant.Error.NAME_EMPTY, Status.BAD_REQUEST);
 
-        this.assertValidUsers(dto.getAssignedUserIdList());
-        this.assertValidUsers(dto.getAdminUserIdList());
+        this.assertValidUsers(dto.getAssignedUsers());
+        this.assertValidUsers(dto.getAdminUsers());
     }
 
     /**

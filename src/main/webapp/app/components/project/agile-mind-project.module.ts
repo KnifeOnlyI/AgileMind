@@ -8,9 +8,10 @@ import {DialogModule} from 'primeng/dialog';
 import {ProjectViewComponent} from 'app/components/project/view/project-view.component';
 import {ProjectCreateComponent} from 'app/components/project/create/project-create.component';
 import {ProjectUpdateComponent} from 'app/components/project/update/project-update.component';
+import {AgileMindReleaseModule} from 'app/components/release/agile-mind-release.module';
 
 @NgModule({
-  imports: [AgileMindSharedModule, RouterModule.forChild(PROJECT_ROUTE), DialogModule],
+  imports: [AgileMindSharedModule, RouterModule.forChild(PROJECT_ROUTE), DialogModule, AgileMindReleaseModule],
   declarations: [
     ProjectListComponent,
     ProjectCreateComponent,
