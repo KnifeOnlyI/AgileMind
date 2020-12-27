@@ -3,7 +3,7 @@
     "title": {
       "new": "New task",
       "edit": "Update task",
-      "list": "Task"
+      "list": "Tasks"
     },
     "list": {
       "noResults": "No created tasks"
